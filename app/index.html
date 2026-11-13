@@ -257,6 +257,7 @@ body.is-offline .offlineBar{display:block}
 .need li.chk.done .chkname{text-decoration:line-through}
 button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px solid var(--line);font:inherit;font-size:14px;color:inherit;text-align:left;justify-content:flex-start}
 .empty{font-size:13px;color:var(--muted);margin:4px 0 8px;line-height:1.55}
+.chk-stamp{font-size:11px;color:var(--muted);margin-top:10px;text-align:right;letter-spacing:.2px}
 
 </style>
 </head>
@@ -811,7 +812,8 @@ function setCountdown(label,html){
 function cdParts(ms){
   const p=fmtParts(ms), sep='<span class="cd-sep">·</span>';
   const u=(n,l)=>'<span class="cd-num num">'+n+'</span><span class="cd-unit">'+l+'</span>';
-  if(p.days>=2) return u(p.days,'days');            // weeks out, hours and minutes are noise
+  if(p.days>=2) return u(Math.ceil(ms/86400000),'days');   // 6d22h must read '7 days', never '6'
+  /* rounding down told a parent '6DAYS' the morning of the 7th day before kickoff */
   if(p.days>0) return u(p.days,'d')+sep+u(p.hours,'hr');
   if(p.hours>0) return u(p.hours,'hr')+sep+u(p.mins,'min');
   return u(p.mins,'min');
@@ -828,7 +830,14 @@ function renderCountdown(state){
       return;
     }
   }
-  setCountdown(state.countdownLabel||'', state.countdownTarget?cdParts(state.countdownTarget-now):'');
+  let lbl=state.countdownLabel||'';
+  if(state.countdownTarget&&!state.currentMatch&&state.phase!=='awaiting-schedule'){
+    const days=(state.countdownTarget-now)/86400000;
+    if(days>0&&days<=7){
+      lbl='TOURNAMENT STARTS '+state.countdownTarget.toLocaleDateString('en-US',{weekday:'long',timeZone:TZ}).toUpperCase();
+    }
+  }
+  setCountdown(lbl, state.countdownTarget?cdParts(state.countdownTarget-now):'');
 }
 
 // ---- CONTEXT + NEED-NOW (consumes resolver) ----
@@ -898,12 +907,12 @@ function renderNextMatch(state){
           (venue.mapsUrl?'<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">'+(venueKnown(venue)?'Directions':'Explore Area')+'</a>':'')+
           (TOURNAMENT.tournament.fullGuideUrl?'<a class="btn ghost" href="'+TOURNAMENT.tournament.fullGuideUrl+'" target="_blank" rel="noopener">Full Guide</a>':'')+
           '<a class="btn ghost" href="#schedule" data-goto="schedule">Schedule</a>'+
-        '</div>';
+        '</div>'+checkedStamp();
       return;
     }
-    if(phase==='awaiting-final'){ nextStatus.textContent='Awaiting'; nextStatus.className='status pend'; nextBody.innerHTML='<div class="time num" style="font-size:26px">Final unconfirmed</div><div class="vs">Final qualification not yet decided.</div>'; return; }
+    if(phase==='awaiting-final'){ nextStatus.textContent='Awaiting'; nextStatus.className='status pend'; nextBody.innerHTML='<div class="time num" style="font-size:26px">Final unconfirmed</div><div class="vs">Final qualification not yet decided.</div>'+checkedStamp(); return; }
     nextStatus.textContent='Complete'; nextStatus.className='status conf';
-    nextBody.innerHTML='<div class="time num" style="font-size:30px">DONE</div><div class="vs">Tournament complete — safe travels home!</div>';
+    nextBody.innerHTML='<div class="time num" style="font-size:30px">DONE</div><div class="vs">Tournament complete — safe travels home!</div>'+checkedStamp();
     return;
   }
   const isLive=currentMatch&&currentMatch.id===g.id;
@@ -924,7 +933,8 @@ function renderNextMatch(state){
       (FMAP?'<a class="btn ghost" href="'+FMAP+'" target="_blank" rel="noopener" title="'+complexMapLabel(venue)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>'+complexMapBtnText(venue)+'</a>':'')+
       '<a class="btn ghost" href="https://playmetrics.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.4-.7L3 21l1.8-5.6A8.4 8.4 0 0 1 3 11.5a8.5 8.5 0 0 1 18 0z"/></svg>Message Team</a>'+
     '</div>'+
-    (nextMatch&&nextMatch.id!==g.id?'<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)">Next: <b style="color:var(--su)">'+nextMatch.label+'</b> · '+nextMatch.time+' · Field '+nextMatch.field+'</div>':'');
+    (nextMatch&&nextMatch.id!==g.id?'<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)">Next: <b style="color:var(--su)">'+nextMatch.label+'</b> · '+nextMatch.time+' · Field '+nextMatch.field+'</div>':'')+
+    checkedStamp();
 }
 
 // ---- MASTER REFRESH: countdown ticks fast, full state re-resolves on a slower cadence ----
@@ -1286,6 +1296,15 @@ function renderChanges(){
 
 // ---- FULL GUIDE LINK (per team) ----
 var TEAM_LABEL_FOR_GUIDE='';
+// Absolute, not "2 min ago": a relative stamp freezes between renders and silently lies.
+var lastCheckedIso=null;
+function checkedStamp(){
+  if(!lastCheckedIso) return '';
+  try{
+    var t=new Date(lastCheckedIso).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:TOURNAMENT.timezone});
+    return '<div class="chk-stamp">Data checked '+t+' ET</div>';
+  }catch(e){ return ''; }
+}
 function renderFullGuide(){
   var fg=document.getElementById('fullGuideLink'); if(!fg) return;
   fg.href=TOURNAMENT.tournament.fullGuideUrl||'../guides/';
@@ -1496,6 +1515,7 @@ async function load(){
     if(tslug) lsSet('tj_tournament_v1',tslug);
     if(slug) lsSet('cc-team',slug);
     fail.hidden=true;
+    lastCheckedIso=new Date().toISOString();      // only a real fetch stamps the card
     var sig=JSON.stringify([shared,team]);
     if(sig!==lastSig){ lastSig=sig; applyData(shared,team,tslug,slug); }   // unchanged data = no re-render
     lsSet(SNAP_KEY,JSON.stringify({t:tslug,team:slug,shared:shared,teamData:team}));
