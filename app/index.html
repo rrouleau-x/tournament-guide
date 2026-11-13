@@ -816,11 +816,18 @@ function setCountdown(label,html){
   const k=label+'|'+html; if(k===lastCd) return;   // touch the DOM only when the text changes
   lastCd=k; cdLabel.textContent=label; cdBody.innerHTML=html; cdWrap.hidden=!label&&!html;
 }
-function cdParts(ms){
+// Whole calendar days between two moments, counted in the tournament's time zone.
+function calDays(from,to){
+  const ymd=d=>{ const a=d.toLocaleDateString('en-CA',{timeZone:TZ}).split('-'); return Date.UTC(+a[0],+a[1]-1,+a[2]); };
+  return Math.round((ymd(to)-ymd(from))/86400000);
+}
+function cdParts(ms,now,target){
   const p=fmtParts(ms), sep='<span class="cd-sep">·</span>';
   const u=(n,l)=>'<span class="cd-num num">'+n+'</span><span class="cd-unit">'+l+'</span>';
-  if(p.days>=2) return u(Math.ceil(ms/86400000),'days');   // 6d22h must read '7 days', never '6'
-  /* rounding down told a parent '6DAYS' the morning of the 7th day before kickoff */
+  // Days are how people count them: Thursday to Saturday is "2 days" at any hour. Rounding
+  // elapsed time gave '6' on the 7th day out (floor) and '3' on Thursday morning (ceil).
+  const cd=(now&&target)?calDays(now,target):p.days;
+  if(cd>=2) return u(cd,'days');
   if(p.days>0) return u(p.days,'d')+sep+u(p.hours,'hr');
   if(p.hours>0) return u(p.hours,'hr')+sep+u(p.mins,'min');
   return u(p.mins,'min');
@@ -833,19 +840,19 @@ function renderCountdown(state){
     const nextToday=state.withState.find(g=>g.state==='upcoming'&&dayKey(g.start)===dayKey(now));
     if(nextToday){
       const mins=Math.round((nextToday.start-now)/60000);
-      setCountdown((mins<=90?'Kickoff in':'Next game in')+(nextToday.arrival?' · arrive by '+nextToday.arrival:''), cdParts(nextToday.start-now));
+      setCountdown((mins<=90?'Kickoff in':'Next game in')+(nextToday.arrival?' · arrive by '+nextToday.arrival:''), cdParts(nextToday.start-now,now,nextToday.start));
       return;
     }
   }
   let lbl=state.countdownLabel||'';
-  if(state.countdownTarget&&!state.currentMatch&&state.phase!=='awaiting-schedule'){
+  if(state.countdownTarget&&state.phase==='pre-tournament'){   // not the night between day 1 and day 2
     const days=(state.countdownTarget-now)/86400000;
     if(days>0&&days<=7){
       lbl='TOURNAMENT STARTS '+state.countdownTarget.toLocaleDateString('en-US',{weekday:'long',timeZone:TZ}).toUpperCase();
     }
   }
   const est=state.currentMatch?'<div style="width:100%;text-align:center;font-size:10.5px;color:#cfe0f5;opacity:.8;margin-top:2px">estimated from the published kickoff — not the referee&rsquo;s clock</div>':'';
-  setCountdown(lbl, state.countdownTarget?(cdParts(state.countdownTarget-now)+est):'');
+  setCountdown(lbl, state.countdownTarget?(cdParts(state.countdownTarget-now,now,state.countdownTarget)+est):'');
 }
 
 // ---- CONTEXT + NEED-NOW (consumes resolver) ----
@@ -878,9 +885,10 @@ function refreshContext(state){
   let needTitleText='Before You Go';
   if(need==='between') needTitleText='Between Games';
   else if(need==='travel') needTitleText=(travel?travel.label:'Today');
-  else if(need==='game1') needTitleText=(g1?g1.label:'Game 1');
+  else if(need==='game1') needTitleText=((currentMatch||nextMatch||g1||{}).label||'Game 1');
   else if(need==='game3') needTitleText='Final Check';
   needTitle.textContent=needTitleText;
+  document.querySelector('.need').hidden=(phase==='complete');
   // The schedule-pending message is stated once, in the Next Match card. Repeating it in the
   // context strip as well was four ways of saying the same thing on one screen.
   var ctxBar=document.querySelector('.context');
@@ -900,13 +908,19 @@ function refreshContext(state){
 // ---- NEXT MATCH DASHBOARD (consumes the SAME resolver) ----
 // "7:15 AM" alone is not a moment in time - anchor it to the kickoff's own day.
 function arrivalAt(g){
-  var m=String((g&&g.arrival)||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-  if(!m||!g.start) return null;
-  var d=new Date(g.start.getTime()), h=parseInt(m[1],10), ap=(m[3]||'').toUpperCase();
-  if(ap==='PM'&&h!==12) h+=12; if(ap==='AM'&&h===12) h=0;
-  d.setHours(h,parseInt(m[2],10),0,0);
-  return d;
+  // Built with the tournament's own UTC offset (same helper as kickoff), never the phone's
+  // clock zone: setHours() made a Paris phone read "350 min ago" before the arrival time.
+  if(!g||!g.arrival||!g.datetime) return null;
+  var d=new Date(isoDT(String(g.datetime).slice(0,10), g.arrival));
+  return isNaN(d)?null:d;
 }
+// Changes whenever the arrival box should read differently: before -> passed, then each minute.
+function arrivalKey(state){
+  var g=state.nextMatch, a=(g&&!state.currentMatch)?arrivalAt(g):null;
+  if(!a) return '';
+  return state.now>a ? 'late'+Math.round((state.now-a)/60000) : 'early';
+}
+function agoText(mins){ return mins<60 ? mins+' min ago' : Math.floor(mins/60)+' hr '+(mins%60)+' min ago'; }
 function setNowHead(t){ var h=document.getElementById('nextHead'); if(h) h.textContent=t; }
 const nextStatus=document.getElementById('nextStatus'),nextBody=document.getElementById('nextBody');
 function renderNextMatch(state){
@@ -930,7 +944,7 @@ function renderNextMatch(state){
       return;
     }
     if(phase==='awaiting-final'){ setNowHead('Next Match'); nextStatus.textContent='Awaiting'; nextStatus.className='status pend'; nextBody.innerHTML='<div class="time num" style="font-size:26px">Final unconfirmed</div><div class="vs">Final qualification not yet decided.</div>'+checkedStamp(); return; }
-    setNowHead('Next Match'); nextStatus.textContent='Complete'; nextStatus.className='status conf';
+    setNowHead('Tournament'); nextStatus.textContent='Complete'; nextStatus.className='status conf';
     nextBody.innerHTML='<div class="time num" style="font-size:30px">DONE</div><div class="vs">Tournament complete — safe travels home!</div>'+checkedStamp();
     return;
   }
@@ -963,7 +977,7 @@ function renderNextMatch(state){
           return '<div class="arrive-strong'+(late?' late':'')+'">'
             +'<div class="label">'+(late?'Arrival time has passed':'Arrive by')+'</div>'
             +'<div class="at num">'+g.arrival+'</div>'
-            +(late?'<div class="small" style="color:var(--amber);font-weight:700">'+mins+' min ago</div>'
+            +(late?'<div class="small" style="color:var(--amber);font-weight:700">'+agoText(mins)+'</div>'
                   :(g.arrivalStatus==='pending-coach'?'<div class="small" style="color:var(--amber);font-weight:700">awaiting coach confirmation</div>':''))
             +'</div>';
         })():''))+
@@ -987,8 +1001,12 @@ function refreshAll(){
   // Countdown is cheap — run every second. Full re-render only when state changes.
   const key=state.phase+'|'+(state.currentMatch?state.currentMatch.id:'')+'|'+(state.nextMatch?state.nextMatch.id:'');
   renderCountdown(state);
-  if(key!==lastStateKey){ lastStateKey=key; refreshContext(state); renderNextMatch(state); renderSchedule(state); renderWeekendStatus(state); }
+  const aKey=arrivalKey(state);
+  if(key!==lastStateKey){ lastStateKey=key; lastArrivalKey=aKey; refreshContext(state); renderNextMatch(state); renderSchedule(state); renderWeekendStatus(state); }
+  // The arrival box is time-based, so the card alone redraws when its wording has to change.
+  else if(aKey!==lastArrivalKey){ lastArrivalKey=aKey; renderNextMatch(state); }
 }
+let lastArrivalKey='';
 
 // ---- WEEKEND STATUS (compact progress derived from state) ----
 function renderWeekendStatus(state){
@@ -1344,7 +1362,10 @@ var lastCheckedIso=null;
 function checkedStamp(){
   if(!lastCheckedIso) return '';
   try{
-    var t=new Date(lastCheckedIso).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:TOURNAMENT.timezone});
+    var d=new Date(lastCheckedIso), tz=TOURNAMENT.timezone;
+    var t=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:tz});
+    // A stamp from another day must say so, or yesterday's check reads as this morning's.
+    if(calDays(d,new Date())!==0) t=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz})+', '+t;
     return '<div class="chk-stamp">Schedule last checked '+t+' ET</div>';
   }catch(e){ return ''; }
 }
@@ -1528,11 +1549,13 @@ function applyData(shared,team,tslug,slug){
 var loadSeq=0;
 async function load(){
   var seq=++loadSeq, fail=document.getElementById('loadFail');
+  lastLoadAt=Date.now();
   var t=qsGet('t')||lsGet('tj_tournament_v1'), wantTeam=qsGet('team')||lsGet('cc-team');
   try{
     var snap=JSON.parse(lsGet(SNAP_KEY)||'null');
     if(snap&&snap.shared&&(!t||snap.t===t)&&(!wantTeam||snap.team===wantTeam)){
       var sig0=JSON.stringify([snap.shared,snap.teamData]);
+      if(!lastCheckedIso&&snap.checkedAt) lastCheckedIso=snap.checkedAt;   // when the saved copy was fetched
       if(sig0!==lastSig){ lastSig=sig0; applyData(snap.shared,snap.teamData,snap.t,snap.team); }
     }
   }catch(e){}
@@ -1561,7 +1584,8 @@ async function load(){
     lastCheckedIso=new Date().toISOString();      // only a real fetch stamps the card
     var sig=JSON.stringify([shared,team]);
     if(sig!==lastSig){ lastSig=sig; applyData(shared,team,tslug,slug); }   // unchanged data = no re-render
-    lsSet(SNAP_KEY,JSON.stringify({t:tslug,team:slug,shared:shared,teamData:team}));
+    else { lastStateKey=''; refreshAll(); }                               // ...but the stamp still moves
+    lsSet(SNAP_KEY,JSON.stringify({t:tslug,team:slug,shared:shared,teamData:team,checkedAt:lastCheckedIso}));
   }catch(e){
     if(seq!==loadSeq) return;
     // Nothing fresh: keep whatever is on screen (saved copy or the empty template) and say so.
@@ -1580,12 +1604,16 @@ load();
 
 // Tick only while the page is visible. The countdown shows minutes, so a 5s cadence is
 // plenty; the full state re-renders only when the resolved state actually changes.
-var tick=null;
-function startTick(){ if(!tick) tick=setInterval(refreshAll,5000); }
+// The schedule is re-fetched when the app comes back to the foreground and every few minutes
+// while it stays open: a field or time change must reach a phone that never reloads the page.
+var tick=null, lastLoadAt=Date.now();
+const RELOAD_ON_RETURN=60000, RELOAD_WHILE_OPEN=300000;
+function freshen(maxAge){ if(navigator.onLine!==false && Date.now()-lastLoadAt>=maxAge) load(); }
+function startTick(){ if(!tick) tick=setInterval(function(){ refreshAll(); freshen(RELOAD_WHILE_OPEN); },5000); }
 function stopTick(){ clearInterval(tick); tick=null; }
 document.addEventListener('visibilitychange',function(){
   if(document.hidden){ stopTick(); return; }
-  refreshAll(); startTick(); loadWeather();         // forecast refresh is throttled inside loadWeather
+  refreshAll(); startTick(); freshen(RELOAD_ON_RETURN); loadWeather();   // forecast refresh is throttled inside loadWeather
 });
 if(!document.hidden) startTick();
 </script>
