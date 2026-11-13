@@ -217,27 +217,16 @@ a.tchip.on{background:#0055A4;border-color:#0055A4;color:#fff}</style>
   </div>
   <div id="homeContent">
     <div class="boarding-pass">
-      <div class="main"><div class="day-badge upcoming">Aug 22-23</div>
-      <div style="font-size:34px;font-weight:700;letter-spacing:-1px">Sporting Jax</div>
-      <div class="vs">Boys Invitational · Veterans Park</div>
-      <div class="details" style="margin-top:8px"><div class="detail-chip"><i class="ti ti-map-pin"></i>St. Johns, FL</div><div class="detail-chip"><i class="ti ti-clock"></i>Schedule: Aug 8-15</div></div></div>
-      <div class="secondary"><span>Savannah United 17/18B</span><a href="/sporting-jax-guide/" style="color:var(--p);font-size:12px;font-weight:600">Full Guide →</a></div>
+      <div class="main"><div class="day-badge upcoming">—</div>
+      <div style="font-size:34px;font-weight:700;letter-spacing:-1px">Loading…</div>
+      <div class="vs">&nbsp;</div></div>
     </div>
-    <div class="card" style="border-left:4px solid var(--r);background:#fef2f2;margin-bottom:10px">
-      <div class="card-title" style="color:var(--r)"><i class="ti ti-bell-ringing" style="font-size:14px;margin-right:4px"></i>UPDATES — Check These</div>
-      <div style="font-size:13px;font-weight:600">1 Update · Bring white & blue jerseys</div>
-      <div style="font-size:11px;color:var(--t2);margin-top:2px">Posted by Coach Keith · Jul 30, 6:00 PM</div>
-      <div style="margin-top:6px"><button class="act-btn" onclick="showSheet('updates')" style="padding:4px 12px;font-size:10px;flex-direction:row;display:inline-flex"><i class="ti ti-arrow-right"></i>View All Updates</button></div>
-    </div>
-    <div class="next-action" onclick="showSheet('hotels')"><i class="ti ti-building"></i><div><div class="label">Next Action</div><div class="text">Book hotel on GotSport</div></div><i class="ti ti-arrow-right arrow"></i></div>
+    <div class="next-action" onclick="showSheet('hotels')"><i class="ti ti-building"></i><div><div class="label">Next Action</div><div class="text">Loading…</div></div><i class="ti ti-arrow-right arrow"></i></div>
     <div class="action-grid">
       <button class="act-btn" onclick="go('pack')"><i class="ti ti-backpack"></i>Open Checklist</button>
-      <button class="act-btn primary" onclick="go('venue')"><i class="ti ti-map-pin"></i>Navigate to Venue</button>
+      <button class="act-btn primary" onclick="go('venue')"><i class="ti ti-map-pin"></i>Venue</button>
     </div>
-    <div class="card compact"><i class="ti ti-cloud-rain" style="color:var(--y);font-size:18px"></i><span>Expect upper 90s, heat index 105+<br><span style="font-size:10px;color:var(--r)">Bring extra water — games may pause for heat</span></span></div>
-    <div class="card compact"><i class="ti ti-building" style="color:var(--p);font-size:18px"></i><span>Hampton Inn Bartram Park: $143/night · 7.9 mi · 15 min</span></div>
-    <div class="card compact" onclick="showSheet('contacts')"><i class="ti ti-phone" style="color:var(--r);font-size:18px"></i><span>Coach: Keith Gunn · Manager: Jenn Boyd</span></div>
-    <div class="card compact" onclick="showSheet('updates')" style="border-left:4px solid var(--r)"><i class="ti ti-bell-ringing" style="color:var(--r);font-size:18px"></i><span><strong>1 Update</strong> · Bring white & blue jerseys · Coach Keith</span><span style="background:var(--r);color:#fff;border-radius:8px;padding:1px 6px;font-size:9px;font-weight:700;margin-left:4px">1</span></div>
+    <div class="card compact"><i class="ti ti-cloud" style="color:var(--t2);font-size:18px"></i><span>Forecast available closer to game day</span></div>
     <div class="card" style="text-align:center;font-size:11px;color:var(--t2);padding:8px;background:var(--bg);margin-top:12px">
       <i class="ti ti-wifi-off"></i> Works offline — schedule & venue cached after first load
     </div>
@@ -322,6 +311,55 @@ function go(s){
   document.getElementById('app').scrollTop=0;
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.scr)));
+
+// --- content helpers: never render a fact we do not have ---
+// The old shell hard-coded "Book hotel on GotSport", "Expect upper 90s" and an
+// ISO date range, so a staged tournament advertised a heat warning for a
+// January event and a hotel link that could not be booked. Everything below is
+// derived from the bundle, and degrades to an honest placeholder.
+function venueKnown(){
+  const a=(D&&D.venue&&D.venue.address)||'';
+  return !!a && !/not yet announced|venue tbd|^tbd/i.test(a);
+}
+function cityOf(){
+  const v=(D&&D.venue)||{};
+  if(!venueKnown()) return String(v.name||'').replace(/^Venue TBD\s*[—-]\s*/i,'').trim();
+  return String(v.address||'').split(',')[0];
+}
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtRange(){
+  const d=(D&&D.tournament&&D.tournament.dates)||{};
+  if(!d.start||!d.end) return '';
+  const p=s=>{const [y,m,dd]=String(s).split('-').map(Number);return new Date(y,m-1,dd);};
+  const a=p(d.start), b=p(d.end);
+  if(a.getMonth()===b.getMonth()&&a.getFullYear()===b.getFullYear())
+    return a.getDate()===b.getDate()
+      ? `${MON[a.getMonth()]} ${a.getDate()}, ${a.getFullYear()}`
+      : `${MON[a.getMonth()]} ${a.getDate()}–${b.getDate()}, ${a.getFullYear()}`;
+  return `${MON[a.getMonth()]} ${a.getDate()} – ${MON[b.getMonth()]} ${b.getDate()}, ${b.getFullYear()}`;
+}
+function nextAction(){
+  const hotels=(D&&D.hotels&&D.hotels.official)||[];
+  if(!venueKnown()) return {label:'Watch for the venue + schedule', act:"go('games')"};
+  if(hotels.length) return {label:'Book hotel', act:"showSheet('hotels')"};
+  if(!(D.games&&D.games.length)) return {label:'Watch for the schedule', act:"go('games')"};
+  return {label:'Check your game plan', act:"go('games')"};
+}
+function weatherLine(){
+  const w=(D&&D.weather)||{}, s=w.summary||'';
+  if(!s) return {icon:'ti-cloud', title:'Forecast available closer to game day', sub:'', color:'var(--t2)'};
+  return {icon:'ti-cloud-sun', title:s, sub:w.detail||'', color:'var(--p)'};
+}
+function shortSchedule(){
+  const st=(D&&D.scheduleStatus)||'';
+  const days=(()=>{const d=(D&&D.tournament&&D.tournament.dates)||{};
+    if(!d.start||!d.end) return 0;
+    const p=s=>{const [y,m,dd]=String(s).split('-').map(Number);return new Date(y,m-1,dd);};
+    return Math.round((p(d.end)-p(d.start))/864e5)+1;})();
+  if(st==='confirmed'&&(D.games||[]).length) return `${D.games.length} games · times listed`;
+  return days>1 ? `${days}-day event · schedule not published yet`
+                : `one-day event · schedule not published yet`;
+}
 
 function phase(){
   if(!D)return'planning';
@@ -415,30 +453,30 @@ function renderHome(){
     // Planning / Countdown
     el.innerHTML=` 
     <div class="boarding-pass">
-      <div class="main"><div class="day-badge upcoming">${c?c.d+'d '+c.h+'h':'Upcoming'}</div>
+      <div class="main"><div class="day-badge upcoming">${(D.team.label||"").toUpperCase()||"UPCOMING"}</div>
       <div style="font-size:48px;font-weight:700;letter-spacing:-2px;line-height:1.1;margin:4px 0">${c?c.d:'--'}<span style="font-size:18px;font-weight:400;opacity:.6"> Days</span></div>
       <div class="vs">Until Tournament</div>
-        <div class="vs">${D.tournament.shortName||D.tournament.name} · ${D.venue.name}</div>
+        <div class="vs">${D.team.shortName||D.team.name} · ${fmtRange()}</div>
         <div class="details" style="margin-top:8px">
-          <div class="detail-chip"><i class="ti ti-calendar-event"></i>${D.tournament.dates.start}—${D.tournament.dates.end}</div>
-          <div class="detail-chip"><i class="ti ti-map-pin"></i>${D.venue.address.split(',')[0]}</div>
+          <div class="detail-chip"><i class="ti ti-map-pin"></i>${cityOf()}</div>
+          <div class="detail-chip"><i class="ti ti-info-circle"></i>${shortSchedule()}</div>
         </div></div>
-        <div class="secondary"><span>Schedule: ${D.scheduleExpected}</span><button class="nav-btn" onclick="go('pack')">Start Packing</button></div>
+        <div class="secondary"><span>${D.tournament.shortName||D.tournament.name}</span><button class="nav-btn" onclick="go('pack')">Start Packing</button></div>
       </div>
-      <div class="next-action" onclick="showSheet('hotels')">
+      <div class="next-action" onclick="${nextAction().act}">
         <i class="ti ti-building"></i>
-        <div><div class="label">Next Action</div><div class="text">Book hotel on GotSport</div></div>
+        <div><div class="label">Next Action</div><div class="text">${nextAction().label}</div></div>
         <i class="ti ti-arrow-right arrow"></i>
       </div>
       <div class="action-grid">
         <button class="act-btn" onclick="go('pack')"><i class="ti ti-backpack"></i>Open Checklist</button>
-        <button class="act-btn primary" onclick="go('venue')"><i class="ti ti-map-pin"></i>Navigate to Venue</button>
+        <button class="act-btn primary" onclick="${venueKnown()?"go('venue')":"go('games')"}"><i class="ti ti-map-pin"></i>${venueKnown()?'Navigate to Venue':'Where to play'}</button>
       </div>
       <div class="section-title">At a Glance</div>
-      <div class="card compact"><i class="ti ti-cloud-rain" style="color:var(--y);font-size:18px"></i><span>${D.weather.summary||'Expect upper 90s, heat index 105+, afternoon storms'}<br><span style="font-size:10px;color:var(--r)">Bring extra water — games may pause for heat</span></span></div>
-      <div class="card compact" onclick="showSheet('hotels')"><i class="ti ti-building" style="color:var(--p);font-size:18px"></i><span>${D.hotels.official[0]?.name||'Hotel info'}: ${D.hotels.official[0]?.rate||''} · ${D.hotels.official[0]?.drive||''}</span><i class="ti ti-chevron-right" style="margin-left:auto;color:var(--t2)"></i></div>
+      <div class="card compact"><i class="ti ${weatherLine().icon}" style="color:${weatherLine().color};font-size:18px"></i><span>${weatherLine().title}${weatherLine().sub?`<br><span style="font-size:10px;color:var(--t2)">${weatherLine().sub}</span>`:''}</span></div>
+      <div class="card compact" onclick="showSheet('hotels')"><i class="ti ti-building" style="color:var(--p);font-size:18px"></i><span>${D.hotels?.official?.[0]?.name?`${D.hotels.official[0].name}: ${D.hotels.official[0].rate||''} · ${D.hotels.official[0].drive||''}`:'Hotels not booked yet — nothing announced'}</span><i class="ti ti-chevron-right" style="margin-left:auto;color:var(--t2)"></i></div>
       <div class="card compact" onclick="showSheet('updates')" id="homeUpdateCard">
-        <i class="ti ti-bell-ringing" style="color:var(--r);font-size:18px"></i>
+        <i class="ti ti-bell${D.updates&&D.updates.length>0?'-ringing':''}" style="color:${D.updates&&D.updates.length>0?'var(--r)':'var(--t2)'};font-size:18px"></i>
         <span style="flex:1"><strong>Updates</strong> · ${D.updates&&D.updates.length>0?D.updates[D.updates.length-1].title:'No new alerts'}</span>
         ${D.updates&&D.updates.length>0?`<span style="background:var(--r);color:#fff;border-radius:8px;padding:1px 6px;font-size:9px;font-weight:700">${D.updates.length}</span>`:''}
         <i class="ti ti-chevron-right" style="margin-left:4px;color:var(--t2)"></i>
@@ -459,19 +497,33 @@ function leaveTime(g){
 function toggleExpand(){const exp=document.getElementById('exp');if(exp)exp.classList.toggle('open');}
 
 function timeline(){
-  const items=[
-    {day:'Friday Aug 21',done:true,items:['Travel to Jax','Hotel check-in','Early bedtime']},
-    {day:'Saturday Aug 22',done:D.games?.length>0&&D.games[0].status==='Complete',current:true,items:D.games?.length>0?['Leave: '+D.games[0].arrival,'Game 1: '+D.games[0].time+' vs '+D.games[0].opponent,'Lunch break','Game 2']:['Schedule pending']},
-    {day:'Sunday Aug 23',done:false,items:D.games?.length>1?['Game 3','Possible final','Drive home']:['Knockout rounds','Drive home']}
-  ];
-  return items.map((d,i)=>`
-    <div class="day ${d.done?'completed':d.current?'current':''}">
+  // Derived from the bundle — the old version hard-coded "Friday Aug 21 /
+  // Saturday Aug 22 / Sunday Aug 23", which is a different tournament entirely.
+  const ds=(D&&D.tournament&&D.tournament.dates)||{};
+  if(!ds.start||!ds.end) return '<p class="help-text">Dates not announced yet</p>';
+  const parse=s=>{const [y,m,dd]=String(s).split('-').map(Number);return new Date(y,m-1,dd);};
+  const start=parse(ds.start), end=parse(ds.end);
+  const today=new Date(); today.setHours(0,0,0,0);
+  const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const games=D.games||[];
+  const rows=[];
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    const key=iso(d);
+    const dayGames=games.filter(g=>String(g.date||'').slice(0,10)===key);
+    const done=d<today, current=iso(d)===iso(today);
+    const items=dayGames.length
+      ? dayGames.map((g,i)=>`Game ${i+1}: ${g.time||'TBD'} vs ${g.opponent||'TBD'}${g.field?' · Field '+g.field:''}`)
+      : ['Schedule not published yet'];
+    rows.push(`<div class="day ${done?'completed':current?'current':''}">
       <div class="marker"></div>
       <div class="content">
-        <div class="day-label">${d.day}</div>
-        <div class="items">${d.items.map((item,j)=>`<div class="${d.done?'done':(d.current&&j===0)?'next':'pending'}">○ ${item}</div>`).join('')}</div>
+        <div class="day-label">${WD[d.getDay()]} ${MON[d.getMonth()]} ${d.getDate()}</div>
+        <div class="items">${items.map((item,j)=>`<div class="${done?'done':(current&&j===0)?'next':'pending'}">○ ${item}</div>`).join('')}</div>
       </div>
-    </div>`).join('');
+    </div>`);
+  }
+  return rows.join('');
 }
 function nextGames(){
   if(!D.games||D.games.length<2) return '<div class="card"><p class="help-text">Schedule not yet released</p></div>';
@@ -699,7 +751,7 @@ function renderPicker(current){
     if(strip&&strip.parentNode)strip.parentNode.insertBefore(host,strip.nextSibling);
     else document.getElementById('app').prepend(host);
   }
-  host.innerHTML=`<details class="tpick"><summary><span>Switch tournament</span><span class="tcur">${(IDX.tournaments.find(t=>t.slug===current)||{}).short||''}</span></summary>${pickerHTML(current)}</details>`;
+  host.innerHTML=`<details class="tpick"><summary><span><i class="ti ti-arrows-shuffle" style="font-size:13px;margin-right:4px"></i>Switch tournament</span><span class="tcur">${(IDX.tournaments.find(t=>t.slug===current)||{}).short||''}</span></summary>${pickerHTML(current)}</details>`;
   host.querySelectorAll('a.trow').forEach(a=>a.addEventListener('click',()=>{
     try{localStorage.setItem(TKEY,decodeURIComponent(a.dataset.slug));}catch(e){}
   }));
