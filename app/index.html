@@ -258,11 +258,15 @@ body.is-offline .offlineBar{display:block}
 button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px solid var(--line);font:inherit;font-size:14px;color:inherit;text-align:left;justify-content:flex-start}
 .empty{font-size:13px;color:var(--muted);margin:4px 0 8px;line-height:1.55}
 .liveflag{font-size:13px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--red);margin:5px 0 0}
-.arrive-strong{margin:12px 0 0;padding:10px 13px;background:var(--green-bg);border-radius:12px}
-.arrive-strong .label{font-size:10.5px;color:#146c34}
+.arrive-strong{margin:12px 0 0;padding:10px 13px;background:var(--su-soft);border-radius:12px}
+.arrive-strong .label{font-size:10.5px;color:var(--su)}
+.arrive-strong .at{font-size:21px;font-weight:800;color:var(--su);letter-spacing:-.4px;line-height:1.2}
 .arrive-strong.late{background:var(--amber-bg)}
 .arrive-strong.late .label,.arrive-strong.late .at{color:var(--amber)}
-.arrive-strong .at{font-size:21px;font-weight:800;color:#146c34;letter-spacing:-.4px;line-height:1.2}
+.arrive-strong.at-field{background:var(--green-bg)}
+.arrive-strong.at-field .label,.arrive-strong.at-field .at{color:#146c34}
+.btn-here{margin-top:9px;width:100%;min-height:44px;border-radius:12px;border:1px solid rgba(0,0,0,.10);background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:block}
+.arrive-strong.late .btn-here{border-color:rgba(183,110,0,.35);color:var(--amber)}
 .nextline{display:block;margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);text-decoration:none}
 .chk-stamp{font-size:11px;color:var(--muted);margin-top:10px;text-align:right;letter-spacing:.2px}
 
@@ -905,6 +909,15 @@ function refreshContext(state){
   }).join('');
 }
 
+// ---- ARRIVED AT THE FIELD (per tournament, per game) ----
+function hereStore(){ return 'gd-here-'+(ACTIVE_TOURNAMENT||'default'); }
+function hereMap(){ try{ return JSON.parse(localStorage.getItem(hereStore()))||{}; }catch(e){ return {}; } }
+function isHere(g){ return !!(g&&hereMap()[g.id]); }
+function setHere(id,on){
+  var m=hereMap(); if(on) m[id]=true; else delete m[id];
+  try{ localStorage.setItem(hereStore(),JSON.stringify(m)); }catch(e){}
+}
+
 // ---- NEXT MATCH DASHBOARD (consumes the SAME resolver) ----
 // "7:15 AM" alone is not a moment in time - anchor it to the kickoff's own day.
 function arrivalAt(g){
@@ -973,12 +986,20 @@ function renderNextMatch(state){
         // Arrival is the question before kickoff, so it is stated next to the time in its own
         // block, and disappears the moment play starts.
         (g.arrival?(function(){
-          var a=arrivalAt(g), late=a&&state.now>a, mins=late?Math.round((state.now-a)/60000):0;
+          var a=arrivalAt(g);
+          // Already at the field: no deadline and no warning, and it stays that way for this
+          // game across reloads. A parent standing at the fence does not need to be told they
+          // are late.
+          if(isHere(g)) return '<div class="arrive-strong at-field"><div class="label">At the field</div>'
+            +'<div class="at num">'+g.arrival+'</div>'
+            +'<button type="button" class="btn-here" data-here-off="'+g.id+'">Not there? Undo</button></div>';
+          var late=a&&state.now>a, mins=late?Math.round((state.now-a)/60000):0;
           return '<div class="arrive-strong'+(late?' late':'')+'">'
             +'<div class="label">'+(late?'Arrival time has passed':'Arrive by')+'</div>'
             +'<div class="at num">'+g.arrival+'</div>'
             +(late?'<div class="small" style="color:var(--amber);font-weight:700">'+agoText(mins)+'</div>'
                   :(g.arrivalStatus==='pending-coach'?'<div class="small" style="color:var(--amber);font-weight:700">awaiting coach confirmation</div>':''))
+            +'<button type="button" class="btn-here" data-here="'+g.id+'">I&rsquo;m here</button>'
             +'</div>';
         })():''))+
     
@@ -1388,6 +1409,14 @@ function toggleNeed(el){
   try{ localStorage.setItem(needStore(),JSON.stringify(all)); }catch(e){}
   el.classList.toggle('done',on); el.setAttribute('aria-checked',String(on));
 }
+document.getElementById('nextBody').addEventListener('click',function(e){
+  var on=e.target.closest('[data-here]'), off=e.target.closest('[data-here-off]');
+  if(!on&&!off) return;
+  e.preventDefault();
+  if(on) setHere(on.dataset.here,true); else setHere(off.dataset.hereOff,false);
+  lastArrivalKey=''; lastStateKey='';
+  renderNextMatch(resolveTournamentState(TOURNAMENT,tzNow()));
+});
 document.getElementById('needList').addEventListener('click',function(e){
   var el=e.target.closest('[data-need]'); if(el) toggleNeed(el);
 });
