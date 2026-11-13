@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
-<title>Carolina Cup Guide</title><style>
+<title>Tournament Guide</title><style>
   :root{
     --su:#0055A4; --su-dark:#003f7a; --su-soft:#e8f0fb;
     --link:#0a66c2; --bg:#eef1f6; --card:#ffffff;
@@ -406,11 +406,18 @@ function dayLabel(iso){
   }catch(e){ return iso; }
 }
 function hhmm(t){ var m=String(t||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); return m?(m[1]+':'+m[2]+' '+m[3].toUpperCase()):String(t||''); }
+function etOffset(dateStr){
+  var d=new Date(dateStr+'T12:00:00Z'), y=d.getUTCFullYear();
+  function nth(month,n){var f=new Date(Date.UTC(y,month,1));var off=(7-f.getUTCDay())%7;return 1+off+(n-1)*7;}
+  var mar=nth(2,2), nov=nth(10,1), m=d.getUTCMonth()+1, day=d.getUTCDate();
+  var dst=(m>3&&m<11)||(m===3&&day>=mar)||(m===11&&day<nov);
+  return dst?'-04:00':'-05:00';
+}
 function isoDT(date,t){
   var m=String(t||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); if(!m||!date) return date||'';
   var h=parseInt(m[1],10), ap=(m[3]||'').toUpperCase();
   if(ap==='PM'&&h!==12) h+=12; if(ap==='AM'&&h===12) h=0;
-  return date+'T'+(h<10?'0':'')+h+':'+m[2]+':00-04:00';
+  return date+'T'+(h<10?'0':'')+h+':'+m[2]+':00'+etOffset(date);
 }
 
 function adaptData(d, team){
@@ -695,7 +702,7 @@ function fmtParts(diff){
    can never disagree. Fully generic — knows nothing about any specific
    tournament. */
 function resolveTournamentState(t, now){
-  const travel=t.travel?{...t.travel,start:tzTime(t.travel.date+"T00:00:00-04:00")}:null;
+  const travel=t.travel?{...t.travel,start:tzTime(t.travel.date+"T00:00:00"+etOffset(t.travel.date))}:null;
   // Derive each game's active window [start, end] from data (or duration)
   const games=(t.games||[]).map(g=>{
     const start=tzTime(g.datetime);
@@ -868,7 +875,7 @@ function renderWeekendStatus(state){
   const parts=[];
   const travel=TOURNAMENT.travel;
   if(travel){
-    const tStart=tzTime(travel.date+"T00:00:00-04:00");
+    const tStart=tzTime(travel.date+"T00:00:00"+etOffset(travel.date));
     const tDone=st.now>new Date(tStart.getTime()+24*3600000);
     parts.push('<span>'+travel.label+' '+(tDone?'<span style="color:var(--green)">✓</span>':'<span style="color:var(--su)">●</span>')+'</span>');
   }
@@ -1257,8 +1264,11 @@ function renderHotels(){
   var el=document.getElementById('hotelsSection'); if(!el) return;
   var HT=TOURNAMENT.hotels||{}; var _picks=HT.official||[];
   if(!_picks.length){ el.innerHTML='<div class="card"><p class="small muted" style="margin:0">The host has not published its hotel block yet. Nothing is recommended until it does.</p></div>'; return; }
-  var picks=TOURNAMENT.hotels.filter(function(h){return h.tier==='pick';});
-  var alts =TOURNAMENT.hotels.filter(function(h){return h.tier==='alt';});
+  var _all = Array.isArray(TOURNAMENT.hotels) ? TOURNAMENT.hotels
+    : (HT.official||[]).map(function(h){h.tier='pick';return h;})
+        .concat((HT.nonOfficial||[]).map(function(h){h.tier='alt';return h;}));
+  var picks=_all.filter(function(h){return h.tier==='pick';});
+  var alts =_all.filter(function(h){return h.tier==='alt';});
   function card(h){
     return '<div style="padding:12px 14px;border-bottom:1px solid var(--line)">'
       + '<div style="font-weight:700;font-size:14px">'+h.name+'</div>'
