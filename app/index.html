@@ -469,8 +469,8 @@ function renderHome(){
         <i class="ti ti-arrow-right arrow"></i>
       </div>
       <div class="action-grid">
-        <button class="act-btn" onclick="go('pack')"><i class="ti ti-backpack"></i>Open Checklist</button>
-        <button class="act-btn primary" onclick="${venueKnown()?"go('venue')":"go('games')"}"><i class="ti ti-map-pin"></i>${venueKnown()?'Navigate to Venue':'Where to play'}</button>
+        <button class="act-btn" onclick="go('pack')"><i class="ti ti-list-check"></i>Open Checklist</button>
+        <button class="act-btn ${venueKnown()?'primary':''}" onclick="${venueKnown()?"go('venue')":"go('games')"}"><i class="ti ti-map-pin"></i>${venueKnown()?'Navigate to Venue':'Where to play'}</button>
       </div>
       <div class="section-title">At a Glance</div>
       <div class="card compact"><i class="ti ${weatherLine().icon}" style="color:${weatherLine().color};font-size:18px"></i><span>${weatherLine().title}${weatherLine().sub?`<br><span style="font-size:10px;color:var(--t2)">${weatherLine().sub}</span>`:''}</span></div>
