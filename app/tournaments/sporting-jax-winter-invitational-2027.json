@@ -8,9 +8,9 @@
     "cleatsLabel": "Cleats"
   },
   "tournament": {
-    "name": "Florida Elite Winter Invitational",
-    "shortName": "Florida Elite",
-    "organizer": "Florida Elite Soccer Academy",
+    "name": "Sporting Jax Winter Invitational",
+    "shortName": "Sporting Jax Winter",
+    "organizer": "Sporting Jax Soccer Academy",
     "dates": {
       "start": "2027-01-23",
       "end": "2027-01-24"
@@ -26,12 +26,12 @@
     "logo": ""
   },
   "venue": {
-    "name": "Venue TBD — Jacksonville, FL",
-    "address": "Jacksonville, FL (venue not yet announced)"
+    "name": "Venue TBD — Jacksonville / St Johns, FL",
+    "address": "Jacksonville / St Johns County, FL (fields not yet assigned)"
   },
   "games": [],
   "scheduleStatus": "pending",
-  "scheduleExpected": "Club calendar: '2 Day Tournament'. Jacksonville, FL. 2-day event, 2027-01-23–2027-01-24. Tournament schedule not yet published — dates are the club's calendar placeholder, not a confirmed bracket.",
+  "scheduleExpected": "Official: Sporting Jax Winter Invitational, Jan 23-24 2027, U9-U14 competitive, Jacksonville/St Johns County. Stay-to-play for teams travelling >90 mi. Schedule and standings published 'coming soon' on sportingjaxacademy.com/WinterInvitational.",
   "hotels": {
     "stayToPlay": false,
     "official": [],

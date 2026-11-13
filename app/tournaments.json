@@ -1,16 +1,16 @@
 {
-  "defaultTournament": "florida-elite-winter-invitational-2027",
+  "defaultTournament": "sporting-jax-winter-invitational-2027",
   "count": 8,
   "tournaments": [
     {
-      "slug": "florida-elite-winter-invitational-2027",
-      "name": "Florida Elite Winter Invitational",
-      "short": "Florida Elite",
+      "slug": "sporting-jax-winter-invitational-2027",
+      "name": "Sporting Jax Winter Invitational",
+      "short": "Sporting Jax Winter",
       "dates": {
         "start": "2027-01-23",
         "end": "2027-01-24"
       },
-      "city": "Jacksonville, FL",
+      "city": "Jacksonville / St Johns County, FL",
       "status": "draft",
       "teams": [
         "SU 17/18B"
