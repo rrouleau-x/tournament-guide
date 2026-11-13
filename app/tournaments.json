@@ -1,0 +1,118 @@
+{
+  "defaultTournament": "florida-elite-winter-invitational-2027",
+  "count": 8,
+  "tournaments": [
+    {
+      "slug": "florida-elite-winter-invitational-2027",
+      "name": "Florida Elite Winter Invitational",
+      "short": "Florida Elite",
+      "dates": {
+        "start": "2027-01-23",
+        "end": "2027-01-24"
+      },
+      "city": "Jacksonville, FL",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    },
+    {
+      "slug": "usa-jfc-jekyll-festival-2027",
+      "name": "1 Day Festival — United Soccer Alliance & JFC",
+      "short": "Jekyll Festival",
+      "dates": {
+        "start": "2027-01-30",
+        "end": "2027-01-30"
+      },
+      "city": "Jekyll Island, GA",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    },
+    {
+      "slug": "sporting-jax-festival-2027",
+      "name": "1 Day Festival — Sporting Jax",
+      "short": "Sporting Jax",
+      "dates": {
+        "start": "2027-02-27",
+        "end": "2027-02-27"
+      },
+      "city": "Jacksonville, FL",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    },
+    {
+      "slug": "augusta-arsenal-festival-2027",
+      "name": "1 Day Festival — Augusta Arsenal",
+      "short": "Augusta Arsenal",
+      "dates": {
+        "start": "2027-03-20",
+        "end": "2027-03-20"
+      },
+      "city": "Augusta, GA",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    },
+    {
+      "slug": "fesa-florida-state-invitational-2027",
+      "name": "FESA Florida State Invitational (OPTIONAL)",
+      "short": "FESA Invitational",
+      "dates": {
+        "start": "2027-04-03",
+        "end": "2027-04-04"
+      },
+      "city": "Tallahassee, FL",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    },
+    {
+      "slug": "macon-afc-lightning-festival-2027",
+      "name": "1 Day Festival — Macon SC & AFC Lightning",
+      "short": "Macon / AFC",
+      "dates": {
+        "start": "2027-04-10",
+        "end": "2027-04-10"
+      },
+      "city": "Macon, GA",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    },
+    {
+      "slug": "coast-fa-spring-classic-2027",
+      "name": "Coast FA Spring Classic",
+      "short": "Coast FA Classic",
+      "dates": {
+        "start": "2027-04-24",
+        "end": "2027-04-25"
+      },
+      "city": "Myrtle Beach, SC",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    },
+    {
+      "slug": "bvbia-dublin-festival-2027",
+      "name": "1 Day Festival — BVBIA",
+      "short": "BVBIA Dublin",
+      "dates": {
+        "start": "2027-05-08",
+        "end": "2027-05-08"
+      },
+      "city": "Dublin, GA",
+      "status": "draft",
+      "teams": [
+        "SU 17/18B"
+      ]
+    }
+  ]
+}

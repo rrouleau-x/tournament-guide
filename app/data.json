@@ -1,0 +1,472 @@
+{
+  "sport": "soccer",
+  "sportConfig": {
+    "teamLabel": "Team",
+    "fieldLabel": "Field",
+    "matchLabel": "Game",
+    "uniformLabel": "Uniform",
+    "cleatsLabel": "Cleats"
+  },
+  "tournament": {
+    "name": "Sporting Jax Boys Invitational",
+    "shortName": "Sporting Jax",
+    "organizer": "Sporting Jax Academy",
+    "dates": {
+      "start": "2026-08-22",
+      "end": "2026-08-23"
+    }
+  },
+  "team": {
+    "name": "Savannah United 17/18B",
+    "shortName": "SU 17/18B",
+    "colors": [
+      "#0055A4",
+      "#ffffff"
+    ],
+    "logo": ""
+  },
+  "venue": {
+    "name": "Chuck Rogers Park",
+    "address": "11950 San Jose Blvd, Jacksonville, FL 32223",
+    "coordinates": {
+      "lat": 30.1544,
+      "lng": -81.6328
+    },
+    "mapsUrl": "https://www.google.com/maps/dir/Chuck+Rogers+Park,11950+San+Jose+Blvd,Jacksonville,FL+32223",
+    "parking": "Free on-site parking. Arrive 30-45 min early — lots fill on tournament days.",
+    "fields": {
+      "count": 8,
+      "surface": "Grass (City of Jacksonville park)",
+      "map": "https://docs.google.com/presentation/d/e/2PACX-1vQCJyfhW8bCpxTk5HXfMKEEbekRHoaQ4FtYkLSzNfe8McocTmwMratx3skY7bvF2nmKkWDnPnknJXTs/pub",
+      "layoutNotes": {
+        "1_2": "Restrooms, concession stand and parking nearby",
+        "3_4": "Restrooms, concession stand and picnic shelters nearby",
+        "5_6": "Restrooms, concession stand and parking nearby"
+      }
+    },
+    "amenities": {
+      "concessions": true,
+      "restrooms": true,
+      "shade": "Limited — bring canopy",
+      "aed": false,
+      "playground": true
+    }
+  },
+  "games": [
+    {
+      "id": "28",
+      "date": "2026-08-22",
+      "time": "10:30 AM EDT",
+      "opponent": "PC NFPL B2017/18 Dev 1",
+      "venue": "Chuck Rogers Park",
+      "field": "Field 7",
+      "arrival": "9:45 AM",
+      "uniform": "Away — Blue (pack both kits)",
+      "status": "scheduled",
+      "type": "group"
+    },
+    {
+      "id": "30",
+      "date": "2026-08-22",
+      "time": "3:30 PM EDT",
+      "opponent": "JAX NFPL B2017/18 N1 DEV 1",
+      "venue": "Chuck Rogers Park",
+      "field": "Field 6",
+      "arrival": "2:45 PM",
+      "uniform": "Home — White (pack both kits)",
+      "status": "scheduled",
+      "type": "group"
+    },
+    {
+      "id": "32",
+      "date": "2026-08-23",
+      "time": "10:30 AM EDT",
+      "opponent": "JFC NFPL B2017/18 Elite Blue",
+      "venue": "Chuck Rogers Park",
+      "field": "Field 5",
+      "arrival": "9:45 AM",
+      "uniform": "Home — White (pack both kits)",
+      "status": "scheduled",
+      "type": "group"
+    },
+    {
+      "id": "33",
+      "date": "2026-08-23",
+      "time": "2:15 PM EDT",
+      "opponent": "Bracket A #1 vs #2 (Final)",
+      "venue": "Chuck Rogers Park",
+      "field": "Field 5",
+      "arrival": "1:30 PM",
+      "uniform": "Pack both kits",
+      "status": "conditional",
+      "type": "final"
+    }
+  ],
+  "scheduleStatus": "confirmed",
+  "scheduleExpected": "Schedule confirmed Aug 17: G1 Sat 10:30 AM Field 7, G2 Sat 3:30 PM Field 6, G3 Sun 10:30 AM Field 5, Bracket A Final Sun 2:15 PM Field 5. 4-team U9 Boys Silver, Bracket A.",
+  "hotels": {
+    "stayToPlay": true,
+    "portal": "https://system.gotsport.com/stores/1903604Y4",
+    "official": [
+      {
+        "name": "Hampton Inn & Suites Jacksonville South - Bartram Park",
+        "chain": "Hilton",
+        "rate": "$119/night (non-refundable) or $139 (free cancel)",
+        "total2Nights": "$238-278+",
+        "rooms": 9,
+        "drive": "7.9 mi · 15 min",
+        "route": "Bartram Park Blvd & Race Track Rd",
+        "amenities": [
+          "Free hot breakfast",
+          "Free parking",
+          "Outdoor pool",
+          "Pet-friendly",
+          "Free WiFi"
+        ],
+        "rating": 4.5,
+        "bestValue": true,
+        "bookUrl": "https://www.booking.com"
+      },
+      {
+        "name": "Fairfield Inn & Suites Jacksonville Butler Boulevard",
+        "chain": "Marriott ★ Points",
+        "rate": "$110/night (non-refundable) or $129 (free cancel)",
+        "total2Nights": "$220-258+",
+        "rooms": 5,
+        "drive": "17.4 mi · 22 min",
+        "route": "I-95 S",
+        "amenities": [
+          "Free buffet breakfast",
+          "Outdoor pool",
+          "Whirlpool",
+          "Marriott Bonvoy"
+        ],
+        "bestValue": false,
+        "bookUrl": "https://www.booking.com"
+      },
+      {
+        "name": "Aloft by Marriott Jacksonville Tapestry Park",
+        "chain": "Marriott ★ Points",
+        "rate": "$116/night (breakfast $9 extra)",
+        "total2Nights": "$232+",
+        "rooms": 10,
+        "drive": "18.3 mi · 25 min",
+        "route": "FL-9B S",
+        "amenities": [
+          "On-site bar & restaurant",
+          "Outdoor pool",
+          "Marriott Bonvoy"
+        ],
+        "bestValue": false,
+        "bookUrl": "https://www.booking.com"
+      }
+    ],
+    "nonOfficial": [
+      {
+        "name": "Holiday Inn Express Jacksonville South - Bartram Park",
+        "chain": "IHG",
+        "drive": "7.9 mi · 16 min",
+        "note": "$128/night, free breakfast (rated 10.0), 6+ rooms. Adjacent to Hampton Inn. Not on GotSport portal."
+      },
+      {
+        "name": "Courtyard by Marriott Jacksonville Flagler Center",
+        "chain": "Marriott ★ Points",
+        "drive": "9.4 mi · 16 min",
+        "note": "$105/night (lowest rate), breakfast $7 extra, 5 rooms. Not on GotSport portal."
+      }
+    ],
+    "updatedAt": "2026-08-16T09:27:50-0400"
+  },
+  "weather": {
+    "summary": "Updated Aug 18: Sunday rain chance jumped to 88% (up from 59%) with thunderstorms and ~0.40 in of rain. Saturday 56% (~0.09 in), Friday travel day 58% (~0.14 in). Both game days need rain gear. Extreme heat through the week — Saturday RealFeel 107F, Sunday 102F, Friday travel 108F. Trend: Aug 10 (4%/6%), Aug 15 (55%/3%), Aug 16 (56%/59%), Aug 18 (56%/88%). Recheck morning of each game.",
+    "details": "Precipitation (AccuWeather 32223): Fri Aug 21 (travel) — 0.14 in expected, 58% chance, ~1 hr rain, humid with an afternoon thunderstorm, High 94F/Low 76F, RealFeel 108F, UV 7, SSW 8 mph. Sat Aug 22 — 0.09 in expected, 56% chance, ~1 hr rain, humid with clouds and a thunderstorm in the afternoon, High 95F/Low 77F, RealFeel 107F, UV 9, SW 9 mph. Sun Aug 23 — 0.40 in expected, 88% chance (up from 59%), ~3 hrs rain, mostly cloudy with a couple of thunderstorms, High 93F/Low 76F, RealFeel 102F, UV 4, SW 9 mph. Sources: AccuWeather 32223 + NWS Jacksonville (extreme heat warning active). Rain gear essential both game days; expect possible delays.",
+    "forecastLink": "https://www.accuweather.com/en/us/jacksonville/32223/10-day-weather-forecast/13855_pc",
+    "source": "AccuWeather (32223) + NWS Jacksonville",
+    "sourceApiUrl": "https://forecast.weather.gov/MapClick.php?lat=30.1544&lon=-81.6328",
+    "updatedAt": "2026-08-18T08:15:00-04:00"
+  },
+  "rules": {
+    "fullLink": "https://docs.google.com/document/d/e/2PACX-1vTfwqpJ6KrFTAWrKkvSay393zfFkZXSUVooPenxd6TStJpcIYHWFJa9kifZJdBQh6ip52gIxifONgO9/pub",
+    "keyRules": [
+      {
+        "label": "Format",
+        "value": "7v7 · Max roster 12 · Min 5 to start · Size 4 ball"
+      },
+      {
+        "label": "Game Length",
+        "value": "25-min halves · 5-min halftime"
+      },
+      {
+        "label": "Points",
+        "value": "Win = 3 · Tie = 1 · Loss = 0"
+      },
+      {
+        "label": "Mercy Rule",
+        "value": "6-goal lead at halftime or later → match ends"
+      },
+      {
+        "label": "Goal Cap",
+        "value": "Max 4 goals per game for GD and GF tiebreakers"
+      },
+      {
+        "label": "Substitutions",
+        "value": "Unlimited at goal kicks, throw-ins, kickoffs, halftime, injury"
+      },
+      {
+        "label": "Heading",
+        "value": "Not allowed U12 and younger → indirect free kick"
+      },
+      {
+        "label": "Water Breaks",
+        "value": "Mandatory mid-half at 85°F+ (FYSA Rule 402.4)"
+      },
+      {
+        "label": "Forfeit",
+        "value": "5 min late (10 min finals). Min 5 players. Recorded as 4-0 loss."
+      },
+      {
+        "label": "Zero Tolerance",
+        "value": "No ref abuse — immediate removal + suspension"
+      },
+      {
+        "label": "Weather",
+        "value": "30-min delay clock. Post-halftime stoppage = completed game."
+      },
+      {
+        "label": "Championship",
+        "value": "No OT — straight to PKs if tied"
+      },
+      {
+        "label": "Stay-to-Play",
+        "value": "Required for teams 90+ miles. Exception: TDirector@SportingJaxAcademy.com"
+      }
+    ],
+    "tiebreakers": [
+      "Head-to-Head (disregarded if 3+ teams tied)",
+      "Goal Differential — max 4 per game",
+      "Goals For — max 4 per game",
+      "Goals Against — fewest allowed (no cap)",
+      "Shutouts — most clean sheets",
+      "Penalty Kicks — FIFA Kicks from the Penalty Mark"
+    ]
+  },
+  "updates": [
+    {
+      "type": "warning",
+      "title": "Weather Alert: Rain likely BOTH days — Sunday now 88%",
+      "description": "Sunday forecast jumped to 88% rain with thunderstorms (up from 59%). Saturday at 56%. Heat intensified — RealFeel 107F Sat, 102F Sun, 108F Friday travel day. Pack rain gear for both game days.",
+      "time": "Aug 18 · 7:30 AM",
+      "posted": "Bob Team Manager",
+      "actionRequired": true
+    },
+    {
+      "type": "warning",
+      "title": "Bring white & blue jerseys",
+      "description": "Uniform confirmation — but pack both kits in case of late change",
+      "time": "Jul 30 · 6:00 PM",
+      "posted": "Coach Keith",
+      "actionRequired": false
+    },
+    {
+      "type": "info",
+      "title": "Pre-tournament practice schedule (updated)",
+      "description": "Practice schedule has changed since originally posted. The Thu Aug 13 practice was CANCELED. A new Saturday practice was added Aug 15 at 10:30 AM at JRSC Field 8. Current upcoming pre-tournament practices: Mon Aug 17 and Wed Aug 19, both 5:30–7:00 PM at Jennifer Ross Soccer Complex Field 7. Note: Savannah fields were closed Aug 11 due to weather.",
+      "time": "2026-08-16T09:15:00-0400",
+      "posted": "Savannah United",
+      "actionRequired": false
+    },
+    {
+      "type": "info",
+      "title": "Fall events added to team calendar",
+      "description": "New team events posted: Local Festival Sat Sep 12 (JRSC), 1-Day Festival Sat Sep 19 & Sat Sep 26 (JRSC), and Carolina Cup Sat–Sun Oct 3–4 in Columbia, SC — an away tournament, so plan travel early.",
+      "time": "Aug 5",
+      "posted": "Savannah United",
+      "actionRequired": false
+    },
+    {
+      "type": "warning",
+      "title": "Stay-to-play booking deadline has passed",
+      "description": "The Sporting Jax stay-to-play portal now shows the reservation deadline has passed — new bookings are request-only. Cancellations within 7 days of check-in incur a $25 fee; within 72 hours, one night's room rate. The portal's available hotel inventory and rates have also changed since our last update, so review the portal directly for current options before booking. Existing reservations are unaffected.",
+      "time": "2026-08-12T08:00:21-0400",
+      "posted": "Savannah United",
+      "actionRequired": true
+    },
+    {
+      "type": "info",
+      "title": "Post-tournament practices posted (Aug 24 & 26)",
+      "description": "Two practices scheduled after the Sporting Jax tournament: Mon Aug 24 and Wed Aug 26, both 5:30–7:00 PM at Jennifer Ross Soccer Complex Field 7. Regular season training resumes immediately after the tournament weekend.",
+      "time": "2026-08-16T09:20:00-0400",
+      "posted": "Savannah United",
+      "actionRequired": false
+    },
+    {
+      "type": "warning",
+      "title": "Set Niko's attendance for Sporting Jax in PlayMetrics",
+      "description": "PlayMetrics is sending repeated reminders to update Niko Rouleau's attendance for upcoming events including the Sporting Jax tournament (Aug 22–23). Open the PlayMetrics app or website, go to the team summary page, and click 'Set Player Availability' before the tournament begins.",
+      "time": "2026-08-16T09:25:00-0400",
+      "posted": "Savannah United",
+      "actionRequired": true
+    },
+    {
+      "type": "info",
+      "title": "Game uniforms assigned — wear correct kit per game",
+      "description": "PlayMetrics now shows specific uniforms for each Sporting Jax game. Game 1 (Sat 10:30 AM, Field 7 vs PC NFPL) — AWAY, wear BLUE. Game 2 (Sat 3:30 PM, Field 6 vs JAX NFPL) — HOME, wear WHITE. Game 3 (Sun 10:30 AM, Field 5 vs JFC NFPL) — HOME, wear WHITE. Potential final (Sun 2:15 PM, Field 5) — TBD. Still pack both kits in case of late changes.",
+      "time": "2026-08-20T08:04:30-0400",
+      "posted": "Savannah United",
+      "actionRequired": false
+    },
+    {
+      "type": "info",
+      "title": "Travel team not in Sporting Jax — only Premier plays",
+      "description": "PlayMetrics canceled the Sporting Jax tournament events (Sat Aug 22 & Sun Aug 23) for the 17/18B Travel team. Only the 17/18B Premier team is participating in this tournament. Coach Keith confirmed the 10-player Premier roster: Carey Noel, Garrad Logan, Hernandez Joshua, Jones Parker, Levesque Aiden, Rouleau Niko, Rudder Maclin, Torres Carlos, Weber Elliott, Whyte Michael. Non-rostered players' games start Sept 12. If you follow both teams in PlayMetrics, the Travel team's canceled events are expected — not an error.",
+      "time": "2026-08-20T08:04:30-0400",
+      "posted": "Savannah United",
+      "actionRequired": false
+    },
+    {
+      "type": "info",
+      "title": "Labor Day Holiday Soccer Clinic — registration open",
+      "description": "Savannah United is running a Labor Day Weekend soccer clinic led by Coach Jason Brown (Central Academy staff). 1-day and 3-day options available. Registration is open now via your PlayMetrics account → Club Programs. Check the attached flyer in the PlayMetrics message for full details and pricing.",
+      "time": "2026-08-22T08:00:00-0400",
+      "posted": "Coach Keith Gunn",
+      "actionRequired": true
+    },
+    {
+      "type": "info",
+      "title": "Coach Keith's academy update — travel rosters still being evaluated",
+      "description": "Coach Keith sent a training update (Aug 20): players are doing well despite heat, fitness levels good. Training focus has been defensive shape and 7v7 game time. Travel roster evaluation is ongoing — expect clarity by September. Local players may be invited to travel training/games as the pool solidifies. Coach Keith plans U9 and U10 parents meetings at the fields (~6:30 PM, end of training) in the next couple weeks. No immediate action needed — invitations will come via PlayMetrics notification.",
+      "time": "2026-08-22T08:05:00-0400",
+      "posted": "Coach Keith Gunn",
+      "actionRequired": false
+    }
+  ],
+  "contacts": {
+    "manager": {
+      "name": "Rich Rouleau",
+      "role": "Parent Team Manager",
+      "phone": "",
+      "email": "rrouleau@mac.com"
+    },
+    "coach": {
+      "name": "Keith Gunn",
+      "role": "Head Coach",
+      "phone": "",
+      "email": "k.gunn@savannahunited.com"
+    },
+    "teamManagers": [
+      {
+        "name": "Jenn Boyd",
+        "role": "Team Manager",
+        "phone": "770-757-1617",
+        "email": "jsboyd21@gmail.com"
+      },
+      {
+        "name": "Victoria Huryn",
+        "role": "Team Manager",
+        "phone": "859-445-2028",
+        "email": "victoriaamberlong@gmail.com"
+      }
+    ],
+    "premierStaff": [
+      {
+        "name": "Carson Gray",
+        "role": "Assistant Coach",
+        "phone": "912-856-9442"
+      },
+      {
+        "name": "Mitchell Heath",
+        "role": "Assistant Coach",
+        "phone": ""
+      }
+    ],
+    "tournamentDirector": {
+      "name": "Tournament Director",
+      "email": "TDirector@SportingJaxAcademy.com",
+      "phone": "904-257-5575"
+    },
+    "emergency": "911"
+  },
+  "venueRules": {
+    "tents": "Pop-up canopies allowed. Must be weighted (no stakes in turf fields). Place behind spectator line — not between field and sideline.",
+    "pets": "Rogers Park (Chuck Rogers Park) is pet-friendly. Dogs must be leashed. Clean up after your pet. Not all tournament venues allow pets — check each venue.",
+    "foodCooler": "Outside food and coolers allowed. No glass containers. Concessions available on-site.",
+    "chairs": "Folding chairs allowed along sidelines behind spectator line. Do not block access paths or medical lanes.",
+    "alcohol": "No alcohol permitted.",
+    "smoking": "Smoking only in designated areas away from fields and playgrounds."
+  },
+  "checklist": {
+    "player": [
+      "Both uniform kits",
+      "Cleats",
+      "Shin guards",
+      "Water bottle",
+      "Extra socks",
+      "Warm-up gear",
+      "Dry clothes",
+      "Recovery shoes",
+      "Medications"
+    ],
+    "weather": [
+      "Water (plenty)",
+      "Electrolytes",
+      "Sunscreen SPF 50+",
+      "Cooling towel",
+      "Rain gear",
+      "Plastic bags"
+    ],
+    "parent": [
+      "Folding chairs",
+      "Shade/canopy",
+      "Umbrella",
+      "Cooler",
+      "Snacks",
+      "Portable charger",
+      "Wipes",
+      "Sibling activities"
+    ],
+    "emergency": [
+      "First-aid kit",
+      "Ice packs",
+      "Insurance info",
+      "Emergency contacts"
+    ]
+  },
+  "nearby": {
+    "urgentCare": {
+      "name": "CareSpot Urgent Care",
+      "address": "70 Durbin Pavilion Dr, Suite 101, St. Johns, FL 32259",
+      "phone": "904-295-0038",
+      "drive": "8am-8pm daily",
+      "maps": "https://www.google.com/maps/?q=CareSpot+Urgent+Care+Durbin+Pavilion+St+Johns+FL"
+    },
+    "target": {
+      "name": "Academy Sports + Outdoors",
+      "address": "9041 Southside Blvd, Jacksonville, FL 32256",
+      "drive": "Closest sporting goods to venue",
+      "maps": "https://www.google.com/maps/?q=Academy+Sports+Outdoors+Southside+Blvd+Jacksonville+FL"
+    },
+    "dicks": {
+      "name": "DICK'S Sporting Goods",
+      "address": "14964 Max Leggett Pkwy, Suite 300, Jacksonville, FL 32218",
+      "drive": "~20 min from venue",
+      "maps": "https://www.google.com/maps/?q=Dicks+Sporting+Goods+Max+Leggett+Pkwy+Jacksonville+FL"
+    },
+    "pharmacy": {
+      "name": "Walgreens",
+      "address": "390 SR-13 S, Jacksonville, FL 32259",
+      "phone": "904-230-4696",
+      "drive": "7am-10pm daily",
+      "maps": "https://www.google.com/maps/?q=Walgreens+390+SR-13+S+Jacksonville+FL+32259"
+    },
+    "coffee": {
+      "name": "CVS (with MinuteClinic)",
+      "address": "430 SR-13, Jacksonville, FL 32259",
+      "drive": "Walk-ins welcome",
+      "maps": "https://www.google.com/maps/?q=CVS+430+SR-13+Jacksonville+FL+32259"
+    }
+  },
+  "offline": {
+    "pdfGuideUrl": "",
+    "lastCached": ""
+  }
+}

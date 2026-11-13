@@ -1,0 +1,80 @@
+{
+  "sport": "soccer",
+  "sportConfig": {
+    "teamLabel": "Team",
+    "fieldLabel": "Field",
+    "matchLabel": "Game",
+    "uniformLabel": "Uniform",
+    "cleatsLabel": "Cleats"
+  },
+  "tournament": {
+    "name": "Coast FA Spring Classic",
+    "shortName": "Coast FA Classic",
+    "organizer": "Coast FA",
+    "dates": {
+      "start": "2027-04-24",
+      "end": "2027-04-25"
+    }
+  },
+  "team": {
+    "name": "Savannah United 17/18B Travel",
+    "shortName": "SU 17/18B",
+    "colors": [
+      "#0055A4",
+      "#ffffff"
+    ],
+    "logo": ""
+  },
+  "venue": {
+    "name": "Venue TBD — Myrtle Beach, SC",
+    "address": "Myrtle Beach, SC (venue not yet announced)"
+  },
+  "games": [],
+  "scheduleStatus": "pending",
+  "scheduleExpected": "Club calendar: '2 day Tournament', Myrtle Beach SC. 2-day event, 2027-04-24–2027-04-25. Tournament schedule not yet published — dates are the club's calendar placeholder, not a confirmed bracket.",
+  "hotels": {
+    "stayToPlay": false,
+    "official": [],
+    "nonOfficial": []
+  },
+  "weather": {},
+  "rules": {},
+  "updates": [],
+  "contacts": {
+    "manager": {
+      "name": "Rich Rouleau",
+      "role": "Parent Team Manager",
+      "phone": "",
+      "email": "rrouleau@mac.com"
+    },
+    "coach": {
+      "name": "Keith Gunn",
+      "role": "Head Coach",
+      "phone": "",
+      "email": "k.gunn@savannahunited.com"
+    },
+    "teamManagers": [],
+    "premierStaff": [
+      {
+        "name": "Carson Gray",
+        "role": "Coach",
+        "phone": "912-856-9442"
+      },
+      {
+        "name": "Mitchell Heath",
+        "role": "Coach",
+        "phone": ""
+      }
+    ],
+    "emergency": "911"
+  },
+  "venueRules": {},
+  "checklist": {
+    "player": [],
+    "weather": [],
+    "parent": [],
+    "emergency": []
+  },
+  "nearby": {},
+  "offline": {}
+}
