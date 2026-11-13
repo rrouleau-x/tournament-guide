@@ -366,25 +366,25 @@ let TOURNAMENT = {
   schedulePending: {
     headline: "Schedule Not Released Yet",
     detail: "The host has not published game times, fields or pairings yet.",
-    accepted: "Accepted team list confirmed (Sep 14)",
-    brackets: "Bracket posted Sep 16 — verified",
-    schedule: "Full schedule posts September 26"
+    accepted: "",
+    brackets: "",
+    schedule: ""
   },
   venue: { assigned:false, name:"", address:"", city:"", mapsUrl:"", complexes:[] },
   breakPlan: { title:"Between-Games Rhythm", intro:"Once the schedule posts we will build a suggested reset rhythm around your actual game times.", steps:[] },
   hotels: [],
   food: [], foodRankedFor: "", foodNote: "", foodUpdated: "",
-  hotelsUpdated: "Hotel rates verified Sep 26, 2026. Rates change daily",
+  hotelsUpdated: "",
   nearby: { groups:[
       { label:"Closest to the venue", items:[
           { name:"Pharmacy", note:"nearest open pharmacy", dist:"~1 min", sub:"0.3 mi", url:"", icon:"shop" },
           { name:"Groceries", note:"water, ice, snacks", dist:"~2 min", sub:"0.4 mi", url:"", icon:"shop" },
           { name:"Supermarket", note:"one-stop for supplies", dist:"~4 min", sub:"1.1 mi", url:"", icon:"shop" },
-          { name:"Publix", note:"2732 North Lake Drive", dist:"~6 min", sub:"2.3 mi", url:"https://www.google.com/maps/search/Publix+2732+North+Lake+Drive+Columbia+SC", icon:"shop" }
+          { name:"Publix", note:"2732 North Lake Drive", dist:"~6 min", sub:"2.3 mi", url:"https://www.google.com/maps/search/Publix+2732+North+Lake+Drive++SC", icon:"shop" }
         ]},
       { label:"Forgot something?", items:[
-          { name:"Dick's Sporting Goods", note:"1110 Bower Parkway", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Dicks+Sporting+Goods+1110+Bower+Parkway+Columbia+SC", icon:"shop" },
-          { name:"Academy Sports + Outdoors", note:"sporting goods", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Academy+Sports+Outdoors+Columbia+SC", icon:"shop" }
+          { name:"Dick's Sporting Goods", note:"1110 Bower Parkway", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Dicks+Sporting+Goods+1110+Bower+Parkway++SC", icon:"shop" },
+          { name:"Academy Sports + Outdoors", note:"sporting goods", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Academy+Sports+Outdoors++SC", icon:"shop" }
         ]},
       { label:"Emergency", items:[
           { name:"Urgent care", note:"search nearest open clinic", dist:"maps", sub:"", url:"", icon:"phone" },
@@ -398,9 +398,9 @@ let TOURNAMENT = {
     
   ],
   rules:{ quick:[], full:[], tiebreakers:[], tiebreakersPending:"", tiebreakProcess:"", fullRulesUrl:"", standingsUrl:"", docsUrl:"" },
-  packing:{ alert:"Pack both kits. Also pack a warm layer — early October mornings run about 63°F.", groups:[] },
+  packing:{ alert:"Pack both kits and a warm layer — January mornings in north Florida are cold.", groups:[] },
   needs:{
-    before:[["Book hotel","rates: checked Sep 26"],["Save the guide PDF","works offline"],["Charge phones","both days"],["Pack both kits","+ warm layer"]],
+    before:[["Book hotel","rates: check on booking"],["Save the guide PDF","works offline"],["Charge phones","both days"],["Pack both kits","+ warm layer"]],
     travel:[["Leave by early afternoon","~3h 15m drive"],["Check in to hotel","Fri Oct 2"],["Early bedtime","players"]],
     game1:[["Both kits","game day"],["Cleats + shin guards","essential"],["Water + electrolytes","bring plenty"],["Cool layer","cool mornings"]],
     between:[["Eat lunch","between games"],["Cool down","shade or A/C"],["Rehydrate","water + electrolytes"],["Back to fields","parking fills early"]],
@@ -833,7 +833,7 @@ function refreshContext(state){
     case 'between-games': txt='BETWEEN GAMES'; chip=nextMatch?nextMatch.label+' · '+nextMatch.time:'Next match'; need='between'; break;
     case 'game-day': txt='GAME DAY'; chip=nextMatch?nextMatch.label+' · '+nextMatch.time:'Next match'; need=(nextMatch&&nextMatch.label==='Game 1')?'game1':'between'; break;
     case 'awaiting-final': txt='AWAITING BRACKET RESULT'; chip='Final qualification not yet confirmed'; need='game3'; break;
-    case 'awaiting-schedule': txt='SCHEDULE PENDING'; chip='Bracket confirmed · Schedule Sep 26'; need='before'; break;
+    case 'awaiting-schedule': txt='SCHEDULE PENDING'; chip='Schedule not published'; need='before'; break;
     case 'complete': txt='TOURNAMENT COMPLETE'; chip='Great weekend!'; need='before'; break;
     default: txt='GAME DAY'; chip=nextMatch?nextMatch.label+' · '+nextMatch.time:'Next match'; need='game1';
   }
@@ -1075,7 +1075,7 @@ function renderSchedule(state){
   const st=state||resolveTournamentState(TOURNAMENT,tzNow());
   const currentId=st.currentMatch?st.currentMatch.id:null;
   const nextId=st.nextMatch?st.nextMatch.id:null;
-  document.getElementById('schedVenueLine').textContent='All games at '+TOURNAMENT.venue.name+' · '+TOURNAMENT.venue.address+', '+TOURNAMENT.venue.city;
+  document.getElementById('schedVenueLine').textContent=(TOURNAMENT.venue&&TOURNAMENT.venue.name)?('All games at '+TOURNAMENT.venue.name+' · '+(TOURNAMENT.venue.address||TOURNAMENT.venue.city||'')):'';
   const byDay={};
   TOURNAMENT.games.forEach(g=>{(byDay[g.dayLabel]=byDay[g.dayLabel]||[]).push(g);});
   let out='';
@@ -1150,10 +1150,10 @@ function renderVenue(){
     document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--amber)">'
       +'<div class="label" style="color:var(--amber)">Venue</div>'
       +'<div style="font-size:17px;font-weight:800;margin:3px 0 6px">Complex not yet assigned</div>'
-      +'<p class="muted small" style="margin:0;line-height:1.55">The host has not published the venue assignment yet.<b>September 26</b>.</p>'
+      +'<p class="muted small" style="margin:0;line-height:1.55">The host has not published the venue assignment yet..</p>'
       +'<div style="margin-top:10px">'+list+'</div>'
       +'</div>';
-    document.getElementById('fieldsCard').innerHTML='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">Field and complex assignments are published with the schedule on September 26.</p></div>';
+    document.getElementById('fieldsCard').innerHTML='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">Field and complex assignments are published with the schedule on .</p></div>';
     const amen0=(v.amenities||[]).map(function(a){return '<div class="amenity">'+a+'</div>';}).join('');
     document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="label" style="margin-bottom:6px">Parking &amp; Amenities</div><p class="small" style="margin:0 0 10px;line-height:1.55">'+(v.parking||'Parking details have not been published yet.')+'</p><div class="amenities">'+amen0+'</div><p class="small muted" style="margin:12px 0 0">'+(v.bring||'')+'</p></div>';
     return;
@@ -1175,7 +1175,7 @@ function renderVenue(){
   grid+='<a class="btn ghost" style="margin-top:10px;flex-direction:row;gap:7px" href="'+(COMPLEX_MAPS[v.name]||v.fieldMapUrl)+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>Official field map</a>';
   } else {
     var fmsg=(v.assigned===false)
-      ? 'Field and complex assignments are published with the schedule on September 26.'
+      ? 'Field and complex assignments are published with the schedule.'
       : 'Field numbers for our games are on the Schedule tab.';
     var fmap=COMPLEX_MAPS[v.name]||'';
     var fLabel=(COMPLEX_MAP_LABELS[v.name]||((v.name||'Complex')+' layout'));
@@ -1228,7 +1228,7 @@ function renderChanges(){
     +'<div class="card" style="font-size:12.5px;line-height:1.65">'
     +'<p style="margin:0 0 10px"><b>Tournament facts</b> &mdash; dates, formats, fees, check-in rules, contacts and complexes &mdash; are taken from the official tournament page.<br><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">Official tournament page &rsaquo;</a></p>'
     +'<p style="margin:0 0 10px"><b>Hotel rates</b> were checked live for Oct 2&ndash;4 (2 adults, 1 child) and change daily &mdash; confirm before booking. <b>Drive distances</b> were measured by routing against the actual venue address, not copied from a tournament portal.</p>'
-    +'<p style="margin:0"><b>Weather</b> is based on ten years of recorded early-October observations for Columbia, SC (Open-Meteo archive). <b>Nearby amenities</b> come from OpenStreetMap. Anything not sourced above is parent-manager research, not official tournament information.</p>'
+    +'<p style="margin:0"><b>Weather</b> is based on ten years of recorded early-October observations for (Open-Meteo archive). <b>Nearby amenities</b> come from OpenStreetMap. Anything not sourced above is parent-manager research, not official tournament information.</p>'
     +'</div>';
 }
 
