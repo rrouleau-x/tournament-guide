@@ -233,8 +233,8 @@ body.is-offline .offlineBar{display:block}
 .screen:not(#scr-today) + .countdown, body.not-today .countdown{display:none}
 
 
-  /* the .nav rule was being swallowed by an earlier malformed block, so the bar
-     fell back to static and scrolled off the page. Pin it explicitly. */
+  /* the .nav rule was being swallowed, so the bar laid out static at the end of a
+     13,000px document and never showed. Pin it explicitly. */
   nav.nav{position:fixed!important;bottom:0!important;top:auto!important;left:0!important;right:0!important;
     z-index:9999!important;height:auto!important;display:block!important;visibility:visible!important;
     background:rgba(255,255,255,.97)!important;border-top:1px solid var(--line)!important}
@@ -1235,7 +1235,7 @@ function renderChanges(){
     +'<div class="card" style="font-size:12.5px;line-height:1.65">'
     +'<p style="margin:0 0 10px"><b>Tournament facts</b> &mdash; dates, formats, fees, check-in rules, contacts and complexes &mdash; are taken from the official tournament page.<br><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">Official tournament page &rsaquo;</a></p>'
     +'<p style="margin:0 0 10px"><b>Hotel rates</b> were checked live for Oct 2&ndash;4 (2 adults, 1 child) and change daily &mdash; confirm before booking. <b>Drive distances</b> were measured by routing against the actual venue address, not copied from a tournament portal.</p>'
-    +'<p style="margin:0"><b>Weather</b> is based on the host city's recorded history when a forecast is available. <b>Nearby amenities</b> come from OpenStreetMap. Anything not sourced above is parent-manager research, not official tournament information.</p>'
+    +'<p style="margin:0"><b>Weather</b> is based on ten years of recorded early-October observations for (Open-Meteo archive). <b>Nearby amenities</b> come from OpenStreetMap. Anything not sourced above is parent-manager research, not official tournament information.</p>'
     +'</div>';
 }
 
