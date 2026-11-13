@@ -34,21 +34,18 @@
   .tpicks{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:12px;position:relative;z-index:2}
   .tpicks::-webkit-scrollbar{display:none}
   .tpick{flex:0 0 auto;white-space:nowrap}
-  .tpick{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);color:#fff;text-decoration:none;font-size:11.5px;font-weight:700;padding:0 8px;min-height:38px;border-radius:20px;letter-spacing:0;border:1px solid rgba(255,255,255,.25);line-height:1}
+  .tpick{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;padding:0 10px;min-height:44px;border-radius:22px;letter-spacing:0;border:1px solid rgba(255,255,255,.25);line-height:1}
   .tpick.on{background:#fff;color:var(--su);border-color:#fff}
 
   /* CONTEXT STRIP + COUNTDOWN */
   .context{background:var(--su);color:#fff;padding:10px 18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .context .chip{background:rgba(255,255,255,.16);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+  .context .chip{background:rgba(255,255,255,.16);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
   .countdown{background:var(--su-dark);color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
   .countdown .cd-label{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#cfe0f5;width:100%;text-align:center}
   .countdown .cd-num{font-size:24px;font-weight:800;letter-spacing:-1px}
-  .countdown .cd-unit{font-size:10px;font-weight:700;color:#cfe0f5;text-transform:uppercase;letter-spacing:.4px}
+  .countdown .cd-unit{font-size:12px;font-weight:700;color:#cfe0f5;text-transform:uppercase;letter-spacing:.4px}
   .countdown .cd-sep{color:#cfe0f5;opacity:.6;font-weight:800}
 
-  /* PROVENANCE LEGEND */
-  .legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 18px;background:var(--bg);font-size:10.5px;color:var(--muted);font-weight:600}
-  .legend span{display:flex;align-items:center;gap:5px}
   .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
   .dot.g{background:var(--green)}.dot.a{background:var(--amber)}.dot.b{background:var(--link)}
 
@@ -90,8 +87,8 @@
   .next .wx-mini{margin-top:10px;padding:10px 12px;background:var(--amber-bg);border-radius:10px;font-size:12.5px;font-weight:600;color:var(--amber);display:flex;justify-content:space-between;align-items:center;gap:8px}
   .next .wx-mini .exp{color:var(--link);font-weight:700;white-space:nowrap;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 
-  .btn-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
-  .btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:13px 6px;border-radius:12px;background:var(--su);color:#fff;text-decoration:none;font-size:11px;font-weight:700;text-align:center}
+  .btn-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;margin-top:12px}
+  .btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:13px 6px;border-radius:12px;background:var(--su);color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;text-align:center}
   .btn svg{width:22px;height:22px}
   .btn.ghost{background:var(--su-soft);color:var(--su)}
 
@@ -154,7 +151,7 @@
 
   .ourwk{display:flex;align-items:center;gap:6px;justify-content:center;padding:12px;background:var(--su);border-radius:12px;color:#fff;margin-top:12px}
   .ourwk .ow{font-size:13px;font-weight:800}
-  .ourwk .owl{font-size:10px;opacity:.85;font-weight:600}
+  .ourwk .owl{font-size:11px;opacity:.85;font-weight:600}
   .ourwk .arr{font-size:16px;opacity:.7}
 
   .tap{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
@@ -165,7 +162,7 @@
   .tap .tt .tl{font-size:14px;font-weight:700}
   .tap .tt .ts{font-size:12px;color:var(--muted)}
   .tap .dist{font-size:12px;font-weight:700;color:var(--link);text-align:right;flex-shrink:0}
-  .tap .dist .d{display:block;font-size:9px;color:var(--muted);font-weight:600}
+  .tap .dist .d{display:block;font-size:11px;color:var(--muted);font-weight:600}
 
   .amenities{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .amenity{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:10px;padding:9px 11px;font-size:12.5px;font-weight:600}
@@ -196,14 +193,15 @@
   .contact .cn{flex:1}
   .contact .cn .cnm{font-size:14px;font-weight:700}
   .contact .cn .crl{font-size:11.5px;color:var(--muted)}
-  .contact>a{background:var(--su);color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 12px;border-radius:9px;flex-shrink:0}
+  .contact>a{background:var(--su);color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:0 16px;min-height:44px;display:inline-flex;align-items:center;border-radius:12px;flex-shrink:0}
   .contact .cn .cmail{font-size:11.5px;padding-top:2px;word-break:break-all}
   .contact .cn .cmail a{color:var(--link);font-weight:600;text-decoration:none}
 
   .quickrules{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .qr{background:var(--bg);border-radius:10px;padding:10px 12px}
-  .qr .qrv{font-size:14px;font-weight:800}
-  .qr .qrl{font-size:11px;color:var(--muted)}
+  .qr{display:flex;flex-direction:column-reverse;justify-content:flex-end;gap:2px}
+  .qr .qrv{font-size:13.5px;font-weight:700;letter-spacing:0;line-height:1.35}
+  .qr .qrl{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
   details.acc{border-radius:12px;overflow:hidden;margin-top:10px;background:var(--bg)}
   details.acc summary{padding:12px 14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--su);list-style:none;display:flex;justify-content:space-between;align-items:center}
   details.acc summary::-webkit-details-marker{display:none}
@@ -223,26 +221,40 @@
   .fullguide .fgb{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700}
   .alert{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;display:flex;gap:10px;align-items:flex-start}
   .alert svg{width:20px;height:20px;flex-shrink:0}
-.nav-inner a,.nav-inner button{min-height:44px}
-.btn,.chip,button,a.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;line-height:1.15}
-.legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px 14px;background:var(--card);border-top:1px solid var(--line)}
-.legend.open{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--line)}
-.legendToggle{background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;padding:6px 14px 8px;width:100%;text-align:right}
-.offlineBar{display:none;background:var(--amber-bg,#fff6e5);color:#8a5a00;font-size:12.5px;font-weight:600;padding:8px 14px;text-align:center;border-bottom:1px solid var(--line)}
+/* ---- shared fixes ---- */
+[hidden]{display:none!important}
+a:focus-visible,button:focus-visible,summary:focus-visible,[role=checkbox]:focus-visible{outline:3px solid #ffbf47;outline-offset:2px;border-radius:6px}
+.nav-inner a{min-height:44px}
+.btn,a.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;line-height:1.15}
+.scr-h{font-size:20px;margin:2px 0 4px;font-weight:800}
+.app.loading main{visibility:hidden}
+.tpicks-label{font-size:11px;font-weight:800;letter-spacing:.8px;color:#cfe0f5;text-transform:uppercase;margin:12px 0 0;position:relative;z-index:2}
+.tpicks-label + .tpicks{margin-top:6px}
+/* Today-only countdown card + weekend progress */
+.countdown{border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.wkstatus{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 14px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);margin-bottom:12px;font-size:12px;font-weight:700;color:var(--muted)}
+/* Secondary tabs get a compact header: title, team and the team switch only */
+body:not([data-tab="today"]) .hero{padding:12px 18px 12px}
+body:not([data-tab="today"]) .hero .kick,body:not([data-tab="today"]) .hero .meta,body:not([data-tab="today"]) .context{display:none}
+body:not([data-tab="today"]) .hero h1{font-size:18px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;padding:12px 14px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);font-size:12.5px;color:var(--muted);font-weight:600}
+.legend span{display:flex;align-items:center;gap:6px}
+.offlineBar{display:none;background:var(--amber-bg);color:#8a5a00;font-size:12.5px;font-weight:600;padding:8px 14px;text-align:center;border-bottom:1px solid var(--line)}
 body.is-offline .offlineBar{display:block}
-.screen:not(#scr-today) + .countdown, body.not-today .countdown{display:none}
+.failBar{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--red-bg);color:#8f1d1d;font-size:12.5px;font-weight:600;padding:6px 14px;border-bottom:1px solid var(--line)}
+.failBar button,.resetBtn{border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:12.5px;font-weight:700;padding:0 14px;min-height:44px;border-radius:22px;cursor:pointer}
+.resetBtn{color:var(--muted)}
+/* Packing rows are real buttons now (keyboard + screen-reader operable) */
+button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px solid var(--line);font:inherit;font-size:14px;color:inherit;text-align:left;justify-content:flex-start}
+.empty{font-size:13px;color:var(--muted);margin:4px 0 8px;line-height:1.55}
 
-
-  /* the .nav rule was being swallowed, so the bar laid out static at the end of a
-     13,000px document and never showed. Pin it explicitly. */
-  nav.nav{position:fixed!important;bottom:0!important;top:auto!important;left:0!important;right:0!important;
-    z-index:9999!important;height:auto!important;display:block!important;visibility:visible!important;
-    background:rgba(255,255,255,.97)!important;border-top:1px solid var(--line)!important}
-  nav.nav .nav-inner{display:flex!important;height:60px!important}
 </style>
 </head>
-<body>
-<div class="app">
+<body data-tab="today">
+<div class="app loading" id="app">
+
+  <div class="offlineBar" id="offlineBar" role="status">Showing the saved copy — you're offline. Details may be out of date.</div>
+  <div class="failBar" id="loadFail" role="alert" hidden><span>Couldn't load the latest tournament details.</span><button type="button" id="retryLoad">Retry</button></div>
 
   <header class="hero">
     <div class="crest" aria-hidden="true" id="crestMark"></div>
@@ -250,7 +262,8 @@ body.is-offline .offlineBar{display:block}
     <h1 id="heroTitle"></h1>
     <p class="team" id="heroTeam"></p>
     <p class="meta" id="heroMeta"></p>
-    <div id="teamPicker" class="tpicks"></div>
+    <p class="tpicks-label" id="teamPickerLabel" hidden>Select your team</p>
+    <nav id="teamPicker" class="tpicks" aria-labelledby="teamPickerLabel"></nav>
   </header>
 
   <div class="context">
@@ -258,29 +271,20 @@ body.is-offline .offlineBar{display:block}
     <span class="chip" id="ctxChip"></span>
   </div>
 
-  <!-- LIVE COUNTDOWN -->
-  <div class="offlineBar" id="offlineBar">Showing the saved copy — you're offline. Details may be out of date.</div>
-  <div class="countdown" id="countdown">
-    <span class="cd-label" id="cdLabel"></span>
-    <span id="cdBody"></span>
-  </div>
-
-  <div class="legend">
-    <span><span class="dot g"></span>Confirmed</span>
-    <span><span class="dot a"></span>Coach pending</span>
-    <span><span class="dot b"></span>Guide recommendation</span>
-  </div>
-
-  <!-- WEEKEND STATUS (compact progress) -->
-  <div id="weekendStatus" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);font-size:10.5px;font-weight:700;color:var(--muted)"></div>
-
   <main>
-    <section class="screen on" id="scr-today">
-      <div class="updated-banner" id="updBanner"></div>
+    <section class="screen on" id="scr-today" aria-label="Today">
+      <div class="updated-banner" id="updBanner" hidden></div>
       <div class="next">
         <div class="head"><span class="who">Next Match</span> <span class="status conf" id="nextStatus"></span></div>
         <div class="body" id="nextBody"></div>
       </div>
+      <!-- LIVE COUNTDOWN: sits directly under the next match, on Today only -->
+      <div class="countdown" id="countdown" role="timer" aria-live="off" hidden>
+        <span class="cd-label" id="cdLabel"></span>
+        <span id="cdBody"></span>
+      </div>
+      <!-- WEEKEND STATUS (compact progress) -->
+      <div class="wkstatus" id="weekendStatus" hidden></div>
       <div class="need">
         <div class="nh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/><circle cx="12" cy="12" r="4"/></svg><span id="needTitle"></span></div>
         <ul id="needList"></ul>
@@ -289,15 +293,15 @@ body.is-offline .offlineBar{display:block}
       <div class="watch" id="watchCard"></div>
     </section>
 
-    <section class="screen" id="scr-schedule">
-      <h1 style="font-size:20px;margin:2px 0 4px;font-weight:800">Schedule</h1>
+    <section class="screen" id="scr-schedule" aria-label="Schedule">
+      <h2 class="scr-h">Schedule</h2>
       <p class="muted" id="schedVenueLine" style="margin:0 0 12px"></p>
       <div id="scheduleDays"></div>
       <div id="ourWeekend"></div>
     </section>
 
-    <section class="screen" id="scr-venue">
-      <h1 style="font-size:20px;margin:2px 0 4px;font-weight:800">Venue</h1>
+    <section class="screen" id="scr-venue" aria-label="Venue">
+      <h2 class="scr-h">Venue</h2>
       <div id="venueCard"></div>
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>Our Fields</div>
       <div id="fieldsCard"></div>
@@ -305,23 +309,23 @@ body.is-offline .offlineBar{display:block}
       <div id="venueInfoCard"></div>
     </section>
 
-    <section class="screen" id="scr-pack">
-      <div class="row" style="margin:2px 0 4px">
-        <h1 style="font-size:20px;margin:0;font-weight:800">Packing</h1>
-        <button onclick="resetPack()" style="border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:12px;font-weight:700;padding:6px 12px;border-radius:20px;cursor:pointer">Reset Checklist</button>
+    <section class="screen" id="scr-pack" aria-label="Packing">
+      <div class="row" style="margin:2px 0 8px">
+        <h2 class="scr-h" style="margin:0">Packing</h2>
+        <button type="button" class="resetBtn" id="packReset" hidden>Reset checklist</button>
       </div>
       <div class="alert" id="packAlert" style="background:var(--su);color:#fff;align-items:center"></div>
       <div class="card" style="padding-bottom:10px">
-        <div class="row"><span class="muted small" id="packCount">0 of 0</span><span class="muted small">Saved on this phone</span></div>
-        <div class="progress"><i id="packBar" style="width:0%"></i></div>
+        <div id="packProgress" hidden>
+          <div class="row"><span class="muted small" id="packCount" aria-live="polite">0 of 0</span><span class="muted small">Saved on this phone</span></div>
+          <div class="progress"><i id="packBar" style="width:0%"></i></div>
+        </div>
         <div id="packLists"></div>
       </div>
     </section>
 
-    <section class="screen" id="scr-more">
-      <!-- Static href = the default team's guide, so "Open full guide" works before JS runs;
-           the script below re-points it at the active team's own PDF. -->
-      <a class="fullguide" id="fullGuideLink" href="../guide.pdf"><div class="fg1" id="fg1"></div><div class="fg2" id="fg2"></div><span class="fgb"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>Open full guide</span></a>
+    <section class="screen" id="scr-more" aria-label="More">
+      <a class="fullguide" id="fullGuideLink" href="../guides/" target="_blank" rel="noopener"><div class="fg1" id="fg1">Full guide</div><div class="fg2" id="fg2"></div><span class="fgb"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>Open full guide</span></a>
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>Hotels</div>
       <div id="hotelsSection"></div>
       <div id="foodSection"></div>
@@ -330,16 +334,22 @@ body.is-offline .offlineBar{display:block}
       <div id="contactsSection"></div>
       <div id="rulesSection"></div>
       <div id="changesSection"></div>
+      <div class="section-title" style="margin-top:18px">What the colours mean</div>
+      <div class="legend">
+        <span><span class="dot g"></span>Confirmed</span>
+        <span><span class="dot a"></span>Coach pending</span>
+        <span><span class="dot b"></span>Guide recommendation</span>
+      </div>
     </section>
   </main>
 
-  <nav class="nav">
+  <nav class="nav" aria-label="Sections">
     <div class="nav-inner">
-      <a href="#" data-goto="today" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Today</a>
-      <a href="#" data-goto="schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Schedule</a>
-      <a href="#" data-goto="venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Venue</a>
-      <a href="#" data-goto="pack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Pack</a>
-      <a href="#" data-goto="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>More</a>
+      <a href="#today" data-goto="today" class="on" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Today</a>
+      <a href="#schedule" data-goto="schedule"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Schedule</a>
+      <a href="#venue" data-goto="venue"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Venue</a>
+      <a href="#pack" data-goto="pack"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Pack</a>
+      <a href="#more" data-goto="more"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>More</a>
     </div>
   </nav>
 </div>
@@ -369,6 +379,7 @@ let TOURNAMENT = {
     updatesUpdated: ""
   },
   travel: null,
+  weather: {},
   games: [],
   schedulePending: {
     headline: "Schedule Not Released Yet",
@@ -382,33 +393,13 @@ let TOURNAMENT = {
   hotels: [],
   food: [], foodRankedFor: "", foodNote: "", foodUpdated: "",
   hotelsUpdated: "",
-  nearby: { groups:[
-      { label:"Closest to the venue", items:[
-          { name:"Pharmacy", note:"nearest open pharmacy", dist:"~1 min", sub:"0.3 mi", url:"", icon:"shop" },
-          { name:"Groceries", note:"water, ice, snacks", dist:"~2 min", sub:"0.4 mi", url:"", icon:"shop" },
-          { name:"Supermarket", note:"one-stop for supplies", dist:"~4 min", sub:"1.1 mi", url:"", icon:"shop" },
-          { name:"Publix", note:"2732 North Lake Drive", dist:"~6 min", sub:"2.3 mi", url:"https://www.google.com/maps/search/Publix+2732+North+Lake+Drive++SC", icon:"shop" }
-        ]},
-      { label:"Forgot something?", items:[
-          { name:"Dick's Sporting Goods", note:"1110 Bower Parkway", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Dicks+Sporting+Goods+1110+Bower+Parkway++SC", icon:"shop" },
-          { name:"Academy Sports + Outdoors", note:"sporting goods", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Academy+Sports+Outdoors++SC", icon:"shop" }
-        ]},
-      { label:"Emergency", items:[
-          { name:"Urgent care", note:"search nearest open clinic", dist:"maps", sub:"", url:"", icon:"phone" },
-          { name:"Tournament HQ", note:"see tournament contacts", dist:"call", sub:"", url:"tel:8774572832", icon:"phone" }
-        ]}
-    ] },
-  contacts:[
-    { name:"Keith Gunn", role:"Director of Coaching", phone:"", email:"k.gunn@savannahunited.com", initial:"K" },
-    { name:"Carson Gray", role:"Coach", phone:"", email:"carsonzgray@gmail.com", initial:"C" },
-    { name:"Mitchell Heath", role:"Coach", phone:"", email:"m.heath@savannahunited.com", initial:"M" }
-    
-  ],
+  nearby: { groups:[] },
+  contacts:[],
   rules:{ quick:[], full:[], tiebreakers:[], tiebreakersPending:"", tiebreakProcess:"", fullRulesUrl:"", standingsUrl:"", docsUrl:"" },
-  packing:{ alert:"Pack both kits and a warm layer — January mornings in north Florida are cold.", groups:[] },
+  packing:{ alert:"Pack both kits, plus a layer for early kickoffs.", groups:[] },
   needs:{
     before:[["Book hotel","rates: check on booking"],["Save the guide PDF","works offline"],["Charge phones","both days"],["Pack both kits","+ warm layer"]],
-    travel:[["Leave by early afternoon","~3h 15m drive"],["Check in to hotel","Fri Oct 2"],["Early bedtime","players"]],
+    travel:[["Check the drive time","before you leave"],["Check in to hotel","if staying over"],["Early bedtime","players"]],
     game1:[["Both kits","game day"],["Cleats + shin guards","essential"],["Water + electrolytes","bring plenty"],["Cool layer","cool mornings"]],
     between:[["Eat lunch","between games"],["Cool down","shade or A/C"],["Rehydrate","water + electrolytes"],["Back to fields","parking fills early"]],
     game3:[["Rain shell","just in case"],["Warm layer","cool mornings"],["Snacks + water","restock"],["Check bracket","after the game"]]
@@ -469,11 +460,12 @@ function adaptData(d, team){
       T.venue.assigned=known;
       T.venue.name=known?(v.name||addr.split(',')[0]):(v.name||'Venue not yet announced');
       T.venue.address=known?addr:'';
-      T.venue.city=T.venue.city||(known?addr.split(',').slice(-2).join(',').trim():'');
+      T.venue.city=v.city||(known?addr.split(',').slice(-2).join(',').trim():'');
       T.venue.mapsUrl=v.mapsUrl||(known?('https://www.google.com/maps/?q='+encodeURIComponent(addr)):'');
     }
     if(d.tournament && d.tournament.dates && d.tournament.dates.start){
-      T.travel={date:d.tournament.dates.start,label:'Travel Day',
+      /* dates.start is the first day of play, not a travel day - label it as such */
+      T.travel={date:d.tournament.dates.start,label:'Opening Day',opening:true,
                 detail:(d.venue&&d.venue.city)||'',drive:''};
     }
     if(d.offline && d.offline.pdfGuideUrl) T.tournament.fullGuideUrl=d.offline.pdfGuideUrl;
@@ -544,6 +536,7 @@ function adaptData(d, team){
 
     // weather note
     if(d.weather){
+      T.weather=T.weather||{};
       if(d.weather.mini && d.weather.mini.temp) T.weather.mini=d.weather.mini;
       else if(d.weather.summary) T.weather.mini={ day:'Outlook', temp:'—', feels:'open the weekend forecast', storm:'' };
     }
@@ -681,16 +674,25 @@ function adaptData(d, team){
    TEMPLATE LOGIC — tournament-agnostic
    ============================================================ */
 
-// ---- NAV ----
+// ---- NAV (hash-routed: tabs are linkable, survive reload, and Back works) ----
+const TABS=['today','schedule','venue','pack','more'];
 const navs=document.querySelectorAll('.nav a');
-function go(s){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));document.getElementById('scr-'+s).classList.add('on');navs.forEach(a=>a.classList.toggle('on',a.dataset.goto===s));window.scrollTo(0,0);}
-navs.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.goto);}));
-// Delegated handler so ANY [data-goto] element — including ones injected later via
-// innerHTML (e.g. the "See what changed" link in the updated banner) — navigates.
+const screens=document.querySelectorAll('.screen');
+function go(s,record){
+  if(TABS.indexOf(s)<0) s='today';
+  screens.forEach(x=>x.classList.toggle('on',x.id==='scr-'+s));
+  navs.forEach(a=>{ const on=a.dataset.goto===s; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  document.body.dataset.tab=s;
+  window.scrollTo(0,0);
+  if(record!==false && location.hash!=='#'+s){ try{ history.pushState(null,'','#'+s); }catch(e){} }
+}
+// One delegated handler covers the tab bar AND any [data-goto] injected later via innerHTML.
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-goto]');
-  if(t&&!t.classList.contains('nav')){ e.preventDefault(); go(t.dataset.goto); }
+  if(t){ e.preventDefault(); go(t.dataset.goto); }
 });
+window.addEventListener('popstate',()=>go(location.hash.slice(1),false));
+go(location.hash.slice(1),false);
 
 // ---- HERO ----
 function renderHero(){
@@ -704,7 +706,12 @@ document.getElementById('crestMark').innerHTML='<svg viewBox="0 0 100 100"><path
 renderHero();
 document.documentElement.style.setProperty('--su',TOURNAMENT.brand.primary);
 document.documentElement.style.setProperty('--su-dark',TOURNAMENT.brand.dark);
-document.getElementById('updBanner').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span><b>'+(TOURNAMENT.tournament.updatesUpdated?('Updated '+TOURNAMENT.tournament.updatesUpdated+(TOURNAMENT.tournament.build? ' &middot; build '+TOURNAMENT.tournament.build:'')):'Guide generated from the tournament platform')+'.</b> See what changed &nbsp;<a href="#scr-more" data-goto="more">here</a>.</span>';
+function renderBanner(){
+  // Only announce "what changed" when there is something to read on the other side of the link.
+  var ub=document.getElementById('updBanner'), has=(TOURNAMENT.changes||[]).length>0;
+  ub.hidden=!has; if(!has) return;
+  ub.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span><b>'+(TOURNAMENT.tournament.updatesUpdated?('Updated '+TOURNAMENT.tournament.updatesUpdated+(TOURNAMENT.tournament.build? ' &middot; build '+TOURNAMENT.tournament.build:'')):'Guide updated')+'.</b> <a href="#more" data-goto="more">See what changed</a></span>';
+}
 
 // ---- TOURNAMENT STATE RESOLVER (single source of truth for time) ----
 const TZ=TOURNAMENT.timezone;
@@ -749,7 +756,7 @@ function resolveTournamentState(t, now){
   // No games published yet — count down to travel day instead of claiming it's over.
   if(!TOURNAMENT.games||!TOURNAMENT.games.length){
     phase='awaiting-schedule';
-    if(travel&&now<travel.start){ countdownTarget=travel.start; countdownLabel='UNTIL TRAVEL DAY'; }
+    if(travel&&now<travel.start){ countdownTarget=travel.start; countdownLabel='UNTIL '+String(travel.label||'Travel Day').toUpperCase(); }
     else { countdownTarget=null; countdownLabel='AWAITING SCHEDULE'; }
     return {now,phase,currentMatch:null,nextMatch:null,countdownTarget,countdownLabel,travel,games,withState};
   }
@@ -759,7 +766,7 @@ function resolveTournamentState(t, now){
     countdownLabel=currentMatch.label.toUpperCase()+' · HAPPENING NOW';
   } else if(nextMatch){
     if(travel&&now<travel.start){ phase='pre-tournament'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
-    else if(travel&&now<new Date(travel.start.getTime()+24*3600000)){ phase='travel'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
+    else if(travel&&!travel.opening&&now<new Date(travel.start.getTime()+24*3600000)){ phase='travel'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
     else {
       // Same calendar day as the next kickoff = game day, not "between games" (which used to show
       // before a day's FIRST game - wrong on the morning of Oct 3). (Rich, 2026-09-27)
@@ -782,42 +789,33 @@ function resolveTournamentState(t, now){
 }
 
 // ---- LIVE COUNTDOWN (consumes resolver) ----
-const cdLabel=document.getElementById('cdLabel'),cdBody=document.getElementById('cdBody');
+const cdLabel=document.getElementById('cdLabel'),cdBody=document.getElementById('cdBody'),cdWrap=document.getElementById('countdown');
+let lastCd=null;
+function setCountdown(label,html){
+  const k=label+'|'+html; if(k===lastCd) return;   // touch the DOM only when the text changes
+  lastCd=k; cdLabel.textContent=label; cdBody.innerHTML=html; cdWrap.hidden=!label&&!html;
+}
+function cdParts(ms){
+  const p=fmtParts(ms), sep='<span class="cd-sep">·</span>';
+  const u=(n,l)=>'<span class="cd-num num">'+n+'</span><span class="cd-unit">'+l+'</span>';
+  if(p.days>=2) return u(p.days,'days');            // weeks out, hours and minutes are noise
+  if(p.days>0) return u(p.days,'d')+sep+u(p.hours,'hr');
+  if(p.hours>0) return u(p.hours,'hr')+sep+u(p.mins,'min');
+  return u(p.mins,'min');
+}
 function renderCountdown(state){
-  // Game-day meaning (review): before the event a countdown is useful; on the day
-  // the only question is "when do I need to leave?", and afterwards it should say
-  // the tournament is done rather than counting down to a date in the past.
-  try{
-    var now=state.now, G=(TOURNAMENT.games||[]).slice().sort(function(a,b){return a.datetime-b.datetime;});
-    var today=new Date(now); today.setHours(0,0,0,0);
-    var dayGames=G.filter(function(g){var d=new Date(g.datetime);d.setHours(0,0,0,0);return d.getTime()===today.getTime();});
-    var nextToday=dayGames.filter(function(g){return g.datetime>now;})[0];
-    var lastGame=G.length?G[G.length-1]:null;
-    if(lastGame && lastGame.datetime + 90*60000 < now && !dayGames.length){
-      cdLabel.textContent='Tournament complete'; cdBody.innerHTML='<span class="cd-num num">Done</span>'; return;
-    }
+  // Game day: the only question is "how long until we play?". Uses the resolver's own
+  // Date objects - the previous version compared ISO strings to Dates and never matched.
+  const now=state.now, dayKey=d=>d.toLocaleDateString('en-US',{timeZone:TZ});
+  if(!state.currentMatch){
+    const nextToday=state.withState.find(g=>g.state==='upcoming'&&dayKey(g.start)===dayKey(now));
     if(nextToday){
-      var mins=Math.round((nextToday.datetime-now)/60000);
-      cdLabel.textContent=(mins<=90?'Kickoff in':'Next game in');
-      var h=Math.floor(mins/60), m=mins%60;
-      cdBody.innerHTML=(h?('<span class="cd-num num">'+h+'</span><span class="cd-unit">hr</span><span class="cd-sep">·</span>'):'')
-        +'<span class="cd-num num">'+m+'</span><span class="cd-unit">min</span>';
-      if(nextToday.arrivalBy){
-        cdLabel.textContent='Arrive by '+nextToday.arrivalBy; 
-        cdBody.innerHTML='<span class="cd-num num">'+mins+'</span><span class="cd-unit">min to kickoff</span>';
-      }
+      const mins=Math.round((nextToday.start-now)/60000);
+      setCountdown((mins<=90?'Kickoff in':'Next game in')+(nextToday.arrival?' · arrive by '+nextToday.arrival:''), cdParts(nextToday.start-now));
       return;
     }
-    if(dayGames.length){ cdLabel.textContent='Game day'; cdBody.innerHTML='<span class="cd-num num">Today</span>'; return; }
-  }catch(e){}
-  cdLabel.textContent=state.countdownLabel||'';
-  if(!state.countdownTarget){ cdBody.innerHTML=''; return; }
-  const p=fmtParts(state.countdownTarget-state.now);
-  let html;
-  if(p.days>0) html='<span class="cd-num num">'+p.days+'</span><span class="cd-unit">d</span><span class="cd-sep">·</span><span class="cd-num num">'+p.hours+'</span><span class="cd-unit">hr</span><span class="cd-sep">·</span><span class="cd-num num">'+p.mins+'</span><span class="cd-unit">min</span>';
-  else if(p.hours>0) html='<span class="cd-num num">'+p.hours+'</span><span class="cd-unit">hr</span><span class="cd-sep">·</span><span class="cd-num num">'+p.mins+'</span><span class="cd-unit">min</span>';
-  else html='<span class="cd-num num">'+p.mins+'</span><span class="cd-unit">min</span>';
-  cdBody.innerHTML=html;
+  }
+  setCountdown(state.countdownLabel||'', state.countdownTarget?cdParts(state.countdownTarget-now):'');
 }
 
 // ---- CONTEXT + NEED-NOW (consumes resolver) ----
@@ -847,7 +845,7 @@ function refreshContext(state){
   ctxText.textContent=txt; ctxChip.textContent=chip;
   const needKey=need==='travel'?'travel':need==='between'?'between':need==='game1'?'game1':need==='game3'?'game3':'before';
   const list=(TOURNAMENT.needs[needKey]||TOURNAMENT.needs.before);
-  let needTitleText='Before Friday';
+  let needTitleText='Before You Go';
   if(need==='between') needTitleText='Between Games';
   else if(need==='travel') needTitleText=(travel?travel.label:'Today');
   else if(need==='game1') needTitleText=(g1?g1.label:'Game 1');
@@ -869,11 +867,12 @@ function renderNextMatch(state){
       nextStatus.textContent='Awaiting'; nextStatus.className='status pend';
       nextBody.innerHTML='<div class="day" style="color:var(--su)">SCHEDULE · '+(TOURNAMENT.tournament.meta||'')+'</div>'+
         '<div style="font-size:16px;font-weight:800;color:var(--ink);line-height:1.35;margin:2px 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
-        '<div class="vs">'+(SP.detail||'')+'</div>'+
-        '<div class="arrive" style="border-top:none;margin-top:10px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venue.name+(venue.address?' &middot; '+venue.address:'')+(venue.city?', '+venue.city:'')+'</div>'+
+        '<div class="muted" style="font-size:13.5px;line-height:1.5">'+(SP.detail||'')+'</div>'+
+        '<div class="arrive" style="border-top:none;margin-top:10px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venueLine(venue)+'</div>'+
         '<div class="btn-row">'+
-          '<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">Directions</a>'+
-          '<a class="btn ghost" href="'+(TOURNAMENT.tournament.fullGuideUrl||'#')+'" target="_blank" rel="noopener">Full Guide</a>'+
+          (venue.mapsUrl?'<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">'+(venueKnown(venue)?'Directions':'Area Map')+'</a>':'')+
+          (TOURNAMENT.tournament.fullGuideUrl?'<a class="btn ghost" href="'+TOURNAMENT.tournament.fullGuideUrl+'" target="_blank" rel="noopener">Full Guide</a>':'')+
+          '<a class="btn ghost" href="#schedule" data-goto="schedule">Schedule</a>'+
         '</div>';
       return;
     }
@@ -883,6 +882,7 @@ function renderNextMatch(state){
     return;
   }
   const isLive=currentMatch&&currentMatch.id===g.id;
+  const WXM=(TOURNAMENT.weather||{}).mini, FMAP=complexMapFor(venue)||complexMapsFallbackUrl();
   nextStatus.textContent = isLive?'Happening Now':(g.arrivalStatus==='pending-coach'?'Awaiting arrival':'Confirmed');
   nextStatus.className='status '+((isLive||g.arrivalStatus==='pending-coach')?'pend':'conf');
   const dayBg=isLive?'var(--red)':'var(--su)';
@@ -892,11 +892,11 @@ function renderNextMatch(state){
     '<div class="vs">vs '+g.opponent+'</div>'+
     '<div class="meta-line"><span class="pill field">FIELD '+g.field+'</span>'+(g.home===true?'<span class="pill home">HOME</span>':g.home===false?'<span class="pill away">AWAY</span>':'')+'</div>'+
     (g.arrival&&!isLive?'<div class="arrive"><span class="dot" style="width:9px;height:9px;background:'+(g.arrivalStatus==='pending-coach'?'var(--amber)':'var(--green)')+'"></span> Player arrival <b>'+g.arrival+'</b>'+(g.arrivalStatus==='pending-coach'?' <span class="pend">· awaiting coach confirmation</span>':'')+'</div>':'')+
-    '<div class="arrive" style="border-top:none;margin-top:6px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venue.name+(venue.address?' &middot; '+venue.address:'')+(venue.city?', '+venue.city:'')+'</div>'+
-    '<div class="wx-mini"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg> '+TOURNAMENT.weather.mini.day+' '+TOURNAMENT.weather.mini.temp+' · '+TOURNAMENT.weather.mini.feels+' · '+TOURNAMENT.weather.mini.storm+'</span><span class="exp" data-wxopen>Weekend forecast ›</span></div>'+
+    '<div class="arrive" style="border-top:none;margin-top:6px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venueLine(venue)+'</div>'+
+    (WXM&&WXM.temp?'<div class="wx-mini"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg> '+[WXM.day+' '+WXM.temp,WXM.feels,WXM.storm].filter(Boolean).join(' · ')+'</span><a href="#wxFull" class="exp" data-wxopen>Weekend forecast ›</a></div>':'')+
     '<div class="btn-row">'+
-      '<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+
-      '<a class="btn ghost" href="'+(complexMapFor(venue)||complexMapsFallbackUrl())+'" target="_blank" rel="noopener" title="'+complexMapLabel(venue)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>'+complexMapBtnText(venue)+'<br></a>'+
+      '<a class="btn" href="'+(venue.mapsUrl||'#venue')+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+
+      (FMAP?'<a class="btn ghost" href="'+FMAP+'" target="_blank" rel="noopener" title="'+complexMapLabel(venue)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>'+complexMapBtnText(venue)+'</a>':'')+
       '<a class="btn ghost" href="https://playmetrics.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.4-.7L3 21l1.8-5.6A8.4 8.4 0 0 1 3 11.5a8.5 8.5 0 0 1 18 0z"/></svg>Message Team</a>'+
     '</div>'+
     (nextMatch&&nextMatch.id!==g.id?'<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)">Next: <b style="color:var(--su)">'+nextMatch.label+'</b> · '+nextMatch.time+' · Field '+nextMatch.field+'</div>':'');
@@ -918,8 +918,9 @@ function renderWeekendStatus(state){
   const el=document.getElementById('weekendStatus');if(!el)return;
   const curId=st.currentMatch?st.currentMatch.id:null,nextId=st.nextMatch?st.nextMatch.id:null;
   const parts=[];
+  el.hidden=!TOURNAMENT.games.length;      // nothing to track until games are published
   const travel=TOURNAMENT.travel;
-  if(travel){
+  if(travel&&!travel.opening){
     const tStart=tzTime(travel.date+"T00:00:00"+etOffset(travel.date));
     const tDone=st.now>new Date(tStart.getTime()+24*3600000);
     parts.push('<span>'+travel.label+' '+(tDone?'<span style="color:var(--green)">✓</span>':'<span style="color:var(--su)">●</span>')+'</span>');
@@ -1082,7 +1083,7 @@ function renderSchedule(state){
   const st=state||resolveTournamentState(TOURNAMENT,tzNow());
   const currentId=st.currentMatch?st.currentMatch.id:null;
   const nextId=st.nextMatch?st.nextMatch.id:null;
-  document.getElementById('schedVenueLine').textContent=(TOURNAMENT.venue&&TOURNAMENT.venue.name)?('All games at '+TOURNAMENT.venue.name+' · '+(TOURNAMENT.venue.address||TOURNAMENT.venue.city||'')):'';
+  document.getElementById('schedVenueLine').textContent=venueKnown(TOURNAMENT.venue)?('All games at '+TOURNAMENT.venue.name+' · '+(TOURNAMENT.venue.address||TOURNAMENT.venue.city||'')):('Venue not assigned yet'+(TOURNAMENT.venue.city?' · '+TOURNAMENT.venue.city:''));
   const byDay={};
   TOURNAMENT.games.forEach(g=>{(byDay[g.dayLabel]=byDay[g.dayLabel]||[]).push(g);});
   let out='';
@@ -1090,9 +1091,9 @@ function renderSchedule(state){
     const isSat=day.toLowerCase().includes('saturday');
     out+='<div class="daycard '+(isSat?'sat':'sun')+'"><div class="dh"><span>'+day+'</span><span class="dd">'+games.map(g=>g.label).join(' + ')+'</span></div>';
     games.forEach((g,i)=>{
-      const badge = g.id===currentId?'<span style="float:right;font-size:10px;font-weight:800;color:var(--red);letter-spacing:.4px">NOW</span>':(g.id===nextId?'<span style="float:right;font-size:10px;font-weight:800;color:var(--su);letter-spacing:.4px">NEXT</span>':'');
+      const badge = g.id===currentId?'<span style="float:right;font-size:12px;font-weight:800;color:var(--red);letter-spacing:.4px">NOW</span>':(g.id===nextId?'<span style="float:right;font-size:12px;font-weight:800;color:var(--su);letter-spacing:.4px">NEXT</span>':'');
       if(g.type==='final'){
-        out+='<div class="final" style="'+(g.id===nextId?'border-color:var(--su);background:var(--su-soft)':'')+'"><div class="ftag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Potential Final · Not Guaranteed'+badge+'</div><div class="ftime num">'+g.time+'</div><div class="ftag" style="color:var(--su)">'+g.opponent+' · Field '+g.field+'</div><div class="fnote">'+g.note+'</div></div>';return;
+        out+='<div class="final" style="'+(g.id===nextId?'border-color:var(--su);background:var(--su-soft)':'')+'"><div class="ftag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Potential Final · Not Guaranteed'+badge+'</div><div class="ftime num">'+g.time+'</div><div class="ftag" style="color:var(--su)">'+g.opponent+' · Field '+g.field+'</div><div class="fnote">'+(g.note||'')+'</div></div>';return;
       }
       out+='<div class="g" style="'+(g.id===currentId?'background:var(--red-bg);border-left:4px solid var(--red)':(g.id===nextId?'background:var(--su-soft);border-left:4px solid var(--su)':''))+'"><div class="ghome">'+(g.home===true?'Home':g.home===false?'Away':'')+'</div><div class="grow"><span class="gtime num">'+g.time+'</span><span class="pill field">Field '+g.field+'</span></div><div class="gvs">vs '+g.opponent+'</div>'+badge+'</div>';
       // gap between games
@@ -1146,26 +1147,37 @@ var COMPLEX_MAPS={
   'Southeastern Freight Lines Soccer Center':'https://irp.cdn-website.com/44ba685a/files/uploaded/SEFL%20tournament%20all%2011v11.pdf',
   'SV Presbyterian Church Fields':'https://irp.cdn-website.com/44ba685a/files/uploaded/sv%20church%20regular%20layout.pdf'
 };
+// A venue is only "known" once the host names a real complex. Data can say assigned:true
+// while the name is still "Venue TBD - <area>", so check the text as well as the flag.
+function venueKnown(v){ return !!v && v.assigned!==false && !!(v.name||v.address) && !/\btbd\b|not yet/i.test((v.name||'')+' '+(v.address||'')); }
+// name · address, city - skipping any part that only repeats another.
+function venueLine(v){
+  if(!venueKnown(v)) return 'Venue not assigned yet'+((v.city||v.address)?' &middot; '+(v.city||v.address):'');
+  var parts=[v.name,v.address,v.city].filter(Boolean).map(String), low=parts.map(function(p){return p.toLowerCase();});
+  return parts.filter(function(p,i){ return !low.some(function(q,j){ return j!==i && q.indexOf(low[i])>=0 && (q.length>low[i].length||j<i); }); }).join(' &middot; ');
+}
 function renderVenue(){
   const v=TOURNAMENT.venue;
   // Never imply a venue the tournament has not assigned yet — naming a single
   // complex here would send families to the wrong place.
-  if(v.assigned===false){
+  if(!venueKnown(v)){
+    const area=v.city||v.address||'';
     const list=(v.complexes||[]).map(function(c){
       return '<div style="padding:9px 0;border-top:1px solid var(--line)"><div style="font-weight:700;font-size:13.5px">'+c.name+'</div><div class="muted small">'+c.address+'</div></div>';
     }).join('');
     document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--amber)">'
       +'<div class="label" style="color:var(--amber)">Venue</div>'
       +'<div style="font-size:17px;font-weight:800;margin:3px 0 6px">Complex not yet assigned</div>'
-      +'<p class="muted small" style="margin:0;line-height:1.55">The host has not published the venue assignment yet..</p>'
-      +'<div style="margin-top:10px">'+list+'</div>'
+      +'<p class="muted small" style="margin:0;line-height:1.55">The host has not published the venue assignment yet.'+(area?' Games will be in <b style="color:var(--ink)">'+area+'</b>.':'')+'</p>'
+      +(list?'<div style="margin-top:10px">'+list+'</div>':'')
+      +(v.mapsUrl?'<a class="btn ghost" style="margin-top:12px;flex-direction:row;font-size:14px" href="'+v.mapsUrl+'" target="_blank" rel="noopener">Open the area in Maps</a>':'')
       +'</div>';
-    document.getElementById('fieldsCard').innerHTML='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">Field and complex assignments are published with the schedule on .</p></div>';
+    document.getElementById('fieldsCard').innerHTML='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">Field and complex assignments are published with the schedule.</p></div>';
     const amen0=(v.amenities||[]).map(function(a){return '<div class="amenity">'+a+'</div>';}).join('');
-    document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="label" style="margin-bottom:6px">Parking &amp; Amenities</div><p class="small" style="margin:0 0 10px;line-height:1.55">'+(v.parking||'Parking details have not been published yet.')+'</p><div class="amenities">'+amen0+'</div><p class="small muted" style="margin:12px 0 0">'+(v.bring||'')+'</p></div>';
+    document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="label" style="margin-bottom:6px">Parking &amp; Amenities</div><p class="small" style="margin:0 0 10px;line-height:1.55">'+(v.parking||'Parking details have not been published yet.')+'</p>'+(amen0?'<div class="amenities">'+amen0+'</div>':'')+(v.bring?'<p class="small muted" style="margin:12px 0 0">'+v.bring+'</p>':'')+'</div>';
     return;
   }
-  document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--su)"><div class="label">'+v.name+'</div><div style="font-size:16px;font-weight:700;margin:2px 0 2px">'+v.address+'</div><div class="muted" style="margin-bottom:12px">'+v.city+'</div><a class="btn" style="flex-direction:row;font-size:14px;gap:8px" href="'+v.mapsUrl+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+((v.assigned===false)?'<div style="margin-top:12px;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12.5px;font-weight:700;color:var(--amber);line-height:1.5">Venue not yet assigned by the host.</div><div style="margin-top:8px"><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="font-size:12px;font-weight:800;color:var(--link)">Tournament info (SincSports) &rsaquo;</a></div></div>':'')+'</div>';
+  document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--su)"><div class="label">'+v.name+'</div><div style="font-size:16px;font-weight:700;margin:2px 0 2px">'+v.address+'</div><div class="muted" style="margin-bottom:12px">'+((v.city&&String(v.address||'').indexOf(v.city)<0)?v.city:'')+'</div><a class="btn" style="flex-direction:row;font-size:14px;gap:8px" href="'+v.mapsUrl+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+((v.assigned===false)?'<div style="margin-top:12px;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12.5px;font-weight:700;color:var(--amber);line-height:1.5">Venue not yet assigned by the host.</div><div style="margin-top:8px"><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="font-size:12px;font-weight:800;color:var(--link)">Official tournament info &rsaquo;</a></div></div>':'')+'</div>';
   // fields grid — only render once fields are actually assigned by the tournament
   const hasFields=(v.fieldCount>0 && v.ourFields && v.ourFields.length>0);
   let grid='';
@@ -1186,13 +1198,13 @@ function renderVenue(){
       : 'Field numbers for our games are on the Schedule tab.';
     var fmap=COMPLEX_MAPS[v.name]||'';
     var fLabel=(COMPLEX_MAP_LABELS[v.name]||((v.name||'Complex')+' layout'));
-    var fno=(!fmap && v.name)?'<p class="small muted" style="margin:8px 0 0">'+v.name+' has no published field layout yet. The field labels on the Schedule tab match the signs on site.</p><a class="btn ghost" style="margin-top:10px;flex-direction:row;gap:7px" href="'+CLUB_FACILITIES_URL+'" target="_blank" rel="noopener"> facilities page</a>':'';
+    var fno=(!fmap && v.name)?'<p class="small muted" style="margin:8px 0 0">'+v.name+' has no published field layout yet. The field labels on the Schedule tab match the signs on site.</p>'+(CLUB_FACILITIES_URL?'<a class="btn ghost" style="margin-top:10px;flex-direction:row;gap:7px" href="'+CLUB_FACILITIES_URL+'" target="_blank" rel="noopener">Club facilities page</a>':''):'';
 grid='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">'+fmsg+'</p>'+(fmap?'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+fmap+'" target="_blank" rel="noopener">'+fLabel+' (PDF)</a>':'')+fno+'</div>';
   }
   document.getElementById('fieldsCard').innerHTML=grid;
   // amenities
-  const amen=v.amenities.map(a=>'<div class="amenity"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>'+a+'</div>').join('');
-  document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="tap"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h16M5 20v-7M19 20v-7M5 13V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/></svg></span><div class="tt"><div class="tl">Parking</div><div class="ts">'+(v.parking||'Parking details have not been published yet.')+'</div></div></div><div class="amenities" style="margin-top:12px">'+amen+'</div><p class="small muted" style="margin:12px 0 0">'+(v.bring||'')+'</p></div>';
+  const amen=(v.amenities||[]).map(a=>'<div class="amenity"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>'+a+'</div>').join('');
+  document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="tap"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h16M5 20v-7M19 20v-7M5 13V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/></svg></span><div class="tt"><div class="tl">Parking</div><div class="ts">'+(v.parking||'Parking details have not been published yet.')+'</div></div></div>'+(amen?'<div class="amenities" style="margin-top:12px">'+amen+'</div>':'')+(v.bring?'<p class="small muted" style="margin:12px 0 0">'+v.bring+'</p>':'')+'</div>';
 }
 
 // ---- MORE: break, nearby, contacts, rules, changes ----
@@ -1214,6 +1226,7 @@ function renderNearby(){
   document.getElementById('nearbySection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16M4 19h16M4 11v4a5 5 0 0 0 8 3M4 11V8l4-4h9l3 3v4"/></svg>Nearby · During the Break</div>'+nbNote+groups;
 }
 function renderContacts(){
+  if(!(TOURNAMENT.contacts||[]).length){ document.getElementById('contactsSection').innerHTML=''; return; }
   const rows=TOURNAMENT.contacts.map(c=>'<div class="contact"><span class="ci">'+c.initial+'</span><div class="cn"><div class="cnm">'+c.name+'</div><div class="crl">'+c.role+'</div>'+(c.email?'<div class="cmail"><a href="mailto:'+c.email+'">'+c.email+'</a></div>':'')+'</div>'+(c.phone?'<a href="tel:'+c.phone+'">Call</a>':(c.url?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':''))+'</div>').join('');
   document.getElementById('contactsSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Need Help?</div><div class="card" style="padding:6px 14px">'+rows+'</div>';
 }
@@ -1224,18 +1237,19 @@ function renderRules(){
     ? (R.tiebreakers||[]).map((t,i)=>'<div class="ruleline"><b>'+(i+1)+'</b><span>'+t+'</span></div>').join('')
     : '<div class="ruleline"><b>&mdash;</b><span>'+(TOURNAMENT.rules.tiebreakersPending||'Not published by the tournament yet.')+'</span></div>';
   const tbNote=TOURNAMENT.rules.tiebreakProcess
-    ? '<div style="margin:12px 0 0;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12px;font-weight:700;color:var(--amber);line-height:1.55">What the event does say</div><div style="font-size:12.5px;color:var(--text);line-height:1.6;margin-top:4px">'+TOURNAMENT.rules.tiebreakProcess+'</div></div>'
+    ? '<div style="margin:12px 0 0;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12px;font-weight:700;color:var(--amber);line-height:1.55">What the event does say</div><div style="font-size:12.5px;color:var(--ink);line-height:1.6;margin-top:4px">'+TOURNAMENT.rules.tiebreakProcess+'</div></div>'
     : '';
-  document.getElementById('rulesSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 21 8 9l4-6 4 6z"/></svg>Parents Should Know</div><div class="card"><div class="quickrules">'+quick+'</div><details class="acc"><summary>View all tournament rules <span>＋</span></summary><div class="accbody">'+full+'</div></details><details class="acc"><summary>Tiebreakers — in order <span>＋</span></summary><div class="accbody">'+tb+'</div></details>'+tbNote+'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener">Tournament info &amp; rules (SincSports)</a>'+((TOURNAMENT.rules.standingsUrl)?'<a class="btn ghost" style="margin-top:8px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.standingsUrl+'" target="_blank" rel="noopener">Live standings &amp; tiebreak page</a>':'')+((TOURNAMENT.rules.docsUrl)?'<a class="btn ghost" style="margin-top:8px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.docsUrl+'" target="_blank" rel="noopener">Team documents &mdash; rules (SincSports login)</a>':'')+'</div>';
+  document.getElementById('rulesSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 21 8 9l4-6 4 6z"/></svg>Parents Should Know</div><div class="card">'+(quick?'<div class="quickrules">'+quick+'</div>':'')+'<details class="acc"><summary>View all tournament rules <span>＋</span></summary><div class="accbody">'+full+'</div></details><details class="acc"><summary>Tiebreakers — in order <span>＋</span></summary><div class="accbody">'+tb+'</div></details>'+tbNote+(TOURNAMENT.rules.fullRulesUrl?'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener">Official tournament info &amp; rules</a>':'')+((TOURNAMENT.rules.standingsUrl)?'<a class="btn ghost" style="margin-top:8px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.standingsUrl+'" target="_blank" rel="noopener">Live standings &amp; tiebreak page</a>':'')+((TOURNAMENT.rules.docsUrl)?'<a class="btn ghost" style="margin-top:8px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.docsUrl+'" target="_blank" rel="noopener">Team documents &mdash; rules (login required)</a>':'')+'</div>';
 }
 function renderChanges(){
   const rows=(TOURNAMENT.changes||[]).map(c=>'<p style="margin:0 0 6px"><b>'+c.k+':</b> '+c.v+'</p>').join('');
-  document.getElementById('changesSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>What Changed · '+TOURNAMENT.tournament.updatesUpdated+'</div><div class="card" style="font-size:13px">'+rows+'</div>'
+  const U=TOURNAMENT.rules.fullRulesUrl;
+  document.getElementById('changesSection').innerHTML=(rows?'<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>What Changed'+(TOURNAMENT.tournament.updatesUpdated?' · '+TOURNAMENT.tournament.updatesUpdated:'')+'</div><div class="card" style="font-size:13px">'+rows+'</div>':'')
     +'<div class="section-title" style="margin-top:18px"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Where This Comes From</div>'
     +'<div class="card" style="font-size:12.5px;line-height:1.65">'
-    +'<p style="margin:0 0 10px"><b>Tournament facts</b> &mdash; dates, formats, fees, check-in rules, contacts and complexes &mdash; are taken from the official tournament page.<br><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">Official tournament page &rsaquo;</a></p>'
-    +'<p style="margin:0 0 10px"><b>Hotel rates</b> were checked live for Oct 2&ndash;4 (2 adults, 1 child) and change daily &mdash; confirm before booking. <b>Drive distances</b> were measured by routing against the actual venue address, not copied from a tournament portal.</p>'
-    +'<p style="margin:0"><b>Weather</b> is based on ten years of recorded early-October observations for (Open-Meteo archive). <b>Nearby amenities</b> come from OpenStreetMap. Anything not sourced above is parent-manager research, not official tournament information.</p>'
+    +'<p style="margin:0 0 10px"><b>Tournament facts</b> &mdash; dates, formats, rules and contacts &mdash; are taken from the official tournament page.'+(U?'<br><a href="'+U+'" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">Official tournament page &rsaquo;</a>':'')+'</p>'
+    +'<p style="margin:0 0 10px"><b>Hotel rates</b> change daily &mdash; confirm before booking. <b>Drive distances</b> are measured by routing against the actual venue address once one is assigned.</p>'
+    +'<p style="margin:0"><b>Weather</b> appears only once a real forecast exists for the event dates. Anything not sourced above is parent-manager research, not official tournament information.</p>'
     +'</div>';
 }
 
@@ -1243,36 +1257,54 @@ function renderChanges(){
 var TEAM_LABEL_FOR_GUIDE='';
 function renderFullGuide(){
   var fg=document.getElementById('fullGuideLink'); if(!fg) return;
-  fg.href=TOURNAMENT.tournament.fullGuideUrl||'#';
+  fg.href=TOURNAMENT.tournament.fullGuideUrl||'../guides/';
   document.getElementById('fg1').textContent='Full '+(TEAM_LABEL_FOR_GUIDE||TOURNAMENT.tournament.name)+' Guide';
   document.getElementById('fg2').textContent='Everything in one detailed document — hotel, travel scenarios, full rules, itinerary.';
 }
-renderFullGuide();
 
 // ---- PACKING (template-driven groups with kind badges) ----
 const KIND_LABEL={always:'Always',weather:'Weather',tournament:'Tournament'};
-const LS='gd-pack-'+TOURNAMENT.tournament.name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
-document.getElementById('packAlert').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span><b>'+TOURNAMENT.packing.alert+'</b></span>';
-function loadPack(){try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}}
-function savePack(o){localStorage.setItem(LS,JSON.stringify(o));}
+// One saved checklist PER tournament. The key used to be built from the fallback's empty
+// name, so every event shared (and overwrote) the same list.
+function packKey(){ return 'gd-pack-'+(ACTIVE_TOURNAMENT||'default'); }
+function loadPack(){try{return JSON.parse(localStorage.getItem(packKey()))||{}}catch(e){return{}}}
+function savePack(o){try{localStorage.setItem(packKey(),JSON.stringify(o));}catch(e){}}
+function packCount(){
+  const all=document.querySelectorAll('#packLists .chk'), done=document.querySelectorAll('#packLists .chk.done');
+  document.getElementById('packCount').textContent=done.length+' of '+all.length+' packed';
+  document.getElementById('packBar').style.width=(all.length?Math.round(done.length/all.length*100):0)+'%';
+}
 function renderPack(){
+  document.getElementById('packAlert').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span><b>'+TOURNAMENT.packing.alert+'</b></span>';
   const pack=loadPack();const wrap=document.getElementById('packLists');
   const LISTS=(TOURNAMENT.packing&&TOURNAMENT.packing.groups)||[];
-  let html='',total=0,done=0;
+  const has=LISTS.some(g=>(g.items||[]).length);
+  document.getElementById('packProgress').hidden=!has;
+  document.getElementById('packReset').hidden=!has;
+  if(!has){ wrap.innerHTML='<p class="empty">The packing checklist for this event has not been published yet. It will appear here, and your ticks are saved on this phone.</p>'; return; }
+  let html='';
   LISTS.forEach(grp=>{
-    html+='<div class="chkgrp"><h4>'+grp.title+' <span style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">'+(KIND_LABEL[grp.kind]||grp.kind)+'</span></h4>';
+    html+='<div class="chkgrp"><h4>'+grp.title+' <span style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">'+(KIND_LABEL[grp.kind]||grp.kind)+'</span></h4>';
     grp.items.forEach(([name,sub])=>{
-      const id=grp.title+'::'+name;const checked=!!pack[id];if(checked)done++;total++;
-      html+='<div class="chk '+(checked?'done':'')+'" onclick="tog(\''+id.replace(/'/g,"\\'")+'\',this)"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="chkname">'+name+(sub?' <span class="muted small">('+sub+')</span>':'')+'</span></div>';
+      const id=grp.title+'::'+name;const checked=!!pack[id];
+      html+='<button type="button" role="checkbox" aria-checked="'+checked+'" class="chk '+(checked?'done':'')+'" data-pack="'+encodeURIComponent(id)+'"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="chkname">'+name+(sub?' <span class="muted small">('+sub+')</span>':'')+'</span></button>';
     });
     html+='</div>';
   });
   wrap.innerHTML=html;
-  document.getElementById('packCount').textContent=done+' of '+total;
-  document.getElementById('packBar').style.width=(total?Math.round(done/total*100):0)+'%';
+  packCount();
 }
-function tog(id,el){const pack=loadPack();pack[id]=!pack[id];savePack(pack);el.classList.toggle('done',!!pack[id]);renderPack();}
-function resetPack(){if(confirm('Reset the packing checklist?')){localStorage.removeItem(LS);renderPack();}}
+// Delegated: toggles the one row in place instead of rebuilding the whole list per tap.
+document.getElementById('packLists').addEventListener('click',e=>{
+  const el=e.target.closest('[data-pack]'); if(!el) return;
+  const id=decodeURIComponent(el.dataset.pack), pack=loadPack();
+  pack[id]=!pack[id]; savePack(pack);
+  el.classList.toggle('done',!!pack[id]); el.setAttribute('aria-checked',String(!!pack[id]));
+  packCount();
+});
+document.getElementById('packReset').addEventListener('click',()=>{
+  if(confirm('Reset the packing checklist?')){ try{localStorage.removeItem(packKey());}catch(e){} renderPack(); }
+});
 
 
 // ---- HOTELS (from data.json) ----
@@ -1303,11 +1335,8 @@ function renderFood(){
 
 function renderHotels(){
   var el=document.getElementById('hotelsSection'); if(!el) return;
-  var HT=TOURNAMENT.hotels||{}; var _picks=HT.official||[];
-  if(!_picks.length){ el.innerHTML='<div class="card"><p class="small muted" style="margin:0">The host has not published its hotel block yet. Nothing is recommended until it does.</p></div>'; return; }
-  var _all = Array.isArray(TOURNAMENT.hotels) ? TOURNAMENT.hotels
-    : (HT.official||[]).map(function(h){h.tier='pick';return h;})
-        .concat((HT.nonOfficial||[]).map(function(h){h.tier='alt';return h;}));
+  var _all=Array.isArray(TOURNAMENT.hotels)?TOURNAMENT.hotels:[];
+  if(!_all.length){ el.innerHTML='<div class="card"><p class="small muted" style="margin:0">The host has not published its hotel block yet. Nothing is recommended until it does.</p></div>'; return; }
   var picks=_all.filter(function(h){return h.tier==='pick';});
   var alts =_all.filter(function(h){return h.tier==='alt';});
   function card(h){
@@ -1328,113 +1357,125 @@ function renderHotels(){
 }
 
 // ---- INIT + LIVE TICK ----
+// Each section renders on its own: one bad field can no longer blank every section after it.
+function safe(fn){ try{ fn(); }catch(e){ if(window.console) console.warn('[guide] '+fn.name+' failed:',e); } }
 function renderAll(){
-renderVenue();renderBreak();renderNearby();renderContacts();renderRules();renderChanges();renderWeather();renderPack();renderHotels(); renderFood();renderFullGuide();
+  [renderHero,renderBanner,renderVenue,renderBreak,renderNearby,renderContacts,renderRules,renderChanges,renderWeather,renderPack,renderHotels,renderFood,renderFullGuide].forEach(safe);
 }
-renderAll();
-// ---- TEAM SELECTION ----
-var ACTIVE_TEAM=null;
-function teamFromUrl(){ try{ var m=location.search.match(/[?&]team=([^&]+)/); return m?decodeURIComponent(m[1]):null; }catch(e){ return null; } }
-function pickTeam(shared){
+
+// ---- TOURNAMENT + TEAM SELECTION ----
+var ACTIVE_TEAM=null, ACTIVE_TOURNAMENT=null;
+const BASE=JSON.stringify(TOURNAMENT);          // pristine template, re-cloned for every load
+const SNAP_KEY='tg-snap-v1';
+function qsGet(k){ try{ return new URLSearchParams(location.search).get(k); }catch(e){ return null; } }
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+// 'no-cache' revalidates with the server (cheap 304s) instead of the old ?_=<timestamp>
+// cache-buster, which forced a full download of every file on every visit.
+function getJSON(url){ return fetch(url,{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(url+' → '+r.status); return r.json(); }); }
+function pickTeam(shared,wanted){
   var list=(shared&&shared.teams)||[];
-  var slug=teamFromUrl();
-  if(!slug){ try{ slug=localStorage.getItem('cc-team'); }catch(e){} }
-  if(!slug||!list.some(function(t){return t.slug===slug;})) slug=(shared&&shared.defaultTeam)||(list[0]&&list[0].slug);
-  return slug;
+  if(wanted&&list.some(function(t){return t.slug===wanted;})) return wanted;
+  return (shared&&shared.defaultTeam)||(list[0]&&list[0].slug)||null;
 }
 function renderTeamPicker(shared){
   var el=document.getElementById('teamPicker'); if(!el) return;
   var list=(shared&&shared.teams)||[];
+  document.getElementById('teamPickerLabel').hidden=list.length<2;
   if(list.length<2){ el.innerHTML=''; return; }
-  el.innerHTML='<span style="font-size:10px;font-weight:800;letter-spacing:.8px;color:#cfe0f5;width:100%;text-transform:uppercase;margin-bottom:2px">Select your team</span>'
-    +list.map(function(t){
-      return '<a class="tpick'+(t.slug===ACTIVE_TEAM?' on':'')+'" href="?team='+encodeURIComponent(t.slug)+'&t='+encodeURIComponent((new URLSearchParams(location.search)).get('t')||'')+'">'+(t.label||t.shortName||t.name)+'</a>';
-    }).join('');
+  el.innerHTML=list.map(function(t){
+    var on=t.slug===ACTIVE_TEAM;
+    return '<a class="tpick'+(on?' on':'')+'"'+(on?' aria-current="true"':'')+' data-team="'+encodeURIComponent(t.slug)+'" href="?t='+encodeURIComponent(ACTIVE_TOURNAMENT||'')+'&team='+encodeURIComponent(t.slug)+'">'+(t.label||t.shortName||t.name)+'</a>';
+  }).join('');
+}
+// Switching team swaps the data in place - no page reload, and you stay on the same tab.
+document.getElementById('teamPicker').addEventListener('click',function(e){
+  var a=e.target.closest('.tpick'); if(!a) return;
+  e.preventDefault();
+  if(a.classList.contains('on')) return;
+  this.querySelectorAll('.tpick').forEach(function(x){ x.classList.toggle('on',x===a); });
+  try{ history.replaceState(null,'',a.getAttribute('href')+location.hash); }catch(err){}
+  load();
+});
+
+var lastSig='';
+function applyData(shared,team,tslug,slug){
+  TOURNAMENT=JSON.parse(BASE);
+  ACTIVE_TEAM=slug; ACTIVE_TOURNAMENT=tslug; TEAM_LABEL_FOR_GUIDE='';
+  if(tslug) TOURNAMENT.tournament.fullGuideUrl='../guides/'+tslug+'/guide.pdf';
+  adaptData(shared,team||{});
+  renderTeamPicker(shared); renderAll();
+  lastStateKey=''; lastWxLoad=0; refreshAll(); loadWeather();
+  document.getElementById('app').classList.remove('loading');
 }
 
-// Load shared data + the selected team, overriding the fallback above.
-(async function(){
+// Load shared data + the selected team. Requests run in parallel (they used to be four
+// sequential round-trips), and the last good copy paints instantly while they are in flight.
+var loadSeq=0;
+async function load(){
+  var seq=++loadSeq, fail=document.getElementById('loadFail');
+  var t=qsGet('t')||lsGet('tj_tournament_v1'), wantTeam=qsGet('team')||lsGet('cc-team');
   try{
-    // Which tournament? ?t= > stored > registry default. Legacy data.json is the fallback.
-    var TSLUG=null;
-    try{ var qs=new URLSearchParams(location.search); TSLUG=qs.get('t'); }catch(e){}
-    var reg=null;
-    try{ reg=await (await fetch('tournaments.json?_='+Date.now())).json(); }catch(e){}
-    var valid=(reg&&reg.tournaments)?reg.tournaments.some(function(t){return t.slug===TSLUG;}):false;
-    if(!valid){
-      try{ TSLUG=localStorage.getItem('tj_tournament_v1'); }catch(e){}
-      valid=(reg&&reg.tournaments)?reg.tournaments.some(function(t){return t.slug===TSLUG;}):false;
+    var snap=JSON.parse(lsGet(SNAP_KEY)||'null');
+    if(snap&&snap.shared&&(!t||snap.t===t)&&(!wantTeam||snap.team===wantTeam)){
+      var sig0=JSON.stringify([snap.shared,snap.teamData]);
+      if(sig0!==lastSig){ lastSig=sig0; applyData(snap.shared,snap.teamData,snap.t,snap.team); }
     }
-    if(!valid) TSLUG=(reg&&reg.defaultTournament)||null;
-    if(TSLUG){ try{ localStorage.setItem('tj_tournament_v1',TSLUG); }catch(e){} }
-    var dataUrl=TSLUG?('tournaments/'+TSLUG+'.json'):'data.json';
-    var shared=await (await fetch(dataUrl+'?_='+Date.now())).json();
-    if(reg&&reg.tournaments&&!shared.teams){
-      shared.teams=reg.teams||[];
-    }
-    // the team registry lives beside the app as teams.json
-    try{ var tr=await (await fetch('teams.json?_='+Date.now())).json();
-         if(tr&&tr.teams&&!shared.teams) shared.teams=tr.teams;
-         if(tr&&tr.defaultTeam&&!shared.defaultTeam) shared.defaultTeam=tr.defaultTeam; }catch(e){}
-    var slug=pickTeam(shared);
-    var team={};
-    if(slug){ try{ team=await (await fetch('teams/'+slug+'.json?_='+Date.now())).json(); }catch(e2){} }
-    ACTIVE_TEAM=slug;
-    try{ localStorage.setItem('cc-team',slug); }catch(e){}
-    adaptData(shared, team);
-    renderHero(); renderTeamPicker(shared); renderAll();
-    lastStateKey=''; refreshAll();
-  }catch(e){ /* keep fallback */ }
-})();
-lastStateKey=''; // force initial full render (schedule, countdown, next-match, context, weekend status)
-
-// ---- game-day-first ordering (review): next match above the countdown ----
-(function(){
-  try{
-    var nextBody=document.getElementById('nextBody');
-    var cd=document.getElementById('countdown');
-    if(nextBody&&cd&&cd.parentNode){
-      var panel=nextBody.closest('.next');
-      while(panel&&panel.parentNode&&panel.parentNode!==cd.parentNode){ panel=panel.parentNode; }
-      if(panel&&panel.parentNode===cd.parentNode){ cd.parentNode.insertBefore(panel, cd); }
-    }
-    // The colour key is reference material: it lives at the bottom of More,
-    // not above the next match on every screen.
-    var lg=document.querySelector('.legend'), more=document.getElementById('scr-more');
-    if(lg&&more){
-      var head=document.createElement('div');
-      head.className='section-title'; head.textContent='What the colours mean';
-      head.style.marginTop='18px';
-      more.appendChild(head); more.appendChild(lg);
-    }
-    function offline(){ document.body.classList.toggle('is-offline', !navigator.onLine); }
-    window.addEventListener('online',offline); window.addEventListener('offline',offline); offline();
   }catch(e){}
-})();
-refreshAll();
-
-// secondary tabs get a compact header: no countdown competing with content
-(function(){
-  function syncTab(){
-    var active=document.querySelector('.screen.active');
-    document.body.classList.toggle('not-today', !!(active && active.id!=='scr-today'));
+  try{
+    var regP=getJSON('tournaments.json').catch(function(){return null;});
+    var teamsP=getJSON('teams.json').catch(function(){return null;});
+    var sharedP=t?getJSON('tournaments/'+encodeURIComponent(t)+'.json').catch(function(){return null;}):null;
+    var teamP=wantTeam?getJSON('teams/'+encodeURIComponent(wantTeam)+'.json').catch(function(){return null;}):null;
+    // Which tournament? ?t= > stored > registry default. Legacy data.json is the fallback.
+    var reg=await regP;
+    var valid=function(s){ return !!(reg&&reg.tournaments&&reg.tournaments.some(function(x){return x.slug===s;})); };
+    var cands=[qsGet('t'),lsGet('tj_tournament_v1'),reg&&reg.defaultTournament].filter(Boolean);
+    var tslug=reg?(cands.find(valid)||null):(cands[0]||null);
+    var shared=(tslug&&tslug===t)?await sharedP:null;
+    if(!shared) shared=await getJSON(tslug?('tournaments/'+encodeURIComponent(tslug)+'.json'):'data.json');
+    var tr=await teamsP;
+    if(tr){ if(tr.teams&&!shared.teams) shared.teams=tr.teams;
+            if(tr.defaultTeam&&!shared.defaultTeam) shared.defaultTeam=tr.defaultTeam; }
+    var slug=pickTeam(shared,wantTeam), team=null;
+    if(slug){ team=(slug===wantTeam)?await teamP:null;
+              if(!team) team=await getJSON('teams/'+encodeURIComponent(slug)+'.json').catch(function(){return {};}); }
+    if(seq!==loadSeq) return;                       // a newer load (team switch) superseded this one
+    if(tslug) lsSet('tj_tournament_v1',tslug);
+    if(slug) lsSet('cc-team',slug);
+    fail.hidden=true;
+    var sig=JSON.stringify([shared,team]);
+    if(sig!==lastSig){ lastSig=sig; applyData(shared,team,tslug,slug); }   // unchanged data = no re-render
+    lsSet(SNAP_KEY,JSON.stringify({t:tslug,team:slug,shared:shared,teamData:team}));
+  }catch(e){
+    if(seq!==loadSeq) return;
+    // Nothing fresh: keep whatever is on screen (saved copy or the empty template) and say so.
+    document.getElementById('app').classList.remove('loading');
+    fail.hidden=!navigator.onLine;                  // offline already has its own banner
+    if(!lastSig){ renderAll(); lastStateKey=''; refreshAll(); }
   }
-  document.querySelectorAll('.nav a, .nav button').forEach(function(el){
-    el.addEventListener('click', function(){ setTimeout(syncTab, 0); });
-  });
-  syncTab();
-})();
-// Load the live forecast once on load; then refresh whenever the tab regains focus so
-// new daily reports appear without a manual reload.
-loadWeather();
-document.addEventListener('visibilitychange',()=>{ if(!document.hidden) loadWeather(); });
-// Countdown ticks every second; full state (Next Match / context / schedule highlight /
-// weekend status) re-resolves every second too, but only re-renders when the resolved
-// state actually changes (cheap + consistent).
-setInterval(refreshAll,1000);
+}
+document.getElementById('retryLoad').addEventListener('click',load);
+
+function syncOnline(){ document.body.classList.toggle('is-offline',!navigator.onLine); }
+window.addEventListener('online',function(){ syncOnline(); load(); });
+window.addEventListener('offline',syncOnline);
+syncOnline();
+load();
+
+// Tick only while the page is visible. The countdown shows minutes, so a 5s cadence is
+// plenty; the full state re-renders only when the resolved state actually changes.
+var tick=null;
+function startTick(){ if(!tick) tick=setInterval(refreshAll,5000); }
+function stopTick(){ clearInterval(tick); tick=null; }
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){ stopTick(); return; }
+  refreshAll(); startTick(); loadWeather();         // forecast refresh is throttled inside loadWeather
+});
+if(!document.hidden) startTick();
 </script>
 <script>
-// Site-wide offline support — covers this page, the hub and the PDF.
+// Offline support for the app shell and its data.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
 }

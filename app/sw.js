@@ -1,27 +1,28 @@
-/* Sporting Jax Guide — service worker
+/* Tournament Guide — service worker
  *
- * Strategy: STALE-WHILE-REVALIDATE for everything same-origin.
- *
- * The previous worker was network-first, so every tap waited on the network
- * before falling back to cache — at a field with one bar that reads to a parent
- * as "the app is broken". Now the cached copy paints immediately and the
- * network copy replaces it in the background for the NEXT visit. A version bump
- * (CACHE) still forces a fresh shell.
+ * Strategy
+ *  - App shell + JSON: NETWORK-FIRST WITH A TIMEOUT. Fresh content wins whenever the
+ *    network answers promptly; if it has not answered in NET_TIMEOUT ms (one bar at
+ *    the fields) the cached copy is served instead of leaving the parent on a spinner.
+ *    The slow response still lands in the cache for the next visit.
+ *  - Everything else same-origin (PDFs, icons): CACHE-FIRST, refreshed in the
+ *    background, so a 350 KB guide is not re-downloaded on every open.
  *
  * Two rules that have bitten this app before:
  *  1. Cache deletion is SCOPED to our own prefix. A bare
  *     keys.filter(k => k !== CACHE) nukes every other cache on the origin.
  *  2. Never precache large binaries (PDFs). They get cached on first view.
  */
-const CACHE = 'tournament-guide-v29';
+const CACHE = 'tournament-guide-v30';
 const PREFIX = 'tournament-guide-';
-const SHELL = ['./', './index.html', './data.json', './tournaments.json', './teams.json', './manifest.json'];
+const SHELL = ['./', './tournaments.json', './teams.json', './manifest.json'];
+const NET_TIMEOUT = 3000;
 
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE).then(c =>
       // fail-soft: one missing entry must not abort the whole install
-      Promise.all(SHELL.map(u => c.add(u).catch(() => null)))
+      Promise.all(SHELL.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => null)))
     ).then(() => self.skipWaiting())
   );
 });
@@ -41,56 +42,36 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;   // never intercept Maps/CDNs
 
-  // The app appends a cache-busting `?_=<ts>` to every JSON fetch. Storing that
-  // verbatim would add a NEW cache entry per visit while `ignoreSearch` matches
-  // the bare URL — the cache would grow forever and never be reused. So both
-  // match and put use the query-stripped URL as the key.
-  const key = new URL(req.url); key.search = '';
-  const cacheKey = key.href;
+  // Query strings (?t=…&team=…, old ?_=<ts> cache-busters) never change the file that is
+  // served, so the cache key is the bare URL: one entry per file, reused by every link.
+  url.search = '';
+  let cacheKey = url.href;
+  if (cacheKey.endsWith('/index.html')) cacheKey = cacheKey.slice(0, -'index.html'.length);
 
-  // DATA IS NETWORK-FIRST. Stale-while-revalidate is right for the shell but
-  // wrong for content: a parent would see yesterday's schedule on the first
-  // load after an update. JSON is fetched fresh and only falls back to cache
-  // when the network fails.
-  const isData = true;   // network-first for EVERYTHING: an out-of-date shell or
-                         // stylesheet is the worst failure for a parent mid-event.
-                         // Cache is only the offline fallback.
+  const isFresh = req.mode === 'navigate' || /\.(json|html)$/.test(url.pathname) || url.pathname.endsWith('/');
 
   e.respondWith((async () => {
     const cache = await caches.open(CACHE);
-    if (isData) {
-      try {
-        const fresh = await fetch(req, { cache: 'no-store' });
-        if (fresh && fresh.status === 200) cache.put(cacheKey, fresh.clone());
-        return fresh;
-      } catch (err) {
-        const hit = await cache.match(cacheKey);
-        if (hit) return hit;
-        throw err;
-      }
+    const network = fetch(req, { cache: 'no-cache' }).then(res => {
+      if (res && res.status === 200) cache.put(cacheKey, res.clone());
+      return res;
+    });
+
+    if (!isFresh) {
+      const hit = await cache.match(cacheKey);
+      if (hit) { e.waitUntil(network.catch(() => null)); return hit; }
+      return network;
     }
+
     const cached = await cache.match(cacheKey);
-    if (cached) {
-      // serve now, refresh for next time
-      e.waitUntil((async () => {
-        try {
-          const fresh = await fetch(req, { cache: 'no-store' });
-          if (fresh && fresh.status === 200) await cache.put(cacheKey, fresh.clone());
-        } catch (_) { /* offline: keep what we have */ }
-      })());
-      return cached;
-    }
+    if (!cached) return network;                      // nothing saved yet: the network is the only option
+    e.waitUntil(network.catch(() => null));           // let a slow response finish and update the cache
+    const timeout = new Promise(resolve => setTimeout(() => resolve(null), NET_TIMEOUT));
     try {
-      const fresh = await fetch(req);
-      if (fresh && fresh.status === 200) cache.put(cacheKey, fresh.clone());
-      return fresh;
-    } catch (err) {
-      // offline and never cached: fall back to the app shell for navigations
-      if (req.mode === 'navigate') {
-        const shell = await cache.match(new URL('./index.html', self.location).href);
-        if (shell) return shell;
-      }
-      throw err;
+      const res = await Promise.race([network, timeout]);
+      return (res && res.status === 200) ? res : cached;
+    } catch (_) {
+      return cached;                                  // offline
     }
   })());
 });
