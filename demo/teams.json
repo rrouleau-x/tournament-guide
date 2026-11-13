@@ -1,4 +1,6 @@
 {
+ "_note": "Demo team registry (synthetic). Mirrors the teams in tournaments/demo-live-test.json.",
+ "defaultTeam": "demo-u9-premier",
  "teams": [
   {
    "slug": "demo-u9-premier",
@@ -16,6 +18,5 @@
    "ageGroup": "U10",
    "format": "7v7"
   }
- ],
- "defaultTeam": "demo-u9-premier"
+ ]
 }

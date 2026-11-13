@@ -268,6 +268,7 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 .btn-here{margin-top:9px;width:100%;min-height:44px;border-radius:12px;border:1px solid rgba(0,0,0,.10);background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:block}
 .arrive-strong.late .btn-here{border-color:rgba(183,110,0,.35);color:var(--amber)}
 .nextline{display:block;margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);text-decoration:none}
+.demoBar{background:#eef1f6;color:#0055A4;font-size:12px;font-weight:700;padding:7px 14px;text-align:center;border-bottom:1px solid #d8e0ec}
 .chk-stamp{font-size:11px;color:var(--muted);margin-top:10px;text-align:right;letter-spacing:.2px}
 
 </style>
@@ -276,6 +277,7 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 <div class="app loading" id="app">
 
   <div class="offlineBar" id="offlineBar" role="status">Showing the saved copy — you're offline. Details may be out of date.</div>
+  <div class="demoBar" id="demoBar" hidden>Demo build &middot; synthetic schedule, not a real tournament</div>
   <div class="failBar" id="loadFail" role="alert" hidden><span>Couldn't load the latest tournament details.</span><button type="button" id="retryLoad">Retry</button></div>
 
   <header class="hero">
@@ -387,6 +389,10 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 
 /* Fallback config — correct at build time. At runtime this is OVERWRITTEN
    by data.json via adaptData(), so the cron job keeps the app current. */
+// The same file is served at /app/ and at /demo/. Everything that must differ in the demo
+// (banner, frozen clock, storage) keys off this one flag, so the two copies stay identical.
+const IS_DEMO=/\/demo\//.test(location.pathname);
+if(IS_DEMO){ document.getElementById('demoBar').hidden=false; }
 let TOURNAMENT = {
   timezone: "America/New_York",
   matchDurationMin: 65,
@@ -725,7 +731,7 @@ document.getElementById('heroKick').textContent=TOURNAMENT.tournament.kick;
 document.getElementById('heroTitle').textContent=TOURNAMENT.tournament.name;
 document.getElementById('heroTeam').textContent=TOURNAMENT.tournament.team;
 document.getElementById('heroMeta').textContent=TOURNAMENT.tournament.meta;
-document.title='Game Day — '+TOURNAMENT.tournament.team.split('·')[0].trim();
+document.title=(IS_DEMO?'Demo — ':'Game Day — ')+TOURNAMENT.tournament.team.split('·')[0].trim();
 document.getElementById('crestMark').innerHTML='<svg viewBox="0 0 100 100"><path d="M50 2 92 22v28c0 26-18 42-42 48C26 92 8 76 8 50V22L50 2z" fill="#fff"/><circle cx="50" cy="48" r="17" fill="none" stroke="'+TOURNAMENT.brand.primary+'" stroke-width="3"/><text x="50" y="55" text-anchor="middle" font-size="18" font-weight="bold" fill="'+TOURNAMENT.brand.primary+'">'+TOURNAMENT.brand.initial+'</text></svg>';
 }
 renderHero();
@@ -741,17 +747,18 @@ function renderBanner(){
 // ---- TOURNAMENT STATE RESOLVER (single source of truth for time) ----
 const TZ=TOURNAMENT.timezone;
 const DURATION=(TOURNAMENT.matchDurationMin||60)*60000; // active-match window
-// Review aid, gated to demo bundles: ?now=2027-01-23T08:20:00-05:00 freezes the clock so a
-// reviewer can see the live / between-games / complete states without waiting for a real
-// tournament. Production slugs never start with "demo", so a stray ?now= is ignored.
-function forcedNow(){
-  try{
-    var q=new URLSearchParams(location.search).get('now');
-    if(q&&/^demo/.test(ACTIVE_TOURNAMENT||'')){ var d=new Date(q); if(!isNaN(d)) return d; }
-  }catch(e){}
-  return null;
+function tzNow(){
+  // Review aid, demo only: ?now=2027-01-23T08:20:00-05:00 freezes the clock so a reviewer can
+  // see the live / between-games / complete states without waiting for a real tournament.
+  // Gated on the /demo/ path, so a stray ?now= on the real app is ignored.
+  if(IS_DEMO){
+    try{
+      var q=new URLSearchParams(location.search).get('now');
+      if(q){ var d=new Date(q); if(!isNaN(d)) return d; }
+    }catch(e){}
+  }
+  return new Date();
 }
-function tzNow(){ return forcedNow()||new Date(); }
 function tzTime(iso){return new Date(iso);}
 function fmtParts(diff){
   diff=Math.max(0,diff);
@@ -920,11 +927,13 @@ function refreshContext(state){
 }
 
 // ---- ARRIVED AT THE FIELD (per tournament, per game) ----
-function hereStore(){ return STORE_NS+'gd-here-'+(ACTIVE_TOURNAMENT||'default')+'-'+(ACTIVE_TEAM||'team'); }
+function hereStore(){ return 'gd-here-'+(ACTIVE_TOURNAMENT||'default'); }
 function hereMap(){ try{ return JSON.parse(localStorage.getItem(hereStore()))||{}; }catch(e){ return {}; } }
-function isHere(g){ return !!(g&&hereMap()[g.id]); }
+// Keyed by team + game: Game 1 for U9 Premier is not Game 1 for U10 Blue.
+function hereKey(id){ return (ACTIVE_TEAM||'')+':'+id; }
+function isHere(g){ return !!(g&&hereMap()[hereKey(g.id)]); }
 function setHere(id,on){
-  var m=hereMap(); if(on) m[id]=true; else delete m[id];
+  var m=hereMap(), k=hereKey(id); if(on) m[k]=true; else delete m[k];
   try{ localStorage.setItem(hereStore(),JSON.stringify(m)); }catch(e){}
 }
 
@@ -1393,8 +1402,7 @@ var lastCheckedIso=null;
 function checkedStamp(){
   if(!lastCheckedIso) return '';
   try{
-    // With the demo clock frozen, a real fetch time would read as nonsense beside it.
-    var d=forcedNow()||new Date(lastCheckedIso), tz=TOURNAMENT.timezone;
+    var d=new Date(lastCheckedIso), tz=TOURNAMENT.timezone;
     var t=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:tz});
     // A stamp from another day must say so, or yesterday's check reads as this morning's.
     if(calDays(d,tzNow())!==0) t=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz})+', '+t;
@@ -1410,7 +1418,7 @@ function renderFullGuide(){
 
 // ---- "BEFORE YOU GO" TICKS (per tournament, per phase group) ----
 var lastNeedGroup='before';
-function needStore(){ return STORE_NS+'gd-need-'+(ACTIVE_TOURNAMENT||'default'); }
+function needStore(){ return 'gd-need-'+(ACTIVE_TOURNAMENT||'default'); }
 function loadNeed(){ try{ return JSON.parse(localStorage.getItem(needStore()))||{}; }catch(e){ return {}; } }
 function toggleNeed(el){
   var all=loadNeed(), k=lastNeedGroup+':'+decodeURIComponent(el.dataset.need), old=lastNeedGroup+':'+el.dataset.idx;
@@ -1441,7 +1449,7 @@ document.getElementById('needList').addEventListener('keydown',function(e){
 const KIND_LABEL={always:'Always',weather:'Weather',tournament:'Tournament'};
 // One saved checklist PER tournament. The key used to be built from the fallback's empty
 // name, so every event shared (and overwrote) the same list.
-function packKey(){ return STORE_NS+'gd-pack-'+(ACTIVE_TOURNAMENT||'default'); }
+function packKey(){ return 'gd-pack-'+(ACTIVE_TOURNAMENT||'default'); }
 function loadPack(){try{return JSON.parse(localStorage.getItem(packKey()))||{}}catch(e){return{}}}
 function savePack(o){try{localStorage.setItem(packKey(),JSON.stringify(o));}catch(e){}}
 function packCount(){
@@ -1540,12 +1548,15 @@ function renderAll(){
 
 // ---- TOURNAMENT + TEAM SELECTION ----
 var ACTIVE_TEAM=null, ACTIVE_TOURNAMENT=null;
-var STORE_NS='';          // 'demo-' in the demo build: separate storage per product
 const BASE=JSON.stringify(TOURNAMENT);          // pristine template, re-cloned for every load
 const SNAP_KEY='tg-snap-v1';
 function qsGet(k){ try{ return new URLSearchParams(location.search).get(k); }catch(e){ return null; } }
-function lsGet(k){ try{ return localStorage.getItem(STORE_NS+k); }catch(e){ return null; } }
-function lsSet(k,v){ try{ localStorage.setItem(STORE_NS+k,v); }catch(e){} }
+// /app/ and /demo/ are one origin, so they share localStorage. The demo gets its own
+// namespace: a demo visit used to overwrite the real app's remembered tournament, team and
+// offline copy, and the real app could then paint the synthetic schedule.
+const NS=IS_DEMO?'demo:':'';
+function lsGet(k){ try{ return localStorage.getItem(NS+k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(NS+k,v); }catch(e){} }
 // 'no-cache' revalidates with the server (cheap 304s) instead of the old ?_=<timestamp>
 // cache-buster, which forced a full download of every file on every visit.
 function getJSON(url){ return fetch(url,{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(url+' → '+r.status); return r.json(); }); }
@@ -1594,7 +1605,8 @@ async function load(){
   var t=qsGet('t')||lsGet('tj_tournament_v1'), wantTeam=qsGet('team')||lsGet('cc-team');
   try{
     var snap=JSON.parse(lsGet(SNAP_KEY)||'null');
-    if(snap&&snap.shared&&(!t||snap.t===t)&&(!wantTeam||snap.team===wantTeam)){
+    // A saved copy written by the other bundle (e.g. before the namespaces existed) is never painted.
+    if(snap&&snap.shared&&(/^demo/.test(snap.t||'')===IS_DEMO)&&(!t||snap.t===t)&&(!wantTeam||snap.team===wantTeam)){
       var sig0=JSON.stringify([snap.shared,snap.teamData]);
       if(!lastCheckedIso&&snap.checkedAt) lastCheckedIso=snap.checkedAt;   // when the saved copy was fetched
       if(sig0!==lastSig){ lastSig=sig0; applyData(snap.shared,snap.teamData,snap.t,snap.team); }
@@ -1622,7 +1634,7 @@ async function load(){
     if(tslug) lsSet('tj_tournament_v1',tslug);
     if(slug) lsSet('cc-team',slug);
     fail.hidden=true;
-    lastCheckedIso=new Date().toISOString();      // only a real fetch stamps the card
+    lastCheckedIso=tzNow().toISOString();      // only a real fetch stamps the card
     var sig=JSON.stringify([shared,team]);
     if(sig!==lastSig){ lastSig=sig; applyData(shared,team,tslug,slug); }   // unchanged data = no re-render
     else { lastStateKey=''; refreshAll(); }                               // ...but the stamp still moves

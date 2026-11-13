@@ -13,8 +13,11 @@
  *     keys.filter(k => k !== CACHE) nukes every other cache on the origin.
  *  2. Never precache large binaries (PDFs). They get cached on first view.
  */
-const CACHE = 'tournament-guide-v40';
-const PREFIX = 'tournament-guide-';
+// One file serves /app/ and /demo/. The demo's caches use a prefix the app's cleanup can
+// never match ('tournament-guide-demo-…' was being deleted by the app as one of its own).
+const VERSION = 'v41';
+const PREFIX = /\/demo\//.test(self.location.pathname) ? 'tg-demo-' : 'tournament-guide-';
+const CACHE = PREFIX + VERSION;
 const SHELL = ['./', './tournaments.json', './teams.json', './manifest.json'];
 const NET_TIMEOUT = 3000;
 
