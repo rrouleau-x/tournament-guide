@@ -13,7 +13,7 @@
  *     keys.filter(k => k !== CACHE) nukes every other cache on the origin.
  *  2. Never precache large binaries (PDFs). They get cached on first view.
  */
-const CACHE = 'tournament-guide-v5';
+const CACHE = 'tournament-guide-v6';
 const PREFIX = 'tournament-guide-';
 const SHELL = ['./', './index.html', './data.json', './tournaments.json', './teams.json', './manifest.json'];
 
@@ -48,8 +48,25 @@ self.addEventListener('fetch', e => {
   const key = new URL(req.url); key.search = '';
   const cacheKey = key.href;
 
+  // DATA IS NETWORK-FIRST. Stale-while-revalidate is right for the shell but
+  // wrong for content: a parent would see yesterday's schedule on the first
+  // load after an update. JSON is fetched fresh and only falls back to cache
+  // when the network fails.
+  const isData = /\/(data|tournaments|teams)\.json$/.test(key.pathname);
+
   e.respondWith((async () => {
     const cache = await caches.open(CACHE);
+    if (isData) {
+      try {
+        const fresh = await fetch(req, { cache: 'no-store' });
+        if (fresh && fresh.status === 200) cache.put(cacheKey, fresh.clone());
+        return fresh;
+      } catch (err) {
+        const hit = await cache.match(cacheKey);
+        if (hit) return hit;
+        throw err;
+      }
+    }
     const cached = await cache.match(cacheKey);
     if (cached) {
       // serve now, refresh for next time
