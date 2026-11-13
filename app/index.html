@@ -223,7 +223,7 @@
   .alert svg{width:20px;height:20px;flex-shrink:0}
 .nav-inner a,.nav-inner button{min-height:44px}
 .btn,.chip,button,a.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;line-height:1.15}
-.legend{display:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px 14px;background:var(--card);border-top:1px solid var(--line)}
 .legend.open{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--line)}
 .legendToggle{background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;padding:6px 14px 8px;width:100%;text-align:right}
 .offlineBar{display:none;background:var(--amber-bg,#fff6e5);color:#8a5a00;font-size:12.5px;font-weight:600;padding:8px 14px;text-align:center;border-bottom:1px solid var(--line)}
@@ -249,7 +249,6 @@ body.is-offline .offlineBar{display:block}
 
   <!-- LIVE COUNTDOWN -->
   <div class="offlineBar" id="offlineBar">Showing the saved copy — you're offline. Details may be out of date.</div>
-  <button class="legendToggle" id="legendToggle" aria-expanded="false">What do the colours mean?</button>
   <div class="countdown" id="countdown">
     <span class="cd-label" id="cdLabel"></span>
     <span id="cdBody"></span>
@@ -1385,12 +1384,15 @@ lastStateKey=''; // force initial full render (schedule, countdown, next-match, 
     var cd=document.getElementById('countdown');
     var card=next&&next.closest?next.closest('.card'):null;
     if(card&&cd&&cd.parentNode){ cd.parentNode.insertBefore(card, cd); }
-    var tog=document.getElementById('legendToggle'), lg=document.querySelector('.legend');
-    if(tog&&lg){ tog.addEventListener('click',function(){
-      var open=lg.classList.toggle('open');
-      tog.setAttribute('aria-expanded',open?'true':'false');
-      tog.textContent=open?'Hide the colour key':'What do the colours mean?';
-    }); }
+    // The colour key is reference material: it lives at the bottom of More,
+    // not above the next match on every screen.
+    var lg=document.querySelector('.legend'), more=document.getElementById('scr-more');
+    if(lg&&more){
+      var head=document.createElement('div');
+      head.className='section-title'; head.textContent='What the colours mean';
+      head.style.marginTop='18px';
+      more.appendChild(head); more.appendChild(lg);
+    }
     function offline(){ document.body.classList.toggle('is-offline', !navigator.onLine); }
     window.addEventListener('online',offline); window.addEventListener('offline',offline); offline();
   }catch(e){}
