@@ -102,7 +102,7 @@ a.card{display:block;background:#fff;border-radius:14px;padding:14px 16px;margin
     document.querySelectorAll("#chips .chip").forEach(function(c){
       c.classList.toggle("on", c.dataset.team===team);
     });
-    go.href="../../app/?t="+sel.value+"&team="+team;
+    go.href="../app/?t="+sel.value+"&team="+team;
     cards.forEach(function(a){a.href="../app/?t="+a.dataset.slug+"&team="+team;});
   }
   document.querySelectorAll("#chips .chip").forEach(function(c){
