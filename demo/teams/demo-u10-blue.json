@@ -1,6 +1,4 @@
 {
- "name": "SU 17/18B Blue",
- "shortName": "SU 17/18B Blue",
  "ageGroup": "U10",
  "format": "7v7",
  "games": [
@@ -41,5 +39,7 @@
    "status": "conditional",
    "type": "final"
   }
- ]
+ ],
+ "name": "SU 17/18B Blue",
+ "shortName": "SU 17/18B Blue"
 }

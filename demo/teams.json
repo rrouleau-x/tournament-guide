@@ -1,0 +1,21 @@
+{
+ "teams": [
+  {
+   "slug": "demo-u9-premier",
+   "label": "U9 Premier",
+   "name": "SU 17/18B Premier",
+   "shortName": "SU 17/18B Premier",
+   "ageGroup": "U9",
+   "format": "7v7"
+  },
+  {
+   "slug": "demo-u10-blue",
+   "label": "U10 Blue",
+   "name": "SU 17/18B Blue",
+   "shortName": "SU 17/18B Blue",
+   "ageGroup": "U10",
+   "format": "7v7"
+  }
+ ],
+ "defaultTeam": "demo-u9-premier"
+}

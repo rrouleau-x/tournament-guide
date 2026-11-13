@@ -741,16 +741,17 @@ function renderBanner(){
 // ---- TOURNAMENT STATE RESOLVER (single source of truth for time) ----
 const TZ=TOURNAMENT.timezone;
 const DURATION=(TOURNAMENT.matchDurationMin||60)*60000; // active-match window
-function tzNow(){
-  // Review aid, gated to demo bundles: ?now=2027-01-23T08:20:00-05:00 freezes the clock so a
-  // reviewer can see the live / between-games / complete states without waiting for a real
-  // tournament. Production slugs never start with "demo", so a stray ?now= is ignored.
+// Review aid, gated to demo bundles: ?now=2027-01-23T08:20:00-05:00 freezes the clock so a
+// reviewer can see the live / between-games / complete states without waiting for a real
+// tournament. Production slugs never start with "demo", so a stray ?now= is ignored.
+function forcedNow(){
   try{
     var q=new URLSearchParams(location.search).get('now');
     if(q&&/^demo/.test(ACTIVE_TOURNAMENT||'')){ var d=new Date(q); if(!isNaN(d)) return d; }
   }catch(e){}
-  return new Date();
+  return null;
 }
+function tzNow(){ return forcedNow()||new Date(); }
 function tzTime(iso){return new Date(iso);}
 function fmtParts(diff){
   diff=Math.max(0,diff);
@@ -919,7 +920,7 @@ function refreshContext(state){
 }
 
 // ---- ARRIVED AT THE FIELD (per tournament, per game) ----
-function hereStore(){ return 'gd-here-'+(ACTIVE_TOURNAMENT||'default'); }
+function hereStore(){ return STORE_NS+'gd-here-'+(ACTIVE_TOURNAMENT||'default')+'-'+(ACTIVE_TEAM||'team'); }
 function hereMap(){ try{ return JSON.parse(localStorage.getItem(hereStore()))||{}; }catch(e){ return {}; } }
 function isHere(g){ return !!(g&&hereMap()[g.id]); }
 function setHere(id,on){
@@ -1392,10 +1393,11 @@ var lastCheckedIso=null;
 function checkedStamp(){
   if(!lastCheckedIso) return '';
   try{
-    var d=new Date(lastCheckedIso), tz=TOURNAMENT.timezone;
+    // With the demo clock frozen, a real fetch time would read as nonsense beside it.
+    var d=forcedNow()||new Date(lastCheckedIso), tz=TOURNAMENT.timezone;
     var t=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:tz});
     // A stamp from another day must say so, or yesterday's check reads as this morning's.
-    if(calDays(d,new Date())!==0) t=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz})+', '+t;
+    if(calDays(d,tzNow())!==0) t=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz})+', '+t;
     return '<div class="chk-stamp">Schedule last checked '+t+' ET</div>';
   }catch(e){ return ''; }
 }
@@ -1408,7 +1410,7 @@ function renderFullGuide(){
 
 // ---- "BEFORE YOU GO" TICKS (per tournament, per phase group) ----
 var lastNeedGroup='before';
-function needStore(){ return 'gd-need-'+(ACTIVE_TOURNAMENT||'default'); }
+function needStore(){ return STORE_NS+'gd-need-'+(ACTIVE_TOURNAMENT||'default'); }
 function loadNeed(){ try{ return JSON.parse(localStorage.getItem(needStore()))||{}; }catch(e){ return {}; } }
 function toggleNeed(el){
   var all=loadNeed(), k=lastNeedGroup+':'+decodeURIComponent(el.dataset.need), old=lastNeedGroup+':'+el.dataset.idx;
@@ -1439,7 +1441,7 @@ document.getElementById('needList').addEventListener('keydown',function(e){
 const KIND_LABEL={always:'Always',weather:'Weather',tournament:'Tournament'};
 // One saved checklist PER tournament. The key used to be built from the fallback's empty
 // name, so every event shared (and overwrote) the same list.
-function packKey(){ return 'gd-pack-'+(ACTIVE_TOURNAMENT||'default'); }
+function packKey(){ return STORE_NS+'gd-pack-'+(ACTIVE_TOURNAMENT||'default'); }
 function loadPack(){try{return JSON.parse(localStorage.getItem(packKey()))||{}}catch(e){return{}}}
 function savePack(o){try{localStorage.setItem(packKey(),JSON.stringify(o));}catch(e){}}
 function packCount(){
@@ -1538,11 +1540,12 @@ function renderAll(){
 
 // ---- TOURNAMENT + TEAM SELECTION ----
 var ACTIVE_TEAM=null, ACTIVE_TOURNAMENT=null;
+var STORE_NS='';          // 'demo-' in the demo build: separate storage per product
 const BASE=JSON.stringify(TOURNAMENT);          // pristine template, re-cloned for every load
 const SNAP_KEY='tg-snap-v1';
 function qsGet(k){ try{ return new URLSearchParams(location.search).get(k); }catch(e){ return null; } }
-function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
-function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function lsGet(k){ try{ return localStorage.getItem(STORE_NS+k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(STORE_NS+k,v); }catch(e){} }
 // 'no-cache' revalidates with the server (cheap 304s) instead of the old ?_=<timestamp>
 // cache-buster, which forced a full download of every file on every visit.
 function getJSON(url){ return fetch(url,{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(url+' → '+r.status); return r.json(); }); }
