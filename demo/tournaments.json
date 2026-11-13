@@ -1,0 +1,11 @@
+{
+ "defaultTournament": "demo-live-test",
+ "tournaments": [
+  {
+   "slug": "demo-live-test",
+   "name": "Demo Test Invitational",
+   "dates": "Jan 23\u201324, 2027",
+   "city": "Jacksonville, FL"
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "name": "SU 17/18B Blue",
+ "shortName": "SU 17/18B Blue",
+ "ageGroup": "U10",
+ "format": "7v7",
+ "games": [
+  {
+   "date": "2027-01-23",
+   "time": "8:00 AM",
+   "opponent": "Florida Elite 17B",
+   "field": "Field 3A",
+   "home": true,
+   "arrival": "7:15 AM",
+   "status": "confirmed"
+  },
+  {
+   "date": "2027-01-23",
+   "time": "11:30 AM",
+   "opponent": "Jacksonville FC 17B",
+   "field": "Field 5",
+   "home": false,
+   "arrival": "10:45 AM",
+   "status": "confirmed"
+  },
+  {
+   "date": "2027-01-23",
+   "time": "3:00 PM",
+   "opponent": "Clay County 17B",
+   "field": "Field 2B",
+   "home": true,
+   "arrival": "2:15 PM",
+   "status": "confirmed"
+  },
+  {
+   "date": "2027-01-24",
+   "time": "9:15 AM",
+   "opponent": "TBD (bracket)",
+   "field": "Field 1",
+   "home": null,
+   "arrival": "8:30 AM",
+   "status": "conditional",
+   "type": "final"
+  }
+ ]
+}

@@ -1,0 +1,122 @@
+{
+ "tournament": {
+  "name": "Demo Test Invitational",
+  "dates": {
+   "start": "2027-01-23",
+   "end": "2027-01-24"
+  }
+ },
+ "venue": {
+  "name": "Patton Park",
+  "address": "2839 Owen Ave, Jacksonville, FL 32205",
+  "city": "Jacksonville, FL",
+  "mapsUrl": "https://www.google.com/maps/?q=Patton+Park+Jacksonville+FL",
+  "parking": "Park on the grass lot off Owen Ave; overflow at the school next door.",
+  "amenities": {
+   "restrooms": true,
+   "concessions": true,
+   "shade": "limited"
+  }
+ },
+ "teams": [
+  {
+   "slug": "demo-u9-premier",
+   "label": "U9 Premier",
+   "name": "SU 17/18B Premier",
+   "shortName": "SU 17/18B Premier",
+   "ageGroup": "U9",
+   "format": "7v7"
+  },
+  {
+   "slug": "demo-u10-blue",
+   "label": "U10 Blue",
+   "name": "SU 17/18B Blue",
+   "shortName": "SU 17/18B Blue",
+   "ageGroup": "U10",
+   "format": "7v7"
+  }
+ ],
+ "defaultTeam": "demo-u9-premier",
+ "checklist": {
+  "player": [
+   "Both uniform kits",
+   "Cleats",
+   "Shin guards",
+   "Water bottle",
+   "Extra socks",
+   "Warm-up gear",
+   "Dry clothes",
+   "Recovery shoes",
+   "Medications"
+  ],
+  "weather": [
+   "Water (plenty)",
+   "Warm layer for early kickoffs",
+   "Beanie or headband",
+   "Gloves",
+   "Hand warmers",
+   "Rain shell"
+  ],
+  "parent": [
+   "Folding chairs",
+   "Shade/canopy",
+   "Cooler",
+   "Snacks",
+   "Portable charger",
+   "Wipes"
+  ],
+  "emergency": [
+   "First-aid kit",
+   "Ice packs",
+   "Insurance info",
+   "Emergency contacts"
+  ]
+ },
+ "rules": {
+  "keyRules": [
+   {
+    "label": "Game length",
+    "value": "2 x 25 min"
+   },
+   {
+    "label": "Format",
+    "value": "7v7"
+   },
+   {
+    "label": "Roster",
+    "value": "12 max"
+   }
+  ],
+  "tiebreakers": [
+   "Head to head",
+   "Goal difference",
+   "Goals scored"
+  ],
+  "fullLink": "https://example.com/rules"
+ },
+ "contacts": {
+  "coaches": [
+   {
+    "name": "Carson Gray",
+    "role": "Coach",
+    "email": "carsonzgray@gmail.com"
+   }
+  ],
+  "tournamentDirector": {
+   "name": "Tournament HQ",
+   "phone": "9040000000",
+   "email": "hq@example.com"
+  }
+ },
+ "updates": [
+  {
+   "title": "Schedule posted",
+   "description": "All four games are now in the app."
+  }
+ ],
+ "weather": {
+  "source": {
+   "enabled": false
+  }
+ }
+}

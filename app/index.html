@@ -741,7 +741,16 @@ function renderBanner(){
 // ---- TOURNAMENT STATE RESOLVER (single source of truth for time) ----
 const TZ=TOURNAMENT.timezone;
 const DURATION=(TOURNAMENT.matchDurationMin||60)*60000; // active-match window
-function tzNow(){return new Date();}
+function tzNow(){
+  // Review aid, gated to demo bundles: ?now=2027-01-23T08:20:00-05:00 freezes the clock so a
+  // reviewer can see the live / between-games / complete states without waiting for a real
+  // tournament. Production slugs never start with "demo", so a stray ?now= is ignored.
+  try{
+    var q=new URLSearchParams(location.search).get('now');
+    if(q&&/^demo/.test(ACTIVE_TOURNAMENT||'')){ var d=new Date(q); if(!isNaN(d)) return d; }
+  }catch(e){}
+  return new Date();
+}
 function tzTime(iso){return new Date(iso);}
 function fmtParts(diff){
   diff=Math.max(0,diff);
