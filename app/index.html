@@ -24,14 +24,14 @@
   .app{max-width:520px;margin:0 auto;background:var(--bg);min-height:100vh;padding-bottom:calc(96px + env(safe-area-inset-bottom));position:relative}
   .num{font-family:"SF Pro Display","Segoe UI",system-ui,sans-serif;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 
-  .hero{background:linear-gradient(160deg,var(--su) 0%,var(--su-dark) 100%);color:#fff;padding:22px 18px 18px;position:relative;overflow:hidden}
+  .hero{background:linear-gradient(160deg,var(--su) 0%,var(--su-dark) 100%);color:#fff;padding:15px 18px 13px;position:relative;overflow:hidden}
   .hero .kick{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#cfe0f5;margin:0 0 3px;font-weight:600}
-  .hero h1{font-size:23px;margin:0;font-weight:800;letter-spacing:-.4px}
+  .hero h1{font-size:21px;margin:0;font-weight:800;letter-spacing:-.4px}
   .hero .team{font-size:13.5px;color:#fff;opacity:.92;margin:3px 0 0;font-weight:600}
-  .hero .meta{font-size:12.5px;color:#cfe0f5;margin:7px 0 0;letter-spacing:.3px}
+  .hero .meta{font-size:12.5px;color:#cfe0f5;margin:5px 0 0;letter-spacing:.3px}
   .hero .crest{position:absolute;right:-18px;top:-18px;width:120px;height:120px;opacity:.10;pointer-events:none}
   .hero .crest svg{width:100%;height:100%}
-  .tpicks{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:12px;position:relative;z-index:2}
+  .tpicks{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:9px;position:relative;z-index:2}
   .tpicks::-webkit-scrollbar{display:none}
   .tpick{flex:0 0 auto;white-space:nowrap}
   .tpick{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;padding:0 10px;min-height:44px;border-radius:22px;letter-spacing:0;border:1px solid rgba(255,255,255,.25);line-height:1}
@@ -228,8 +228,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[role=checkbox]:focus
 .btn,a.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;line-height:1.15}
 .scr-h{font-size:20px;margin:2px 0 4px;font-weight:800}
 .app.loading main{visibility:hidden}
-.tpicks-label{font-size:11px;font-weight:800;letter-spacing:.8px;color:#cfe0f5;text-transform:uppercase;margin:12px 0 0;position:relative;z-index:2}
-.tpicks-label + .tpicks{margin-top:6px}
+.tpicks-label{font-size:11px;font-weight:800;letter-spacing:.8px;color:#cfe0f5;text-transform:uppercase;margin:9px 0 0;position:relative;z-index:2}
+.tpicks-label + .tpicks{margin-top:5px}
 /* Today-only countdown card + weekend progress */
 .countdown{border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow)}
 .wkstatus{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 14px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);margin-bottom:12px;font-size:12px;font-weight:700;color:var(--muted)}
@@ -239,12 +239,21 @@ body:not([data-tab="today"]) .hero .kick,body:not([data-tab="today"]) .hero .met
 body:not([data-tab="today"]) .hero h1{font-size:18px}
 .legend{display:flex;flex-wrap:wrap;gap:8px 14px;padding:12px 14px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);font-size:12.5px;color:var(--muted);font-weight:600}
 .legend span{display:flex;align-items:center;gap:6px}
+.context.hide{display:none!important}
 .offlineBar{display:none;background:var(--amber-bg);color:#8a5a00;font-size:12.5px;font-weight:600;padding:8px 14px;text-align:center;border-bottom:1px solid var(--line)}
 body.is-offline .offlineBar{display:block}
 .failBar{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--red-bg);color:#8f1d1d;font-size:12.5px;font-weight:600;padding:6px 14px;border-bottom:1px solid var(--line)}
 .failBar button,.resetBtn{border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:12.5px;font-weight:700;padding:0 14px;min-height:44px;border-radius:22px;cursor:pointer}
 .resetBtn{color:var(--muted)}
 /* Packing rows are real buttons now (keyboard + screen-reader operable) */
+.need li.chk{background:none;border:0;padding:7px 0;gap:10px;width:100%;min-height:44px;cursor:pointer;text-align:left;font:inherit;font-size:13.5px;font-weight:600;color:#fff;display:flex;align-items:center}
+.need li.chk::before{display:none}
+.need li.chk .box{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.need li.chk .box svg{width:13px;height:13px;stroke:#fff}
+.need li.chk.done{opacity:.65}
+.need li.chk.done .box{background:#fff;border-color:#fff}
+.need li.chk.done .box svg{stroke:var(--su)}
+.need li.chk.done .chkname{text-decoration:line-through}
 button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px solid var(--line);font:inherit;font-size:14px;color:inherit;text-align:left;justify-content:flex-start}
 .empty{font-size:13px;color:var(--muted);margin:4px 0 8px;line-height:1.55}
 
@@ -851,7 +860,19 @@ function refreshContext(state){
   else if(need==='game1') needTitleText=(g1?g1.label:'Game 1');
   else if(need==='game3') needTitleText='Final Check';
   needTitle.textContent=needTitleText;
-  needList.innerHTML=list.map(([a,b])=>'<li>'+a+' <span style="opacity:.75;font-weight:500">· '+b+'</span></li>').join('');
+  // The schedule-pending message is stated once, in the Next Match card. Repeating it in the
+  // context strip as well was four ways of saying the same thing on one screen.
+  var ctxBar=document.querySelector('.context');
+  if(ctxBar) ctxBar.classList.toggle('hide', phase==='awaiting-schedule');
+  // "Before You Go" is a checklist parents actually use on the drive, so the ticks persist per tournament.
+  lastNeedGroup=needKey;
+  var ticks=loadNeed(), _nt={}; Object.keys(ticks).forEach(function(k){ var p=k.split(':'); if(p[0]===needKey) _nt[p[1]]=ticks[k]; }); ticks=_nt;
+  needList.innerHTML=list.map(function(pair,i){
+    var on=!!ticks[i];
+    return '<li class="chk'+(on?' done':'')+'" role="checkbox" tabindex="0" aria-checked="'+on+'" data-need="'+i+'">'
+      +'<span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>'
+      +'<span class="chkname">'+pair[0]+' <span style="opacity:.75;font-weight:500">· '+pair[1]+'</span></span></li>';
+  }).join('');
 }
 
 // ---- NEXT MATCH DASHBOARD (consumes the SAME resolver) ----
@@ -865,12 +886,12 @@ function renderNextMatch(state){
     if(phase==='awaiting-schedule'){
       const SP=TOURNAMENT.schedulePending||{};
       nextStatus.textContent='Awaiting'; nextStatus.className='status pend';
-      nextBody.innerHTML='<div class="day" style="color:var(--su)">SCHEDULE · '+(TOURNAMENT.tournament.meta||'')+'</div>'+
+      nextBody.innerHTML='<div class="day" style="color:var(--su)">NEXT MATCH STATUS</div>'+
         '<div style="font-size:16px;font-weight:800;color:var(--ink);line-height:1.35;margin:2px 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
         '<div class="muted" style="font-size:13.5px;line-height:1.5">'+(SP.detail||'')+'</div>'+
         '<div class="arrive" style="border-top:none;margin-top:10px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venueLine(venue)+'</div>'+
         '<div class="btn-row">'+
-          (venue.mapsUrl?'<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">'+(venueKnown(venue)?'Directions':'Area Map')+'</a>':'')+
+          (venue.mapsUrl?'<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">'+(venueKnown(venue)?'Directions':'Explore '+areaName(venue))+'</a>':'')+
           (TOURNAMENT.tournament.fullGuideUrl?'<a class="btn ghost" href="'+TOURNAMENT.tournament.fullGuideUrl+'" target="_blank" rel="noopener">Full Guide</a>':'')+
           '<a class="btn ghost" href="#schedule" data-goto="schedule">Schedule</a>'+
         '</div>';
@@ -1147,6 +1168,12 @@ var COMPLEX_MAPS={
   'Southeastern Freight Lines Soccer Center':'https://irp.cdn-website.com/44ba685a/files/uploaded/SEFL%20tournament%20all%2011v11.pdf',
   'SV Presbyterian Church Fields':'https://irp.cdn-website.com/44ba685a/files/uploaded/sv%20church%20regular%20layout.pdf'
 };
+// Short human place name for the "Explore <area>" action while no venue is assigned.
+function areaName(v){
+  var c=String((v&&(v.city||v.address))||'').split(/[\/,]/)[0].trim();
+  c=c.replace(/\bFL\b|\bGA\b|\bSC\b/,'').trim();
+  return c||'Tournament Area';
+}
 // A venue is only "known" once the host names a real complex. Data can say assigned:true
 // while the name is still "Venue TBD - <area>", so check the text as well as the flag.
 function venueKnown(v){ return !!v && v.assigned!==false && !!(v.name||v.address) && !/\btbd\b|not yet/i.test((v.name||'')+' '+(v.address||'')); }
@@ -1261,6 +1288,25 @@ function renderFullGuide(){
   document.getElementById('fg1').textContent='Full '+(TEAM_LABEL_FOR_GUIDE||TOURNAMENT.tournament.name)+' Guide';
   document.getElementById('fg2').textContent='Everything in one detailed document — hotel, travel scenarios, full rules, itinerary.';
 }
+
+// ---- "BEFORE YOU GO" TICKS (per tournament, per phase group) ----
+var lastNeedGroup='before';
+function needStore(){ return 'gd-need-'+(ACTIVE_TOURNAMENT||'default'); }
+function loadNeed(){ try{ return JSON.parse(localStorage.getItem(needStore()))||{}; }catch(e){ return {}; } }
+function toggleNeed(el){
+  var i=el.dataset.need, all=loadNeed(), k=lastNeedGroup+':'+i;
+  all[k]=!all[k];
+  try{ localStorage.setItem(needStore(),JSON.stringify(all)); }catch(e){}
+  el.classList.toggle('done',!!all[k]); el.setAttribute('aria-checked',String(!!all[k]));
+}
+document.getElementById('needList').addEventListener('click',function(e){
+  var el=e.target.closest('[data-need]'); if(el) toggleNeed(el);
+});
+document.getElementById('needList').addEventListener('keydown',function(e){
+  if(e.key!==' '&&e.key!=='Enter') return;
+  var el=e.target.closest('[data-need]'); if(!el) return;
+  e.preventDefault(); toggleNeed(el);
+});
 
 // ---- PACKING (template-driven groups with kind badges) ----
 const KIND_LABEL={always:'Always',weather:'Weather',tournament:'Tournament'};
