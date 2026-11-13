@@ -14,7 +14,8 @@
     "dates": {
       "start": "2027-02-27",
       "end": "2027-02-27"
-    }
+    },
+    "build": "v1"
   },
   "team": {
     "name": "Savannah United 17/18B Travel",
@@ -27,7 +28,11 @@
   },
   "venue": {
     "name": "Venue TBD — Jacksonville, FL",
-    "address": "Jacksonville, FL (venue not yet announced)"
+    "address": "Jacksonville, FL (venue not yet announced)",
+    "assigned": false,
+    "city": "Jacksonville, FL",
+    "coordinates": null,
+    "complexes": []
   },
   "games": [],
   "scheduleStatus": "pending",
@@ -35,10 +40,26 @@
   "hotels": {
     "stayToPlay": false,
     "official": [],
-    "nonOfficial": []
+    "nonOfficial": [],
+    "portal": "",
+    "updatedAt": "",
+    "source": ""
   },
-  "weather": {},
-  "rules": {},
+  "weather": {
+    "summary": "",
+    "details": "",
+    "days": [],
+    "forecastLink": "",
+    "source": "",
+    "updatedAt": ""
+  },
+  "rules": {
+    "keyRules": [],
+    "tiebreakers": [],
+    "tiebreakersPending": true,
+    "directorContact": "",
+    "bracketContact": ""
+  },
   "updates": [],
   "contacts": {
     "manager": {
@@ -66,7 +87,26 @@
         "phone": ""
       }
     ],
-    "emergency": "911"
+    "emergency": "911",
+    "coaches": [
+      {
+        "name": "Keith Gunn",
+        "role": "Head Coach",
+        "phone": "",
+        "email": "k.gunn@savannahunited.com"
+      },
+      {
+        "name": "Carson Gray",
+        "role": "Coach",
+        "phone": "912-856-9442"
+      },
+      {
+        "name": "Mitchell Heath",
+        "role": "Coach",
+        "phone": ""
+      }
+    ],
+    "tournamentDirector": {}
   },
   "venueRules": {},
   "checklist": {
@@ -76,5 +116,48 @@
     "emergency": []
   },
   "nearby": {},
-  "offline": {}
+  "offline": {
+    "pdfGuideUrl": "",
+    "icsUrl": "",
+    "lastCached": ""
+  },
+  "teams": [
+    {
+      "slug": "u9-premier",
+      "name": "Savannah United 17/18B Premier",
+      "shortName": "SU 17/18B Premier",
+      "label": "U9 Premier",
+      "ageGroup": "09U",
+      "gender": "Boys",
+      "format": "7v7"
+    },
+    {
+      "slug": "u9-blue",
+      "name": "Savannah United 17/18B Blue",
+      "shortName": "SU 17/18B Blue",
+      "label": "U9 Blue",
+      "ageGroup": "09U",
+      "gender": "Boys",
+      "format": "7v7"
+    },
+    {
+      "slug": "u10-premier",
+      "name": "Savannah United 16/17B Premier",
+      "shortName": "SU 16/17B Premier",
+      "label": "U10 Premier",
+      "ageGroup": "10U",
+      "gender": "Boys",
+      "format": "7v7"
+    },
+    {
+      "slug": "u10-blue",
+      "name": "Savannah United 16/17B Blue",
+      "shortName": "SU 16/17B Blue",
+      "label": "U10 Blue",
+      "ageGroup": "10U",
+      "gender": "Boys",
+      "format": "7v7"
+    }
+  ],
+  "defaultTeam": "u9-premier"
 }

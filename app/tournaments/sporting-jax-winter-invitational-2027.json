@@ -14,7 +14,8 @@
     "dates": {
       "start": "2027-01-23",
       "end": "2027-01-24"
-    }
+    },
+    "build": "v1"
   },
   "team": {
     "name": "Savannah United 17/18B Travel",
@@ -27,7 +28,12 @@
   },
   "venue": {
     "name": "Venue TBD — Jacksonville / St Johns, FL",
-    "address": "Jacksonville / St Johns County, FL (fields not yet assigned)"
+    "address": "Jacksonville / St Johns County, FL (fields not yet assigned)",
+    "assigned": true,
+    "city": "Jacksonville / St Johns County, FL",
+    "mapsUrl": "https://www.google.com/maps/?q=Jacksonville%20/%20St%20Johns%20County%2C%20FL",
+    "coordinates": null,
+    "complexes": []
   },
   "games": [],
   "scheduleStatus": "pending",
@@ -35,9 +41,19 @@
   "hotels": {
     "stayToPlay": false,
     "official": [],
-    "nonOfficial": []
+    "nonOfficial": [],
+    "portal": "",
+    "updatedAt": "",
+    "source": ""
   },
-  "weather": {},
+  "weather": {
+    "summary": "",
+    "details": "",
+    "days": [],
+    "forecastLink": "",
+    "source": "",
+    "updatedAt": ""
+  },
   "rules": {
     "fullLink": "https://docs.google.com/document/d/e/2PACX-1vT6XxZhuaK1sKrRj5uSFNlsgHr6Vpqo7Iyz02sL6gOoKl_ZfPnFu7ym0mYgXjtpKvSytDpnDVx_vTs8/pub",
     "keyRules": [
@@ -89,7 +105,10 @@
       "Fewest goals allowed",
       "Most shutouts",
       "Penalty kicks per FIFA"
-    ]
+    ],
+    "tiebreakersPending": false,
+    "directorContact": "",
+    "bracketContact": ""
   },
   "updates": [],
   "contacts": {
@@ -118,7 +137,26 @@
         "phone": ""
       }
     ],
-    "emergency": "911"
+    "emergency": "911",
+    "coaches": [
+      {
+        "name": "Keith Gunn",
+        "role": "Head Coach",
+        "phone": "",
+        "email": "k.gunn@savannahunited.com"
+      },
+      {
+        "name": "Carson Gray",
+        "role": "Coach",
+        "phone": "912-856-9442"
+      },
+      {
+        "name": "Mitchell Heath",
+        "role": "Coach",
+        "phone": ""
+      }
+    ],
+    "tournamentDirector": {}
   },
   "venueRules": {},
   "checklist": {
@@ -128,5 +166,48 @@
     "emergency": []
   },
   "nearby": {},
-  "offline": {}
+  "offline": {
+    "pdfGuideUrl": "",
+    "icsUrl": "",
+    "lastCached": ""
+  },
+  "teams": [
+    {
+      "slug": "u9-premier",
+      "name": "Savannah United 17/18B Premier",
+      "shortName": "SU 17/18B Premier",
+      "label": "U9 Premier",
+      "ageGroup": "09U",
+      "gender": "Boys",
+      "format": "7v7"
+    },
+    {
+      "slug": "u9-blue",
+      "name": "Savannah United 17/18B Blue",
+      "shortName": "SU 17/18B Blue",
+      "label": "U9 Blue",
+      "ageGroup": "09U",
+      "gender": "Boys",
+      "format": "7v7"
+    },
+    {
+      "slug": "u10-premier",
+      "name": "Savannah United 16/17B Premier",
+      "shortName": "SU 16/17B Premier",
+      "label": "U10 Premier",
+      "ageGroup": "10U",
+      "gender": "Boys",
+      "format": "7v7"
+    },
+    {
+      "slug": "u10-blue",
+      "name": "Savannah United 16/17B Blue",
+      "shortName": "SU 16/17B Blue",
+      "label": "U10 Blue",
+      "ageGroup": "10U",
+      "gender": "Boys",
+      "format": "7v7"
+    }
+  ],
+  "defaultTeam": "u9-premier"
 }

@@ -2,859 +2,1355 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0055A4">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css">
-<title>Sporting Jax Guide</title>
-<style>
-:root{--p:#0055A4;--pd:#003D7A;--bg:#f2f2f7;--c:#fff;--t:#1d1d1f;--t2:#86868b;--b:#e5e5ea;--g:#34c759;--y:#ff9500;--r:#ff3b30;--bl:#007aff;--sb:env(safe-area-inset-bottom,0px);--th:56px}
-.dark{--bg:#1c1c1e;--c:#2c2c2e;--t:#f5f5f7;--t2:#98989d;--b:#38383a}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;height:100%}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--t);height:100dvh;overflow:hidden;padding-bottom:calc(var(--th)+var(--sb));-webkit-font-smoothing:antialiased;user-select:none}
-.app{height:100dvh;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
-.screen{display:none;padding:0 16px 24px;animation:fadeIn .2s}
-.screen.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+<title>Carolina Cup Guide</title><style>
+  :root{
+    --su:#0055A4; --su-dark:#003f7a; --su-soft:#e8f0fb;
+    --link:#0a66c2; --bg:#eef1f6; --card:#ffffff;
+    --ink:#1d1d1f; --muted:#6e6e73; --line:#e3e6ec;
+    --green:#1a9e4a; --green-bg:#e8f6ee;
+    --amber:#b76e00; --amber-bg:#fff3d6;
+    --red:#d72d2d; --red-bg:#fdecec;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg)}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;color:var(--ink);line-height:1.45}
+  .app{max-width:520px;margin:0 auto;background:var(--bg);min-height:100vh;padding-bottom:76px;position:relative}
+  .num{font-family:"SF Pro Display","Segoe UI",system-ui,sans-serif;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 
-/* Top status strip */
-.top-strip{background:var(--p);padding:44px 16px 10px;color:#fff;margin-bottom:12px}
-.top-strip .tourney{font-size:13px;opacity:.7;text-transform:uppercase;letter-spacing:1px}
-.top-strip .phase{display:inline-flex;align-items:center;gap:4px;font-size:11px;opacity:.85;margin-top:2px}
-.top-strip .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
-.top-strip .dot.green{background:var(--g)}
-.top-strip .dot.yellow{background:var(--y)}
-.top-strip .dot.red{background:var(--r)}
+  .hero{background:linear-gradient(160deg,var(--su) 0%,var(--su-dark) 100%);color:#fff;padding:22px 18px 18px;position:relative;overflow:hidden}
+  .hero .kick{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#cfe0f5;margin:0 0 3px;font-weight:600}
+  .hero h1{font-size:23px;margin:0;font-weight:800;letter-spacing:-.4px}
+  .hero .team{font-size:13.5px;color:#fff;opacity:.92;margin:3px 0 0;font-weight:600}
+  .hero .meta{font-size:12.5px;color:#cfe0f5;margin:7px 0 0;letter-spacing:.3px}
+  .hero .crest{position:absolute;right:-18px;top:-18px;width:120px;height:120px;opacity:.10;pointer-events:none}
+  .hero .crest svg{width:100%;height:100%}
+  .tpicks{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:2}
+  .tpick{background:rgba(255,255,255,.16);color:#fff;text-decoration:none;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:.2px;border:1px solid rgba(255,255,255,.25)}
+  .tpick.on{background:#fff;color:var(--su);border-color:#fff}
 
-/* Giant next game boarding pass */
-.boarding-pass{border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.boarding-pass .main{background:#1c1c1e;color:#fff;padding:20px 20px 16px;position:relative}
-.boarding-pass .main::after{content:'';position:absolute;left:20px;right:20px;bottom:0;height:2px;background:repeating-linear-gradient(90deg,transparent,transparent 6px,#444 6px,#444 8px)}
-.boarding-pass .day-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.boarding-pass .day-badge.today{background:var(--g);color:#fff}
-.boarding-pass .day-badge.upcoming{background:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
-.boarding-pass .time{font-size:40px;font-weight:700;letter-spacing:-1.5px;line-height:1}
-.boarding-pass .vs{font-size:16px;font-weight:400;color:rgba(255,255,255,.6);margin:6px 0}
-.boarding-pass .opp{font-size:18px;font-weight:600}
-.boarding-pass .details{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.boarding-pass .detail-chip{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:14px;font-size:11px;background:rgba(255,255,255,.1)}
-.boarding-pass .detail-chip i{font-size:13px;opacity:.7}
-.boarding-pass .secondary{background:#2c2c2e;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
-.boarding-pass .secondary span{font-size:12px;color:rgba(255,255,255,.5)}
-.boarding-pass .nav-btn{display:flex;align-items:center;gap:4px;padding:8px 16px;border-radius:20px;background:var(--p);color:#fff;font-size:12px;font-weight:600;border:none;cursor:pointer}
-.boarding-pass .expand-section{display:none;background:#2c2c2e;padding:0 20px 16px;border-top:1px solid #3a3a3c}
-.boarding-pass .expand-section.open{display:block}
-.boarding-pass .expand-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #3a3a3c;font-size:12px;color:rgba(255,255,255,.7);cursor:pointer}
-.boarding-pass .expand-item:last-child{border:none}
-.boarding-pass .expand-item i{font-size:14px;color:rgba(255,255,255,.4);width:18px}
-.boarding-pass .tap-expand{text-align:center;padding:6px;color:rgba(255,255,255,.3);font-size:11px;cursor:pointer}
+  /* CONTEXT STRIP + COUNTDOWN */
+  .context{background:var(--su);color:#fff;padding:10px 18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .context .chip{background:rgba(255,255,255,.16);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+  .countdown{background:var(--su-dark);color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+  .countdown .cd-label{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#cfe0f5;width:100%;text-align:center}
+  .countdown .cd-num{font-size:24px;font-weight:800;letter-spacing:-1px}
+  .countdown .cd-unit{font-size:10px;font-weight:700;color:#cfe0f5;text-transform:uppercase;letter-spacing:.4px}
+  .countdown .cd-sep{color:#cfe0f5;opacity:.6;font-weight:800}
 
-/* Morning greeting */
-.greeting{background:linear-gradient(135deg,#0055A4,#003D7A);border-radius:16px;padding:16px 20px;color:#fff;margin-bottom:12px}
-.greeting .hello{font-size:11px;text-transform:uppercase;opacity:.7;letter-spacing:1px;margin-bottom:2px}
-.greeting .main-info{font-size:20px;font-weight:700;margin-bottom:6px}
-.greeting .sub-info{font-size:12px;opacity:.85;line-height:1.5}
-.greeting .quick-stats{display:flex;gap:16px;margin-top:8px}
-.greeting .stat{font-size:12px;opacity:.8}
-.greeting .stat strong{opacity:1;font-size:14px}
+  /* PROVENANCE LEGEND */
+  .legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 18px;background:var(--bg);font-size:10.5px;color:var(--muted);font-weight:600}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .dot.g{background:var(--green)}.dot.a{background:var(--amber)}.dot.b{background:var(--link)}
 
-/* Next Action */
-.next-action{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;background:var(--c);border:1px solid var(--b);margin-bottom:12px}
-.next-action i{font-size:18px;color:var(--p)}
-.next-action .label{font-size:10px;text-transform:uppercase;color:var(--t2);letter-spacing:.5px}
-.next-action .text{font-size:14px;font-weight:600}
-.next-action .arrow{color:var(--t2);margin-left:auto;font-size:16px}
+  .nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);backdrop-filter:saturate(180%) blur(12px);border-top:1px solid var(--line);z-index:50}
+  .nav-inner{max-width:520px;margin:0 auto;display:flex;height:60px}
+  .nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted);text-decoration:none;font-size:10px;font-weight:600}
+  .nav a svg{width:22px;height:22px}
+  .nav a.on{color:var(--su)}
+  .nav a.on svg{stroke:var(--su)}
 
-/* Section titles */
-.section-title{font-size:13px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;margin-top:14px}
+  .screen{display:none;padding:14px 14px 20px}
+  .screen.on{display:block}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
+  .muted{color:var(--muted);font-size:13px}.small{font-size:12px}
+  .label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;color:var(--muted)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .section-title{font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--su);margin:18px 4px 8px;display:flex;align-items:center;gap:6px}
+  .section-title svg{width:16px;height:16px;stroke:var(--su)}
 
-/* Timeline */
-.timeline .day{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-left:2px solid var(--b);margin-left:6px;position:relative}
-.timeline .day:last-child{border-left-color:transparent}
-.timeline .day .marker{width:14px;height:14px;border-radius:50%;background:var(--c);border:2px solid var(--b);position:absolute;left:-8px;top:50%;transform:translateY(-50%);z-index:1;margin-top:0}
-.timeline .day.completed .marker{background:var(--g);border-color:var(--g)}
-.timeline .day.completed .marker::after{content:'✓';font-size:8px;color:#fff;font-weight:700}
-.timeline .day.current .marker{background:var(--p);border-color:var(--p);box-shadow:0 0 0 4px rgba(0,85,164,.2)}
-.timeline .day .content{flex:1;padding-bottom:12px}
-.timeline .day .day-label{font-size:11px;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:2px}
-.timeline .day .items{font-size:13px;line-height:1.6}
-.timeline .day .items .done{color:var(--t2);text-decoration:line-through}
-.timeline .day .items .next{color:var(--p);font-weight:600}
-.timeline .day .items .pending{color:var(--t2)}
+  /* NEXT MATCH DASHBOARD */
+  .next{border-radius:20px;overflow:hidden;background:var(--card);box-shadow:var(--shadow);margin-bottom:12px;border-top:5px solid var(--su)}
+  .next .head{background:var(--su-soft);padding:9px 16px;display:flex;justify-content:space-between;align-items:center}
+  .next .head .who{font-size:12px;font-weight:800;color:var(--su);letter-spacing:.3px;text-transform:uppercase}
+  .next .head .status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+  .status.conf{background:var(--green-bg);color:var(--green)}
+  .status.pend{background:var(--amber-bg);color:var(--amber)}
+  .next .body{padding:16px 18px}
+  .next .day{font-size:13px;font-weight:800;color:var(--su);text-transform:uppercase;letter-spacing:.6px}
+  .next .time{font-size:54px;font-weight:800;letter-spacing:-2.5px;line-height:1;margin:2px 0}
+  .next .vs{font-size:17px;font-weight:700;margin:4px 0}
+  .next .meta-line{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}
+  .pill{font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;background:var(--su-soft);color:var(--su)}
+  .pill.field{background:var(--su);color:#fff}
+  .pill.away{background:var(--bg);color:var(--muted)}
+  .pill.home{background:var(--green-bg);color:#146c34}
+  .next .arrive{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted)}
+  .next .arrive b{color:var(--ink)}
+  .next .arrive .pend{color:var(--amber);font-weight:600}
+  .next .wx-mini{margin-top:10px;padding:10px 12px;background:var(--amber-bg);border-radius:10px;font-size:12.5px;font-weight:600;color:var(--amber);display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .next .wx-mini .exp{color:var(--link);font-weight:700;white-space:nowrap;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 
-/* Cards */
-.card{background:var(--c);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--b)}
-.card.compact{padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+  .btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:13px 6px;border-radius:12px;background:var(--su);color:#fff;text-decoration:none;font-size:11px;font-weight:700;text-align:center}
+  .btn svg{width:22px;height:22px}
+  .btn.ghost{background:var(--su-soft);color:var(--su)}
 
-/* Action grid */
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.act-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;border-radius:12px;border:none;background:var(--c);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--b);-webkit-tap-highlight-color:transparent}
-.act-btn i{font-size:18px;color:var(--p)}
-.act-btn.primary{background:var(--p);color:#fff;border-color:var(--p)}
-.act-btn.primary i{color:#fff}
+  .wx-full{display:none}
+  .wx-full.open{display:block}
+  .wx{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .wxcard{border-radius:14px;padding:14px;color:#fff}
+  /* Backgrounds for the day variants the renderer emits. Without these the cards keep
+     .wxcard's color:#fff on the white .card, so every value renders white-on-white and the
+     whole forecast reads as a blank white box. Keep this list in step with the className
+     values renderWeather()/loadWeather() emit ('sat' | 'sun'). */
+  .wxcard.sat{background:linear-gradient(150deg,var(--su),var(--su-dark))}
+  .wxcard.sun{background:linear-gradient(150deg,#3f7cba,#2b5d92)}
+  .wxcard .wd{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;opacity:.85}
+  .wxcard .wt{font-size:34px;font-weight:800;letter-spacing:-1.5px;margin:2px 0 0}
+  .wxcard .wf{font-size:12px;font-weight:600;opacity:.9;margin-bottom:8px}
+  .wxcard .wrow{font-size:11.5px;display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid rgba(255,255,255,.18)}
+  .wxcard .wrow b{font-weight:700}
 
-/* Games list */
-.game-card{padding:14px 16px;margin-bottom:8px;border-radius:14px;background:var(--c);border:1px solid var(--b);cursor:pointer;transition:.15s}
-.game-card:active{transform:scale(.98)}
-.game-card .time{font-size:22px;font-weight:700;color:var(--p)}
-.game-card.next{border-left:4px solid var(--g);border-left-width:4px}
-.game-card.past{opacity:.5}
-.game-card .opp{font-size:15px;font-weight:600}
-.game-card .det{font-size:11px;color:var(--t2);margin-top:2px}
-.game-card.expand{padding-bottom:12px}
+  .watch{border-radius:14px;overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
+  .watch .wh{background:var(--su-dark);color:#fff;padding:9px 14px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+  .watch .wh svg{width:16px;height:16px}
+  .watch .wb{display:grid;background:var(--card)}
+  .watch .wcell{padding:13px 14px;border-bottom:1px solid var(--line)}
+  .watch .wcell:last-child{border-bottom:none}
+  .watch .wcell .wt{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+  .watch .wcell .wv{font-size:24px;font-weight:800;letter-spacing:-1px;margin:2px 0}
+  .watch .wcell .ws{font-size:11px;color:var(--muted)}
+  .watch .wfoot{background:var(--card);border-top:1px solid var(--line);padding:9px 14px;text-align:center}
+  .watch .wfoot a{color:var(--link);font-weight:700;text-decoration:none;font-size:12.5px}
 
-/* Venue - interactive */
-.venue-map{border-radius:12px;overflow:hidden;border:1px solid var(--b)}
-.venue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:8px;background:#e8e8ea}
-.venue-grid .field{aspect-ratio:1;border-radius:8px;background:var(--c);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--t2);cursor:pointer;border:2px solid transparent;transition:.15s}
-.venue-grid .field.active{border-color:var(--p);background:#e8f0fe;color:var(--p)}
-.venue-grid .field.turf{background:#f0faf0;font-size:9px}
-.venue-grid .field.turf::after{content:'TURF';font-size:7px;color:var(--g);font-weight:600}
-.field-info{display:none;padding:12px}
-.field-info.show{display:block}
-.field-info .amenity{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:11px;color:var(--t2)}
+  .need{border-radius:16px;padding:15px 16px;margin-bottom:14px;color:#fff;box-shadow:var(--shadow);background:linear-gradient(150deg,#0055A4,#003f7a)}
+  .need .nh{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;opacity:.85;display:flex;align-items:center;gap:7px;margin-bottom:9px}
+  .need .nh svg{width:15px;height:15px}
+  .need ul{margin:0;padding:0;list-style:none}
+  .need li{font-size:13.5px;font-weight:600;padding:4px 0;display:flex;align-items:center;gap:9px}
+  .need li::before{content:"";width:5px;height:5px;border-radius:50%;background:#fff;opacity:.6;flex-shrink:0}
 
-/* Checklist */
-.check-group{margin-bottom:10px}
-.check-group h4{font-size:11px;font-weight:600;text-transform:uppercase;color:var(--t2);letter-spacing:.5px;margin-bottom:4px}
-.check-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--c);border-radius:8px;margin-bottom:2px;border:1px solid var(--b);cursor:pointer}
-.check-item .cb{width:18px;height:18px;border-radius:4px;border:2px solid var(--b);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
-.check-item .cb.checked{background:var(--g);border-color:var(--g)}
-.check-item .cb.checked::after{content:'✓';font-size:10px;color:#fff;font-weight:700}
-.check-item .label{font-size:12px;flex:1}
-.check-item .label.done{text-decoration:line-through;color:var(--t2)}
-.check-item .tag{font-size:9px;padding:1px 6px;border-radius:6px;background:var(--bg);color:var(--t2)}
-.progress-ring{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;position:relative}
-.progress-ring::before{content:'';position:absolute;inset:0;border-radius:50%;border:4px solid var(--b)}
-.progress-ring .val{font-size:22px;font-weight:700;color:var(--g)}
+  .daycard{border-radius:18px;overflow:hidden;background:var(--card);box-shadow:var(--shadow);margin-bottom:14px}
+  /* Same trap as the weather cards: .dh sets color:#fff but the sat/sun variants were never
+     written, so the day headers rendered white-on-white and the schedule lost its day labels. */
+  .daycard.sat .dh{background:linear-gradient(150deg,var(--su),var(--su-dark))}
+  .daycard.sun .dh{background:linear-gradient(150deg,#3f7cba,#2b5d92)}
+  .daycard .dh{padding:11px 16px;color:#fff;font-weight:800;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+  .daycard .dh .dd{font-size:11px;font-weight:600;opacity:.85}
+  .daycard .g{padding:14px 16px;border-top:1px solid var(--line)}
+  .daycard .g:first-of-type{border-top:none}
+  .g .grow{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .g .gtime{font-size:24px;font-weight:800;letter-spacing:-1px}
+  .g .gvs{font-size:13.5px;font-weight:600}
+  .g .gmeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+  .g .ghome{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  .gap{border-left:3px solid var(--amber);background:var(--amber-bg);padding:9px 14px;font-size:12px;color:var(--amber);font-weight:700;display:flex;align-items:center;gap:7px}
+  .gap svg{width:16px;height:16px}
+  .final{border:2px dashed var(--amber);background:var(--amber-bg);border-radius:14px;padding:13px 16px;margin-top:2px}
+  .final .ftag{font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+  .final .ftag svg{width:15px;height:15px}
+  .final .ftime{font-size:24px;font-weight:800;letter-spacing:-1px;margin:3px 0}
+  .final .fnote{font-size:12px;color:var(--amber);margin-top:4px}
 
-/* More */
-.more-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--b);cursor:pointer;background:var(--c)}
-.more-item:last-child{border:none}
-.more-item i{font-size:18px;color:var(--p);width:22px}
-.more-item .lbl{flex:1;font-size:14px;font-weight:500}
-.more-item .sub{font-size:11px;color:var(--t2);margin-top:1px}
-.more-item .arr{color:var(--t2)}
+  .ourwk{display:flex;align-items:center;gap:6px;justify-content:center;padding:12px;background:var(--su);border-radius:12px;color:#fff;margin-top:12px}
+  .ourwk .ow{font-size:13px;font-weight:800}
+  .ourwk .owl{font-size:10px;opacity:.85;font-weight:600}
+  .ourwk .arr{font-size:16px;opacity:.7}
 
-/* Search */
-.search-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg);border-radius:10px;margin-bottom:12px;border:1px solid var(--b)}
-.search-bar i{color:var(--t2)}
-.search-bar input{border:none;background:none;flex:1;font-size:14px;color:var(--t);outline:none}
+  .tap{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+  .tap:last-child{border-bottom:none}
+  .tap .ic{width:40px;height:40px;border-radius:12px;background:var(--su-soft);color:var(--su);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .tap .ic svg{width:21px;height:21px}
+  .tap .tt{flex:1}
+  .tap .tt .tl{font-size:14px;font-weight:700}
+  .tap .tt .ts{font-size:12px;color:var(--muted)}
+  .tap .dist{font-size:12px;font-weight:700;color:var(--link);text-align:right;flex-shrink:0}
+  .tap .dist .d{display:block;font-size:9px;color:var(--muted);font-weight:600}
 
-/* Updates */
-.update-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--b);font-size:12px}
-.update-row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.update-row .dot.alert{background:var(--r)}
-.update-row .dot.info{background:var(--bl)}
-.update-row .dot.warn{background:var(--y)}
-.update-row .time{font-size:10px;color:var(--t2);white-space:nowrap;margin-top:1px;min-width:70px}
-.update-row .text{flex:1}
-.update-row .text .title{font-weight:600;font-size:13px}
-.update-row .text .desc{color:var(--t2);margin-top:1px}
+  .amenities{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .amenity{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:10px;padding:9px 11px;font-size:12.5px;font-weight:600}
+  .amenity svg{width:17px;height:17px;color:var(--green);stroke:var(--green)}
 
-/* Sheet */
-.sheet-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.4)}
-.sheet-overlay.on{display:block}
-.sheet{position:fixed;bottom:0;left:0;right:0;z-index:201;background:var(--c);border-radius:16px 16px 0 0;padding:20px 20px calc(20px+var(--sb));transform:translateY(100%);transition:transform .3s;max-height:80vh;overflow-y:auto}
-.sheet.on{transform:translateY(0)}
-.sheet .handle{width:36px;height:4px;border-radius:2px;background:var(--b);margin:0 auto 14px}
+  .tl{position:relative;padding-left:26px;margin-top:6px}
+  .tl::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .tlstep{position:relative;padding:6px 0 6px 6px}
+  .tlstep::before{content:"";position:absolute;left:-22px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--su);border:2px solid #fff;box-shadow:0 0 0 2px var(--su)}
+  .tlstep .tt{font-size:13px;font-weight:700}
+  .tlstep .ts{font-size:12px;color:var(--muted)}
+  .tlstep .tk{font-size:11px;font-weight:800;color:var(--su)}
 
-/* Bottom tabs */
-.tabs{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--c);border-top:1px solid var(--b);display:flex;padding:4px 0 calc(4px+var(--sb))}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;border:none;background:none;color:var(--t2);font-size:10px;font-weight:500;padding:3px 0;cursor:pointer}
-.tab i{font-size:22px}
-.tab.active,.tab.active i{color:var(--p)}
-.tab.active{font-weight:600}
+  .chkgrp{margin-bottom:14px}
+  .chkgrp h4{margin:0 0 8px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--su)}
+  .chk{display:flex;align-items:center;gap:11px;padding:9px 4px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer}
+  .chk:last-child{border-bottom:none}
+  .chk .box{width:24px;height:24px;border-radius:7px;border:2px solid #c7cdd6;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .chk.done .box{background:var(--green);border-color:var(--green)}
+  .chk.done .box svg{width:15px;height:15px;stroke:#fff}
+  .chk.done .chkname{color:var(--muted);text-decoration:line-through}
+  .progress{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin:4px 0 12px}
+  .progress i{display:block;height:100%;background:var(--green);transition:width .2s}
 
-/* Contact rows */
-.c-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--b);font-size:12px}
-.c-row:last-child{border:none}
-.c-row i{font-size:16px;color:var(--p);margin-top:1px;width:20px}
-.c-row .who{font-weight:600}
-.c-row .why{color:var(--t2);font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+  .contact{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line)}
+  .contact:last-child{border-bottom:none}
+  .contact .ci{width:40px;height:40px;border-radius:50%;background:var(--su-soft);color:var(--su);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
+  .contact .cn{flex:1}
+  .contact .cn .cnm{font-size:14px;font-weight:700}
+  .contact .cn .crl{font-size:11.5px;color:var(--muted)}
+  .contact>a{background:var(--su);color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 12px;border-radius:9px;flex-shrink:0}
+  .contact .cn .cmail{font-size:11.5px;padding-top:2px;word-break:break-all}
+  .contact .cn .cmail a{color:var(--link);font-weight:600;text-decoration:none}
 
-.help-text{font-size:11px;color:var(--t2);text-align:center;padding:8px}
+  .quickrules{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .qr{background:var(--bg);border-radius:10px;padding:10px 12px}
+  .qr .qrv{font-size:14px;font-weight:800}
+  .qr .qrl{font-size:11px;color:var(--muted)}
+  details.acc{border-radius:12px;overflow:hidden;margin-top:10px;background:var(--bg)}
+  details.acc summary{padding:12px 14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--su);list-style:none;display:flex;justify-content:space-between;align-items:center}
+  details.acc summary::-webkit-details-marker{display:none}
+  details.acc[open] summary{background:var(--su-soft)}
+  details.acc .accbody{padding:4px 14px 14px;font-size:13px}
+  .ruleline{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+  .ruleline:last-child{border-bottom:none}
+  .ruleline b{font-weight:700;color:var(--su)}
 
-@media(prefers-color-scheme:dark){body.dark{--bg:#1c1c1e;--c:#2c2c2e;--t:#f5f5f7;--t2:#98989d;--b:#38383a}}
-/* multi-tournament picker */
-#tpick{padding:0 12px}
-.tpick{margin:8px 0 2px;background:var(--c);border:1px solid var(--b);border-radius:12px;overflow:hidden}
-.tpick summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
-  gap:8px;padding:10px 14px;font-size:13px;color:var(--t2)}
-.tpick summary::-webkit-details-marker{display:none}
-.tpick summary .tcur{color:var(--t);font-weight:600;font-size:13px}
-.tpick-wrap{padding:2px 0 8px}
-.tpick-hd{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--t2);padding:8px 14px 4px}
-a.trow{display:flex;justify-content:space-between;align-items:center;gap:10px;text-decoration:none;
-  padding:11px 14px;border-top:1px solid var(--b);color:var(--t)}
-a.trow.on{background:rgba(0,85,164,.10)}
-.tmain{display:flex;flex-direction:column;gap:2px;min-width:0}
-.tname2{font-size:14px;font-weight:600;color:var(--t)}
-.tmeta{font-size:12px;color:var(--t2)}
-.tchev{color:var(--t2);font-size:18px;line-height:1}
-/* team chips */
-#tteam{padding:8px 12px 0}
-.tchips{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.tchips::-webkit-scrollbar{display:none}
-a.tchip{flex:0 0 auto;padding:7px 12px;border-radius:999px;border:1px solid var(--b);
-  background:var(--c);color:var(--t);font-size:12.5px;font-weight:600;text-decoration:none;white-space:nowrap}
-a.tchip.on{background:#0055A4;border-color:#0055A4;color:#fff}</style>
+  .updated-banner{background:var(--card);border-radius:12px;padding:11px 14px;margin-bottom:12px;box-shadow:var(--shadow);font-size:12.5px;display:flex;align-items:center;gap:9px}
+  .updated-banner svg{width:17px;height:17px;color:var(--link);stroke:var(--link);flex-shrink:0}
+  .updated-banner a{color:var(--link);font-weight:700;text-decoration:none}
+
+  .fullguide{border-radius:14px;background:linear-gradient(150deg,var(--su),var(--su-dark));color:#fff;padding:16px;margin-bottom:14px;text-decoration:none;display:block}
+  .fullguide .fg1{font-size:14px;font-weight:800;margin-bottom:3px}
+  .fullguide .fg2{font-size:12px;opacity:.85;margin-bottom:10px}
+  .fullguide .fgb{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700}
+  .alert{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;display:flex;gap:10px;align-items:flex-start}
+  .alert svg{width:20px;height:20px;flex-shrink:0}
+</style>
 </head>
 <body>
+<div class="app">
 
-<div class="sheet-overlay" id="ov" onclick="closeSheet()"></div>
-<div class="sheet" id="sh"><div class="handle"></div><div id="sc"></div></div>
+  <header class="hero">
+    <div class="crest" aria-hidden="true" id="crestMark"></div>
+    <p class="kick" id="heroKick"></p>
+    <h1 id="heroTitle"></h1>
+    <p class="team" id="heroTeam"></p>
+    <p class="meta" id="heroMeta"></p>
+    <div id="teamPicker" class="tpicks"></div>
+  </header>
 
-<div class="app" id="app">
-<!-- HOME -->
-<div class="screen active" id="scr-home">
-  <div class="top-strip">
-    <div class="tourney" id="tname">Sporting Jax Boys Invitational</div>
-    <div class="phase" id="tdates">Veterans Park</div>
+  <div class="context">
+    <span id="ctxText"></span>
+    <span class="chip" id="ctxChip"></span>
   </div>
-  <div id="homeContent">
-    <div class="boarding-pass">
-      <div class="main"><div class="day-badge upcoming">—</div>
-      <div style="font-size:34px;font-weight:700;letter-spacing:-1px">Loading…</div>
-      <div class="vs">&nbsp;</div></div>
+
+  <!-- LIVE COUNTDOWN -->
+  <div class="countdown" id="countdown">
+    <span class="cd-label" id="cdLabel"></span>
+    <span id="cdBody"></span>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot g"></span>Confirmed</span>
+    <span><span class="dot a"></span>Coach pending</span>
+    <span><span class="dot b"></span>Guide recommendation</span>
+  </div>
+
+  <!-- WEEKEND STATUS (compact progress) -->
+  <div id="weekendStatus" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);font-size:10.5px;font-weight:700;color:var(--muted)"></div>
+
+  <main>
+    <section class="screen on" id="scr-today">
+      <div class="updated-banner" id="updBanner"></div>
+      <div class="next">
+        <div class="head"><span class="who">Next Match</span><span class="status conf" id="nextStatus"></span></div>
+        <div class="body" id="nextBody"></div>
+      </div>
+      <div class="need">
+        <div class="nh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/><circle cx="12" cy="12" r="4"/></svg><span id="needTitle"></span></div>
+        <ul id="needList"></ul>
+      </div>
+      <div class="wx-full" id="wxFull"></div>
+      <div class="watch" id="watchCard"></div>
+    </section>
+
+    <section class="screen" id="scr-schedule">
+      <h1 style="font-size:20px;margin:2px 0 4px;font-weight:800">Schedule</h1>
+      <p class="muted" id="schedVenueLine" style="margin:0 0 12px"></p>
+      <div id="scheduleDays"></div>
+      <div id="ourWeekend"></div>
+    </section>
+
+    <section class="screen" id="scr-venue">
+      <h1 style="font-size:20px;margin:2px 0 4px;font-weight:800">Venue</h1>
+      <div id="venueCard"></div>
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>Our Fields</div>
+      <div id="fieldsCard"></div>
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h16M5 20v-7M19 20v-7M5 13V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/></svg>Parking &amp; Amenities</div>
+      <div id="venueInfoCard"></div>
+    </section>
+
+    <section class="screen" id="scr-pack">
+      <div class="row" style="margin:2px 0 4px">
+        <h1 style="font-size:20px;margin:0;font-weight:800">Packing</h1>
+        <button onclick="resetPack()" style="border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:12px;font-weight:700;padding:6px 12px;border-radius:20px;cursor:pointer">Reset Checklist</button>
+      </div>
+      <div class="alert" id="packAlert" style="background:var(--su);color:#fff;align-items:center"></div>
+      <div class="card" style="padding-bottom:10px">
+        <div class="row"><span class="muted small" id="packCount">0 of 0</span><span class="muted small">Saved on this phone</span></div>
+        <div class="progress"><i id="packBar" style="width:0%"></i></div>
+        <div id="packLists"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="scr-more">
+      <!-- Static href = the default team's guide, so "Open full guide" works before JS runs;
+           the script below re-points it at the active team's own PDF. -->
+      <a class="fullguide" id="fullGuideLink" href="../guide.pdf"><div class="fg1" id="fg1"></div><div class="fg2" id="fg2"></div><span class="fgb"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>Open full guide</span></a>
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>Hotels</div>
+      <div id="hotelsSection"></div>
+      <div id="foodSection"></div>
+      <div id="breakSection"></div>
+      <div id="nearbySection"></div>
+      <div id="contactsSection"></div>
+      <div id="rulesSection"></div>
+      <div id="changesSection"></div>
+    </section>
+  </main>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" data-goto="today" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Today</a>
+      <a href="#" data-goto="schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Schedule</a>
+      <a href="#" data-goto="venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Venue</a>
+      <a href="#" data-goto="pack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Pack</a>
+      <a href="#" data-goto="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>More</a>
     </div>
-    <div class="next-action" onclick="showSheet('hotels')"><i class="ti ti-building"></i><div><div class="label">Next Action</div><div class="text">Loading…</div></div><i class="ti ti-arrow-right arrow"></i></div>
-    <div class="action-grid">
-      <button class="act-btn" onclick="go('pack')"><i class="ti ti-backpack"></i>Open Checklist</button>
-      <button class="act-btn primary" onclick="go('venue')"><i class="ti ti-map-pin"></i>Venue</button>
-    </div>
-    <div class="card compact"><i class="ti ti-cloud" style="color:var(--t2);font-size:18px"></i><span>Forecast available closer to game day</span></div>
-    <div class="card" style="text-align:center;font-size:11px;color:var(--t2);padding:8px;background:var(--bg);margin-top:12px">
-      <i class="ti ti-wifi-off"></i> Works offline — schedule & venue cached after first load
-    </div>
-  </div>
+  </nav>
 </div>
-
-<!-- GAMES -->
-<div class="screen" id="scr-games">
-  <div class="top-strip"><div class="tourney">Schedule</div><div class="phase" id="gteam">Savannah United</div></div>
-  <div id="gamesContent"></div>
-</div>
-
-<!-- VENUE -->
-<div class="screen" id="scr-venue">
-  <div class="top-strip"><div class="tourney">Venue</div><div class="phase" id="vname">Veterans Park</div></div>
-  <div id="venueContent"></div>
-</div>
-
-<!-- PACK -->
-<div class="screen" id="scr-pack">
-  <div class="top-strip"><div class="tourney">Packing</div><div class="phase">Check off as you pack</div></div>
-  <div id="packContent"></div>
-</div>
-
-<!-- MORE -->
-<div class="screen" id="scr-more">
-  <div class="top-strip"><div class="tourney">More</div><div class="phase">Everything else</div></div>
-  <div class="card" style="padding:8px 12px;margin-bottom:12px">
-    <div class="search-bar"><i class="ti ti-search"></i><input type="text" placeholder="Search everything..." oninput="doSearch(this.value)"></div>
-    <div id="searchResults" style="display:none;max-height:200px;overflow-y:auto"></div>
-  </div>
-  <div class="section-title" style="margin-top:12px">Nearby · Food · Errands · Emergency</div>
-  <div class="action-grid" style="margin-top:4px;margin-bottom:12px;gap:10px">
-    <button class="act-btn" onclick="window.open('https://www.google.com/maps/?q=Baptist+Health+Emergency+Fleming+Island','_blank')"><i class="ti ti-ambulance"></i>Urgent Care</button>
-    <button class="act-btn" onclick="go('venue')"><i class="ti ti-car"></i>Parking</button>
-    <button class="act-btn" onclick="window.open('https://www.google.com/maps/?q=Target+County+Rd+210+St+Johns+FL','_blank')"><i class="ti ti-building-store"></i>Target</button>
-    <button class="act-btn" onclick="window.open('https://www.google.com/maps/?q=Dicks+Sporting+Goods+Midtown+Pkwy+Jacksonville','_blank')"><i class="ti ti-shopping-cart"></i>Dick's</button>
-    <button class="act-btn" onclick="window.open('https://www.google.com/maps/?q=Starbucks+County+Rd+210+St+Johns','_blank')"><i class="ti ti-coffee"></i>Coffee</button>
-    <button class="act-btn" onclick="window.open('https://www.google.com/maps/?q=Restaurants+near+Veterans+Park+St+Johns+FL','_blank')"><i class="ti ti-tools-kitchen-2"></i>Restaurants</button>
-    <button class="act-btn" onclick="go('venue')"><i class="ti ti-door"></i>Bathrooms</button>
-    <button class="act-btn" onclick="go('venue')"><i class="ti ti-building-store"></i>Concessions</button>
-    <button class="act-btn" onclick="go('venue')"><i class="ti ti-ambulance"></i>Medical</button>
-    <button class="act-btn" onclick="showSheet('contacts')"><i class="ti ti-help"></i>Lost & Found</button>
-    <button class="act-btn" onclick="window.open('https://www.google.com/maps/?q=Gas+Station+near+Veterans+Park+St+Johns+FL','_blank')"><i class="ti ti-gas-station"></i>Gas</button>
-    <button class="act-btn" onclick="window.open('https://www.google.com/maps/?q=CVS+Pharmacy+near+Veterans+Park+St+Johns+FL','_blank')"><i class="ti ti-pill"></i>CVS</button>
-  </div>
-  <div class="section-title" style="margin-top:4px">Everything Else</div>
-  <div class="card" style="padding:0;overflow:hidden;margin-bottom:4px" id="moreList">
-    <div class="more-item" onclick="showSheet('updates')"><i class="ti ti-bell"></i><div class="lbl"><span class="lbl">Updates</span><div class="sub">Announcements & alerts</div></div><i class="ti ti-chevron-right arr"></i></div>
-    <div class="more-item" onclick="showSheet('hotels')"><i class="ti ti-building"></i><div class="lbl"><span class="lbl">Hotels</span><div class="sub">Stay-to-Play & nearby</div></div><i class="ti ti-chevron-right arr"></i></div>
-    <div class="more-item" onclick="showSheet('rules')"><i class="ti ti-book"></i><div class="lbl"><span class="lbl">Rules & Tiebreakers</span><div class="sub">Tournament rules</div></div><i class="ti ti-chevron-right arr"></i></div>
-    <div class="more-item" onclick="showSheet('weather')"><i class="ti ti-cloud-rain"></i><div class="lbl"><span class="lbl">Weather Details</span><div class="sub">Forecast & planning</div></div><i class="ti ti-chevron-right arr"></i></div>
-    <div class="more-item" onclick="showSheet('contacts')"><i class="ti ti-phone"></i><div class="lbl"><span class="lbl">Contacts</span><div class="sub">Who to call for what</div></div><i class="ti ti-chevron-right arr"></i></div>
-    <div class="more-item" onclick="showSheet('about')"><i class="ti ti-info-circle"></i><div class="lbl"><span class="lbl">About</span><div class="sub">Version & app info</div></div><i class="ti ti-chevron-right arr"></i></div>
-  </div>
-</div>
-</div>
-
-<!-- TABS -->
-<nav class="tabs">
-  <button class="tab active" data-scr="home" style="position:relative"><i class="ti ti-home"></i>Home</button>
-  <button class="tab" data-scr="games"><i class="ti ti-trophy"></i>Games</button>
-  <button class="tab" data-scr="venue"><i class="ti ti-map-pin"></i>Venue</button>
-  <button class="tab" data-scr="pack"><i class="ti ti-backpack"></i>Pack</button>
-  <button class="tab" data-scr="more"><i class="ti ti-menu-2"></i>More</button>
-</nav>
 
 <script>
-let D=null;
-const phases={planning:{label:'Planning Mode',dot:'green',cls:'planning'},
-  countdown:{label:'Countdown',dot:'green',cls:'planning'},
-  gameday:{label:'Game Day',dot:'green',cls:'gameday'},
-  between:{label:'Between Games',dot:'green',cls:'gameday'},
-  delay:{label:'Weather Delay',dot:'red',cls:'delay'},
-  complete:{label:'Tournament Complete',dot:'yellow',cls:'complete'}};
+/* ============================================================
+   TOURNAMENT GUIDE PLATFORM — game-day.html
+   This is the reusable TEMPLATE. Nothing tournament-specific is
+   hard-coded in the logic below — everything renders from the
+   TOURNAMENT object. To spin up a new tournament, replace the
+   data in TOURNAMENT (do not touch the template).
+   ============================================================ */
 
-function go(s){
-  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  document.getElementById('scr-'+s).classList.add('active');
-  document.querySelector('.tab[data-scr="'+s+'"]').classList.add('active');
-  document.getElementById('app').scrollTop=0;
-}
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.scr)));
+/* Fallback config — correct at build time. At runtime this is OVERWRITTEN
+   by data.json via adaptData(), so the cron job keeps the app current. */
+let TOURNAMENT = {
+  timezone: "America/New_York",
+  matchDurationMin: 65,
+  brand: { initial: "SU", primary: "#0055A4", dark: "#003f7a" },
+  tournament: {
+    name: "",
+    kick: "Savannah United",
+    team: "",
+    meta: "",
+    homeBase: "Savannah, GA",
+    fullGuideUrl: "",
+    updatesUpdated: ""
+  },
+  travel: null,
+  games: [],
+  schedulePending: {
+    headline: "Schedule Not Released Yet",
+    detail: "Brackets are posted — our division is confirmed. The full schedule with game times, fields and pairings now posts September 26: SCUFC took the schedule page offline to resolve coaching conflicts and field changes (checked September 24). We publish games here as soon as they appear.",
+    accepted: "Accepted team list confirmed (Sep 14)",
+    brackets: "Bracket posted Sep 16 — verified",
+    schedule: "Full schedule posts September 26"
+  },
+  venue: { assigned:false, name:"", address:"", city:"", mapsUrl:"", complexes:[] },
+  breakPlan: { title:"Between-Games Rhythm", intro:"Once the schedule posts we will build a suggested reset rhythm around your actual game times.", steps:[] },
+  hotels: [],
+  food: [], foodRankedFor: "", foodNote: "", foodUpdated: "",
+  hotelsUpdated: "Hotel rates verified Sep 26, 2026. Rates change daily",
+  nearby: { groups:[
+      { label:"Closest to the venue", items:[
+          { name:"CVS Pharmacy", note:"pharmacy · 0.3 mi from the complex", dist:"~1 min", sub:"0.3 mi", url:"https://www.google.com/maps/search/CVS+pharmacy+near+Ballentine+Park+Irmo+SC", icon:"shop" },
+          { name:"Food Lion", note:"groceries · water, ice, snacks", dist:"~2 min", sub:"0.4 mi", url:"https://www.google.com/maps/search/Food+Lion+near+Ballentine+Park+Irmo+SC", icon:"shop" },
+          { name:"Walmart Supercenter", note:"1180 Dutch Fork Road · one-stop", dist:"~4 min", sub:"1.1 mi", url:"https://www.google.com/maps/search/Walmart+1180+Dutch+Fork+Road+Irmo+SC", icon:"shop" },
+          { name:"Publix", note:"2732 North Lake Drive", dist:"~6 min", sub:"2.3 mi", url:"https://www.google.com/maps/search/Publix+2732+North+Lake+Drive+Columbia+SC", icon:"shop" }
+        ]},
+      { label:"Forgot something?", items:[
+          { name:"Dick's Sporting Goods", note:"1110 Bower Parkway", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Dicks+Sporting+Goods+1110+Bower+Parkway+Columbia+SC", icon:"shop" },
+          { name:"Academy Sports + Outdoors", note:"sporting goods", dist:"~13 min", sub:"6.2 mi", url:"https://www.google.com/maps/search/Academy+Sports+Outdoors+Columbia+SC", icon:"shop" }
+        ]},
+      { label:"Emergency", items:[
+          { name:"Urgent Care near Irmo", note:"search nearest open clinic", dist:"maps", sub:"", url:"https://www.google.com/maps/search/urgent+care+near+Irmo+SC", icon:"phone" },
+          { name:"SCUFC Tournament HQ", note:"877-457-2832", dist:"call", sub:"", url:"tel:8774572832", icon:"phone" }
+        ]}
+    ] },
+  contacts:[
+    { name:"Keith Gunn", role:"Director of Coaching", phone:"", email:"k.gunn@savannahunited.com", initial:"K" },
+    { name:"Carson Gray", role:"Coach", phone:"", email:"carsonzgray@gmail.com", initial:"C" },
+    { name:"Mitchell Heath", role:"Coach", phone:"", email:"m.heath@savannahunited.com", initial:"M" },
+    { name:"Tripp Miller", role:"Tournament Director · SCUFC", phone:"8774572832", email:"tripp@scufc.com", initial:"T" }
+  ],
+  rules:{ quick:[], full:[], tiebreakers:[], tiebreakersPending:"", tiebreakProcess:"", fullRulesUrl:"", standingsUrl:"", docsUrl:"" },
+  packing:{ alert:"Pack both kits. Also pack a warm layer — early October mornings run about 63°F.", groups:[] },
+  needs:{
+    before:[["Book hotel","rates: checked Sep 26"],["Save the guide PDF","works offline"],["Charge phones","both days"],["Pack both kits","+ warm layer"]],
+    travel:[["Leave by early afternoon","~3h 15m drive"],["Check in to hotel","Fri Oct 2"],["Early bedtime","players"]],
+    game1:[["Both kits","game day"],["Cleats + shin guards","essential"],["Water + electrolytes","bring plenty"],["Cool layer","cool mornings"]],
+    between:[["Eat lunch","between games"],["Cool down","shade or A/C"],["Rehydrate","water + electrolytes"],["Back to fields","parking fills early"]],
+    game3:[["Rain shell","just in case"],["Warm layer","cool mornings"],["Snacks + water","restock"],["Check bracket","after the game"]]
+  },
+  changes:[]
+};
 
-// --- content helpers: never render a fact we do not have ---
-// The old shell hard-coded "Book hotel on GotSport", "Expect upper 90s" and an
-// ISO date range, so a staged tournament advertised a heat warning for a
-// January event and a hotel link that could not be booked. Everything below is
-// derived from the bundle, and degrades to an honest placeholder.
-function venueKnown(){
-  const a=(D&&D.venue&&D.venue.address)||'';
-  return !!a && !/not yet announced|venue tbd|^tbd/i.test(a);
+/* ---------- data.json -> TOURNAMENT adapter ---------- */
+function fieldNum(f){ var m=String(f||'').match(/(\d+)/); return m?parseInt(m[1],10):0; }
+function dayLabel(iso){
+  try{ var d=new Date(iso+'T12:00:00');
+    return d.toLocaleDateString('en-US',{weekday:'long',timeZone:TOURNAMENT.timezone})+' · '
+         + d.toLocaleDateString('en-US',{month:'long',timeZone:TOURNAMENT.timezone})+' '+d.getDate();
+  }catch(e){ return iso; }
 }
-function cityOf(){
-  const v=(D&&D.venue)||{};
-  if(!venueKnown()) return String(v.name||'').replace(/^Venue TBD\s*[—-]\s*/i,'').trim();
-  return String(v.address||'').split(',')[0];
-}
-const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-function fmtRange(){
-  const d=(D&&D.tournament&&D.tournament.dates)||{};
-  if(!d.start||!d.end) return '';
-  const p=s=>{const [y,m,dd]=String(s).split('-').map(Number);return new Date(y,m-1,dd);};
-  const a=p(d.start), b=p(d.end);
-  if(a.getMonth()===b.getMonth()&&a.getFullYear()===b.getFullYear())
-    return a.getDate()===b.getDate()
-      ? `${MON[a.getMonth()]} ${a.getDate()}, ${a.getFullYear()}`
-      : `${MON[a.getMonth()]} ${a.getDate()}–${b.getDate()}, ${a.getFullYear()}`;
-  return `${MON[a.getMonth()]} ${a.getDate()} – ${MON[b.getMonth()]} ${b.getDate()}, ${b.getFullYear()}`;
-}
-function nextAction(){
-  const hotels=(D&&D.hotels&&D.hotels.official)||[];
-  if(!venueKnown()) return {label:'Watch for the venue + schedule', act:"go('games')"};
-  if(hotels.length) return {label:'Book hotel', act:"showSheet('hotels')"};
-  if(!(D.games&&D.games.length)) return {label:'Watch for the schedule', act:"go('games')"};
-  return {label:'Check your game plan', act:"go('games')"};
-}
-function weatherLine(){
-  const w=(D&&D.weather)||{}, s=w.summary||'';
-  if(!s) return {icon:'ti-cloud', title:'Forecast available closer to game day', sub:'', color:'var(--t2)'};
-  return {icon:'ti-cloud-sun', title:s, sub:w.detail||'', color:'var(--p)'};
-}
-function shortSchedule(){
-  const st=(D&&D.scheduleStatus)||'';
-  const days=(()=>{const d=(D&&D.tournament&&D.tournament.dates)||{};
-    if(!d.start||!d.end) return 0;
-    const p=s=>{const [y,m,dd]=String(s).split('-').map(Number);return new Date(y,m-1,dd);};
-    return Math.round((p(d.end)-p(d.start))/864e5)+1;})();
-  if(st==='confirmed'&&(D.games||[]).length) return `${D.games.length} games · times listed`;
-  return days>1 ? `${days}-day event · schedule not published yet`
-                : `one-day event · schedule not published yet`;
-}
-
-function phase(){
-  if(!D)return'planning';
-  const n=new Date(),s=new Date(D.tournament.dates.start),e=new Date(D.tournament.dates.end+'T23:59:59');
-  if(n>e)return'complete';
-  if(n>=s&&n<=e)return D.updates?.some(u=>u.type==='alert')?'delay':'gameday';
-  const d=s-n;return d<5*864e5?'countdown':'planning';
-}
-function cd(){
-  if(!D)return null;
-  const s=new Date(D.tournament.dates.start),n=new Date(),d=s-n;
-  if(d<=0)return null;
-  return{d:Math.floor(d/864e5),h:Math.floor((d%864e5)/36e5),m:Math.floor((d%36e5)/6e4)};
-}
-
-function renderHome(){
-  const p=phase(),el=document.getElementById('homeContent'),c=cd();
-  document.getElementById('tname').textContent=D.tournament.name;
-  document.getElementById('tdates').textContent=D.venue.name;
-  const dot=document.querySelector('.top-strip .dot');
-  const ph=phases[p];
-  if(dot)dot.className='dot '+ph.dot;
-
-  if(p==='gameday'&&D.games?.length>0){
-    const g=D.games[0];
-    el.innerHTML=`
-      <div class="boarding-pass">
-        <div class="main">
-          <div class="day-badge today">Today</div>
-          <div class="time">${g.time||'TBD'}</div>
-          <div class="vs">vs</div>
-          <div class="opp">${g.opponent||'TBD'}</div>
-          <div class="details">
-            <div class="detail-chip"><i class="ti ti-map-pin"></i>Field ${g.field||'TBD'}</div>
-            <div class="detail-chip"><i class="ti ti-clock"></i>Arrive ${g.arrival||'45m before'}</div>
-            <div class="detail-chip"><i class="ti ti-shirt"></i>${g.uniform||'TBD'}</div>
-          </div>
-        </div>
-        <div class="secondary">
-          <span>Tap for more info</span>
-          <button class="nav-btn" onclick="window.open('${D.venue.mapsUrl}','_blank')"><i class="ti ti-navigation"></i>Navigate</button>
-        </div>
-        <div class="expand-section" id="exp">
-          <div class="expand-item" onclick="window.open('${D.venue.fields.map}','_blank')"><i class="ti ti-fence"></i>Field Map</div>
-          <div class="expand-item" onclick="showSheet('weather')"><i class="ti ti-cloud-rain"></i>Weather: ${D.weather.summary||'No forecast'}</div>
-          <div class="expand-item" onclick="go('venue')"><i class="ti ti-car"></i>Parking: ${D.venue.parking||'Free on-site'}</div>
-          <div class="expand-item" onclick="go('venue')"><i class="ti ti-toilet"></i>Restrooms near field</div>
-          <div class="expand-item" onclick="showSheet('contacts')"><i class="ti ti-phone"></i>Coach Contact</div>
-        </div>
-        <div class="tap-expand" onclick="toggleExpand()">Show all ▼</div>
-      </div>
-      <div class="greeting">
-        <div class="hello">Good Morning</div>
-        <div class="main-info">Leave in ${leaveTime(g)} minutes</div>
-        <div class="sub-info">Traffic looks normal. Weather ${D.weather.summary||'upper 90s'}. ${g.uniform||'Blue jerseys'}.</div>
-        <div class="quick-stats">
-          <div class="stat"><strong>${g.field||'TBD'}</strong><br>Field</div>
-          <div class="stat"><strong>${g.arrival||'7:15'}</strong><br>Arrive</div>
-          <div class="stat"><strong>${g.time||'8:00'}</strong><br>Kickoff</div>
-        </div>
-      </div>
-      <div class="next-action" onclick="window.open('${D.venue.mapsUrl}','_blank')">
-        <i class="ti ti-navigation"></i>
-        <div><div class="label">Next Action</div><div class="text">Leave by ${g.arrival||'7:15 AM'}</div></div>
-        <i class="ti ti-arrow-right arrow"></i>
-      </div>
-      <div class="section-title">Timeline</div>
-      <div class="card">${timeline()}</div>
-      <div class="section-title">What's Next</div>
-      ${nextGames()}`;
-  } else if(p==='delay'){
-    const a=D.updates?.find(u=>u.type==='alert');
-    el.innerHTML=`
-      <div class="boarding-pass" style="background:linear-gradient(135deg,#b71c1c,#d32f2f)">
-        <div class="main"><div class="day-badge" style="background:rgba(255,255,255,.3)">ALERT</div>
-        <div class="time" style="font-size:18px">${a?.title||'Lightning Delay'}</div>
-        <div class="vs">${a?.description||'Play suspended. Remain in vehicles.'}</div>
-        <div class="details" style="margin-top:8px"><div class="detail-chip"><i class="ti ti-clock"></i>Next update: ${a?.nextUpdate||'TBD'}</div></div></div>
-        <div class="secondary" style="background:rgba(0,0,0,.2)"><span>${a?.posted||'Coach Update'}</span><button class="nav-btn" style="background:rgba(255,255,255,.2)" onclick="go('games')">Schedule</button></div>
-      </div>
-      <div class="section-title">Updates</div>`;
-  } else if(p==='complete'){
-    el.innerHTML=`
-      <div class="boarding-pass" style="background:linear-gradient(135deg,#5856d6,#3634a3)">
-        <div class="main" style="text-align:center"><div class="day-badge" style="background:rgba(255,255,255,.3)">COMPLETE</div>
-        <div style="font-size:28px;font-weight:700;margin:8px 0">Great Weekend!</div>
-        <div class="vs">Thanks for a great tournament, Savannah United.</div></div>
-        <div class="secondary" style="background:rgba(0,0,0,.2);text-align:center;justify-content:center"><span>Check back for the next event</span></div>
-      </div>`;
-  } else {
-    // Planning / Countdown
-    el.innerHTML=` 
-    <div class="boarding-pass">
-      <div class="main"><div class="day-badge upcoming">${(D.team.label||"").toUpperCase()||"UPCOMING"}</div>
-      <div style="font-size:48px;font-weight:700;letter-spacing:-2px;line-height:1.1;margin:4px 0">${c?c.d:'--'}<span style="font-size:18px;font-weight:400;opacity:.6"> Days</span></div>
-      <div class="vs">Until Tournament</div>
-        <div class="vs">${D.team.shortName||D.team.name} · ${fmtRange()}</div>
-        <div class="details" style="margin-top:8px">
-          <div class="detail-chip"><i class="ti ti-map-pin"></i>${cityOf()}</div>
-          <div class="detail-chip"><i class="ti ti-info-circle"></i>${shortSchedule()}</div>
-        </div></div>
-        <div class="secondary"><span>${D.tournament.shortName||D.tournament.name}</span><button class="nav-btn" onclick="go('pack')">Start Packing</button></div>
-      </div>
-      <div class="next-action" onclick="${nextAction().act}">
-        <i class="ti ti-building"></i>
-        <div><div class="label">Next Action</div><div class="text">${nextAction().label}</div></div>
-        <i class="ti ti-arrow-right arrow"></i>
-      </div>
-      <div class="action-grid">
-        <button class="act-btn" onclick="go('pack')"><i class="ti ti-list-check"></i>Open Checklist</button>
-        <button class="act-btn ${venueKnown()?'primary':''}" onclick="${venueKnown()?"go('venue')":"go('games')"}"><i class="ti ti-map-pin"></i>${venueKnown()?'Navigate to Venue':'Where to play'}</button>
-      </div>
-      <div class="section-title">At a Glance</div>
-      <div class="card compact"><i class="ti ${weatherLine().icon}" style="color:${weatherLine().color};font-size:18px"></i><span>${weatherLine().title}${weatherLine().sub?`<br><span style="font-size:10px;color:var(--t2)">${weatherLine().sub}</span>`:''}</span></div>
-      <div class="card compact" onclick="showSheet('hotels')"><i class="ti ti-building" style="color:var(--p);font-size:18px"></i><span>${D.hotels?.official?.[0]?.name?`${D.hotels.official[0].name}: ${D.hotels.official[0].rate||''} · ${D.hotels.official[0].drive||''}`:'Hotels not booked yet — nothing announced'}</span><i class="ti ti-chevron-right" style="margin-left:auto;color:var(--t2)"></i></div>
-      <div class="card compact" onclick="showSheet('updates')" id="homeUpdateCard">
-        <i class="ti ti-bell${D.updates&&D.updates.length>0?'-ringing':''}" style="color:${D.updates&&D.updates.length>0?'var(--r)':'var(--t2)'};font-size:18px"></i>
-        <span style="flex:1"><strong>Updates</strong> · ${D.updates&&D.updates.length>0?D.updates[D.updates.length-1].title:'No new alerts'}</span>
-        ${D.updates&&D.updates.length>0?`<span style="background:var(--r);color:#fff;border-radius:8px;padding:1px 6px;font-size:9px;font-weight:700">${D.updates.length}</span>`:''}
-        <i class="ti ti-chevron-right" style="margin-left:4px;color:var(--t2)"></i>
-      </div>
-      <div class="card compact" onclick="showSheet('contacts')"><i class="ti ti-phone" style="color:var(--r);font-size:18px"></i><span>Need help? Coach: ${D.contacts.coach?.name}, Manager: ${D.contacts.manager?.name}</span><i class="ti ti-chevron-right" style="margin-left:auto;color:var(--t2)"></i></div>`;
-  }
+function hhmm(t){ var m=String(t||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); return m?(m[1]+':'+m[2]+' '+m[3].toUpperCase()):String(t||''); }
+function isoDT(date,t){
+  var m=String(t||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); if(!m||!date) return date||'';
+  var h=parseInt(m[1],10), ap=(m[3]||'').toUpperCase();
+  if(ap==='PM'&&h!==12) h+=12; if(ap==='AM'&&h===12) h=0;
+  return date+'T'+(h<10?'0':'')+h+':'+m[2]+':00-04:00';
 }
 
-function leaveTime(g){
-  if(!g||!g.arrival) return '';
-  const t=g.arrival.toUpperCase(), isPM=t.includes('PM');
-  const nums=t.replace(/[^0-9:]/g,'').split(':').map(Number);
-  let h=nums[0]||7, m=nums[1]||0;
-  if(isPM&&h<12)h+=12;
-  const now=new Date(), target=new Date(now);target.setHours(h,m,0,0);
-  return Math.round((target-now)/60000).toString();
-}
-function toggleExpand(){const exp=document.getElementById('exp');if(exp)exp.classList.toggle('open');}
-
-function timeline(){
-  // Derived from the bundle — the old version hard-coded "Friday Aug 21 /
-  // Saturday Aug 22 / Sunday Aug 23", which is a different tournament entirely.
-  const ds=(D&&D.tournament&&D.tournament.dates)||{};
-  if(!ds.start||!ds.end) return '<p class="help-text">Dates not announced yet</p>';
-  const parse=s=>{const [y,m,dd]=String(s).split('-').map(Number);return new Date(y,m-1,dd);};
-  const start=parse(ds.start), end=parse(ds.end);
-  const today=new Date(); today.setHours(0,0,0,0);
-  const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  const games=D.games||[];
-  const rows=[];
-  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
-    const key=iso(d);
-    const dayGames=games.filter(g=>String(g.date||'').slice(0,10)===key);
-    const done=d<today, current=iso(d)===iso(today);
-    const items=dayGames.length
-      ? dayGames.map((g,i)=>`Game ${i+1}: ${g.time||'TBD'} vs ${g.opponent||'TBD'}${g.field?' · Field '+g.field:''}`)
-      : ['Schedule not published yet'];
-    rows.push(`<div class="day ${done?'completed':current?'current':''}">
-      <div class="marker"></div>
-      <div class="content">
-        <div class="day-label">${WD[d.getDay()]} ${MON[d.getMonth()]} ${d.getDate()}</div>
-        <div class="items">${items.map((item,j)=>`<div class="${done?'done':(current&&j===0)?'next':'pending'}">○ ${item}</div>`).join('')}</div>
-      </div>
-    </div>`);
-  }
-  return rows.join('');
-}
-function nextGames(){
-  if(!D.games||D.games.length<2) return '<div class="card"><p class="help-text">Schedule not yet released</p></div>';
-  return D.games.slice(1,4).map(g=>`
-    <div class="card compact">
-      <span style="font-weight:700;font-size:15px;min-width:50px">${g.time||'TBD'}</span>
-      <span style="flex:1">${g.opponent||'TBD'}</span>
-      <span style="font-size:11px;color:var(--t2)">Field ${g.field||'--'}</span>
-    </div>`).join('');
-}
-
-// === GAMES ===
-function renderGames(){
-  document.getElementById('gteam').textContent=D.team.name;
-  const el=document.getElementById('gamesContent');
-  if(!D.games||D.games.length===0){
-    el.innerHTML=`<div class="card" style="text-align:center;padding:32px"><i class="ti ti-ball-soccer" style="font-size:48px;color:var(--y);opacity:.4"></i><h3 style="margin:8px 0 4px">Schedule Releases Soon</h3><p class="help-text">${(D.scheduleExpected||'').replace(/[.]+$/,'')}. Check back then for game times, fields, and opponents.</p></div>`;return;
-  }
-  el.innerHTML=D.games.map((g,i)=>{
-    const cls=i===0?'game-card next':g.status==='Complete'?'game-card past':'game-card';
-    return `<div class="${cls}" onclick="expandGame(this)">
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span class="time">${g.time||'TBD'}</span>
-        <span style="font-size:12px;color:var(--t2);margin:0 6px">vs</span>
-        <span class="opp">${g.opponent||'TBD'}</span>
-      </div>
-      <div class="det">Field ${g.field||'TBD'} · Arrive ${g.arrival||'TBD'} · ${g.uniform||''}</div>
-      <div class="expand-section" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--b)">
-        <div class="expand-item" onclick="window.open('${D.venue.mapsUrl}','_blank')"><i class="ti ti-navigation"></i>Directions to venue</div>
-        <div class="expand-item" onclick="window.open('${D.venue.fields.map}','_blank')"><i class="ti ti-fence"></i>Field map</div>
-        <div class="expand-item" onclick="showSheet('weather')"><i class="ti ti-cloud-rain"></i>Weather</div>
-        <div class="expand-item" onclick="go('venue')"><i class="ti ti-toilet"></i>Facilities near field</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function expandGame(card){
-  const exp=card.querySelector('.expand-section');
-  exp.style.display=exp.style.display==='none'?'block':'none';
-}
-
-// === VENUE ===
-function renderVenue(){
-  document.getElementById('vname').textContent=D.venue.name;
-  const el=document.getElementById('venueContent');
-  const v=D.venue;
-  el.innerHTML=`
-    <div class="venue-map">
-      <div class="venue-grid">
-        ${Array.from({length:6},(_,i)=>{
-          const n=i+1,isTurf=n===6;
-          return `<div class="field ${isTurf?'turf':''}" onclick="selectField(${n})">F${n}<br><span style="font-size:7px;font-weight:400">${n<3?'WEST':n<5?'CENTER':'EAST'}</span></div>`;
-        }).join('')}
-      </div>
-      <div class="field-info" id="finfo">
-        <p class="help-text">Tap a field to see nearby amenities</p>
-      </div>
-    </div>
-    <div id="parkingRules" style="margin-top:8px;padding:8px 12px;background:var(--bg);border-radius:8px;font-size:11px;color:var(--t2);line-height:1.5"><strong>Parking:</strong> ${v.parking||'Free on-site'}<br><strong>Tents:</strong> ${v.tentRules||D.venueRules?.tents||''}</div>
-    <div style="margin-top:12px">
-      <div class="card compact" onclick="window.open('${v.mapsUrl}','_blank')"><i class="ti ti-navigation"></i><span style="flex:1">Directions to ${v.name}</span><i class="ti ti-arrow-right arr"></i></div>
-      <div class="card compact" onclick="window.open('${v.fields.map}','_blank')"><i class="ti ti-fence"></i><span style="flex:1">Official Field Map</span><i class="ti ti-arrow-right arr"></i></div>
-      <div class="card compact"><i class="ti ti-car"></i><span>${v.parking}</span></div>
-      <div class="card compact"><i class="ti ti-building-store"></i><span>Concessions on-site</span></div>
-    </div>
-    <div class="section-title">Venue Rules</div>
-    <div class="card" style="font-size:12px;line-height:1.7" id="vrules"></div>`;
-  const vr=D.venueRules;
-  document.getElementById('vrules').innerHTML=vr?`<p><strong>Tents/Canopies:</strong> ${vr.tents}</p><p><strong>Pets:</strong> ${vr.pets}</p><p><strong>Food/Coolers:</strong> ${vr.foodCooler}</p><p><strong>Chairs:</strong> ${vr.chairs}</p><p><strong>Alcohol:</strong> ${vr.alcohol}</p><p><strong>Smoking:</strong> ${vr.smoking}</p>`:'<p class="help-text">Venue rules not yet confirmed</p>';
-}
-function selectField(n){
-  document.querySelectorAll('.venue-grid .field').forEach(f=>f.classList.remove('active'));
-  document.querySelectorAll('.venue-grid .field')[Math.min(n-1,5)].classList.add('active');
-  const ln=D.venue.fields.layoutNotes||{};
-  const fmap={'1':'1_2','2':'1_2','3':'3_4','4':'3_4','5':'5_6','6':'5_6'};
-  const info=ln[fmap[n.toString()]]||'Facilities nearby';
-  document.getElementById('finfo').innerHTML=`<p style="font-weight:600;margin-bottom:4px;font-size:13px">Field ${n} ${n===6?'🟩 Turf':''}</p>
-    <div class="amenity"><i class="ti ti-info-circle"></i> ${info}</div>`;
-  document.getElementById('finfo').classList.add('show');
-}
-
-// === PACK ===
-function renderPack(){
-  const el=document.getElementById('packContent'),g=[
-    {k:'Required — Player',items:D.checklist.player,req:true},
-    {k:'Recommended — Weather',items:D.checklist.weather,req:false},
-    {k:'Recommended — Parent',items:D.checklist.parent,req:false},
-    {k:'Required — Emergency',items:D.checklist.emergency,req:true}
-  ];
-  let total=0,done=0;
-  g.forEach(gr=>gr.items.forEach(item=>{total++;if(localStorage.getItem('ck_'+item.replace(/[^a-z0-9]/gi,'_'))==='true')done++;}));
-  const pct=total?Math.round(done/total*100):0;
-  el.innerHTML=`
-    <div style="text-align:center;margin:0 0 12px">
-      <div class="progress-ring"><div class="val">${pct}%</div></div>
-      <p style="font-size:12px;color:var(--t2)"><strong>${total} Items</strong> · ${done} Packed</p>
-      <button class="act-btn" style="margin:8px auto 0;font-size:10px;padding:6px 16px" onclick="resetPack()">Reset All</button>
-    </div>
-    ${g.map(gr=>`
-      <div class="check-group"><h4>${gr.k}</h4>
-        ${gr.items.map(item=>{
-          const id=item.replace(/[^a-z0-9]/gi,'_'),ch=localStorage.getItem('ck_'+id)==='true';
-          return `<div class="check-item" onclick="tog('${id}')">
-            <div class="cb ${ch?'checked':''}"></div><span class="label ${ch?'done':''}">${item}</span>
-            ${!gr.req?'<span class="tag">optional</span>':''}
-          </div>`;
-        }).join('')}
-      </div>`).join('')}`;
-}
-function tog(id){localStorage.setItem('ck_'+id,localStorage.getItem('ck_'+id)==='true'?'false':'true');renderPack();}
-function resetPack(){if(confirm('Reset checklist?')){localStorage.clear();renderPack();}}
-
-// === MORE SHEETS ===
-function showSheet(section){
-  let h='';
-  if(section==='updates'){
-    if(!D.updates||!D.updates.length) h=`<h3 style="margin-bottom:12px">Updates</h3><p class="help-text" style="padding:20px">No updates yet. Messages and alerts will appear here.</p>`;
-    else h=`<h3 style="margin-bottom:12px">Updates</h3>`+D.updates.map(u=>`<div class="update-row"><div class="dot ${u.type==='alert'?'alert':u.type==='warning'?'warn':'info'}"></div><span class="time">${u.time||''}</span><div class="text"><div class="title">${u.title}</div><div class="desc">${u.description}${u.posted?' · '+u.posted:''}</div></div></div>`).join('');
-  }
-  if(section==='hotels'){
-    const ht=D.hotels;
-    h=`<h3 style="margin-bottom:8px">Official — Stay-to-Play Compliant</h3><p class="help-text" style="text-align:left;margin-bottom:8px">These hotels satisfy the tournament housing requirement.</p>
-      ${ht.official.map(o=>`<div style="padding:10px;background:var(--bg);border-radius:8px;margin-bottom:6px"><span style="font-weight:600">${o.name}</span><span style="font-size:10px;color:var(--t2)"> ${o.chain}</span><br><span style="font-size:11px">${o.rate} · ${o.rooms} rooms</span><br><span style="font-size:10px;color:var(--p);font-weight:500">Drive to venue: ${o.drive}</span>${o.amenities?.length?`<br><span style="font-size:9px;color:var(--t2)">${o.amenities.join(' · ')}</span>`:''}${o.bestValue?'<br><span style="font-size:10px;color:var(--g);font-weight:600">⭐ Best Value — closest to venue, lowest price</span>':''}</div>`).join('')}
-      <h3 style="margin:14px 0 8px">Non-Official</h3>${ht.nonOfficial.map(o=>`<div style="padding:8px;background:var(--bg);border-radius:8px;margin-bottom:4px"><span style="font-weight:600;font-size:12px">${o.name}</span><br><span style="font-size:10px;color:var(--p);font-weight:500">Drive to venue: ${o.drive}</span><br><span style="font-size:10px;color:var(--t2)">${o.note}</span></div>`).join('')}
-      <p class="help-text" style="color:var(--r);text-align:left">Do not book non-official until manager confirms proximity exception.</p>
-      <div style="margin-top:10px"><button class="act-btn primary" style="padding:10px;font-size:12px" onclick="window.open('${ht.portal}','_blank')"><i class="ti ti-external-link"></i>Book on GotSport</button></div>`;
-  }
-  if(section==='rules'){
-    h=`<h3 style="margin-bottom:8px">Tournament Rules</h3>
-      ${D.rules.keyRules.map(r=>`<div style="display:flex;padding:4px 0;border-bottom:1px solid var(--b);font-size:12px"><span style="font-weight:600;min-width:90px">${r.label}</span><span style="color:var(--t2)">${r.value}</span></div>`).join('')}
-      <h4 style="margin:12px 0 4px">Tiebreakers</h4>
-      ${D.rules.tiebreakers.map((t,i)=>`<div style="display:flex;gap:4px;padding:2px 0;font-size:11px;color:var(--t2)"><span style="font-weight:700;color:#5856d6;min-width:12px">${i+1}</span>${t}</div>`).join('')}
-      <div style="margin-top:8px"><button class="act-btn" style="padding:6px 12px;font-size:10px" onclick="window.open('${D.rules.fullLink}','_blank')">Full Rules PDF</button>${(D.venue&&D.venue.fields&&D.venue.fields.map)?`<button class="act-btn" style="padding:6px 12px;font-size:10px;margin-left:6px" onclick="window.open('${D.venue.fields.map}','_blank')">Field Map</button>`:''}</div>`;
-  }
-  if(section==='weather'){
-    h=`<h3 style="margin-bottom:8px">Weather</h3><p style="font-weight:600;font-size:15px">${D.weather.summary||'No forecast'}</p><p class="help-text" style="text-align:left;margin-top:6px">${D.weather.details||'Check back closer to tournament'}</p>`;
-  }
-  if(section==='contacts'){
-    const tm=D.contacts.teamManagers||[];
-    h=`<h3 style="margin-bottom:8px">Who to Contact</h3>
-      <div class="c-row"><i class="ti ti-ball-soccer"></i><div><div class="who">${D.contacts.coach.name}</div><div class="why">Soccer question · lineups, positions, tactics</div></div></div>
-      <div class="c-row"><i class="ti ti-message-user"></i><div><div class="who">${D.contacts.manager.name}</div><div class="why">Team logistics · hotels, schedule, uniforms</div></div></div>
-      ${tm.map(m=>`<div class="c-row"><i class="ti ti-users"></i><div><div class="who">${m.name}</div><div class="why">General team help · ${m.phone?'<a href="tel:'+m.phone+'" style="color:var(--p)">'+m.phone+'</a>':''}</div></div></div>`).join('')}
-      <div class="c-row" style="opacity:.6"><i class="ti ti-shield"></i><div><div class="who">${D.contacts.tournamentDirector?.email||'Tournament HQ'}</div><div class="why">Lost kid · injury · venue emergency</div></div></div>
-      <div class="c-row"><i class="ti ti-ambulance"></i><div><div class="who">911 / Venue Medical</div><div class="why">Medical emergency — call 911 first</div></div></div>`;
-  }
-  if(section==='resources'){
-    h=`<h3 style="margin-bottom:8px">Nearby Resources</h3>
-      <p style="font-size:12px;margin-bottom:6px"><strong>Academy Sports + Outdoors</strong><br>9041 Southside Blvd, Jax · (904) 363-6720<br>Mon-Sat 8am-10pm · ~8-10 min</p>
-      <p style="font-size:12px;margin-bottom:6px"><strong>Dick's Sporting Goods</strong><br>10390 Midtown Pkwy, Jax · (904) 642-4299<br>Mon-Sat 9am-9pm · ~12-15 min</p>
-      <p style="font-size:12px"><strong>CVS Pharmacy</strong><br>13970 Village Lake Circle, Jax · (904) 260-0550</p>
-      <p class="help-text" style="margin-top:8px">Current as of Jul 30, 2026</p>`;
-  }
-  if(section==='about'){
-    h=`<h3 style="margin-bottom:8px">About</h3>
-      <p style="font-size:14px;font-weight:600">Sporting Jax Guide</p>
-      <p class="help-text" style="text-align:left;margin-top:4px">Version 4.0 · Updated Jul 30, 2026<br>Savannah United 17/18B Travel<br>Sporting Jax Boys Invitational</p>`;
-  }
-  document.getElementById('sc').innerHTML=h;
-  document.getElementById('sh').classList.add('on');document.getElementById('ov').classList.add('on');
-}
-function closeSheet(){document.getElementById('sh').classList.remove('on');document.getElementById('ov').classList.remove('on')}
-
-// === SEARCH ===
-function doSearch(q){
-  const el=document.getElementById('searchResults');
-  if(!q||q.length<2){el.style.display='none';return;}
-  const terms=q.toLowerCase().split(/\s+/);
-  const items=[
-    {l:'Hotels',v:'Hotels — Stay-to-Play & nearby'},{l:'Rules',v:'Tournament rules & tiebreakers'},
-    {l:'Weather',v:'Weather forecast & heat planning'},{l:'Contacts',v:'Coach, manager, team managers'},
-    {l:'Venue',v:'Veterans Park, parking, fields'},{l:'Schedule',v:'Game schedule'},
-    {l:'Packing',v:'Checklist & what to bring'},{l:'Coach',v:D.contacts.coach.name},
-    {l:'Manager',v:D.contacts.manager.name},
-    {l:'Parking',v:D.venue.parking},{l:'Field',v:D.venue.fields.count+' fields'},
-    {l:'Bathroom',v:'Restrooms at multiple locations'},{l:'Uniform',v:D.games?.[0]?.uniform||'TBD'},
-    {l:'Hotel',v:D.hotels.official[0]?.name+' — '+D.hotels.official[0]?.rate}
-  ];
-  const matches=items.filter(i=>terms.some(t=>i.l.toLowerCase().includes(t)||i.v.toLowerCase().includes(t)));
-  el.innerHTML=matches.length?matches.map(m=>`<div class="more-item" style="padding:10px 12px" onclick="closeSheet()"><div class="lbl"><span class="lbl">${m.l}</span><div class="sub">${m.v}</div></div></div>`).join(''):'<p class="help-text">No results</p>';
-  el.style.display='block';
-}
-
-// === MULTI-TOURNAMENT (spring 2027 slate) ===
-// One app, N events. `tournaments.json` is the registry; each event is a full
-// bundle at `tournaments/<slug>.json`. Selection order: URL `?t=slug` >
-// localStorage > registry default > legacy data.json. An unknown slug falls
-// back rather than blanking the screen, and a missing registry (older deploy)
-// leaves the single-tournament behaviour untouched.
-let IDX=null;
-let TEAMS=null;
-const TKEY='tj_tournament_v1';
-const MKEY='tj_team_v1';
-
-function pickSlug(){
-  let want=null;
-  try{want=new URLSearchParams(location.search).get('t');}catch(e){}
-  if(want && IDX && IDX.tournaments.some(t=>t.slug===want))return want;
-  let saved=null;
-  try{saved=localStorage.getItem(TKEY);}catch(e){}
-  if(saved && IDX && IDX.tournaments.some(t=>t.slug===saved))return saved;
-  if(IDX && IDX.defaultTournament)return IDX.defaultTournament;
-  return null;
-}
-
-function pickerHTML(current){
-  const rows=(IDX.tournaments||[]).map(t=>{
-    const d=t.dates?(t.dates.start===t.dates.end?t.dates.start:t.dates.start+' → '+t.dates.end):'';
-    const on=t.slug===current?' on':'';
-    return `<a class="trow${on}" href="?t=${encodeURIComponent(t.slug)}" data-slug="${encodeURIComponent(t.slug)}">
-      <span class="tmain"><span class="tname2">${t.short||t.name}</span>
-      <span class="tmeta">${d}${t.city?' · '+t.city:''}</span></span>
-      <span class="tchev">›</span></a>`;
-  }).join('');
-  return `<div class="tpick-wrap"><div class="tpick-hd">Choose your tournament</div>${rows}</div>`;
-}
-
-function renderPicker(current){
-  if(!IDX||!Array.isArray(IDX.tournaments)||IDX.tournaments.length<2)return;
-  let host=document.getElementById('tpick');
-  if(!host){
-    host=document.createElement('div');
-    host.id='tpick';
-    const strip=document.querySelector('.top-strip')||document.getElementById('app');
-    if(strip&&strip.parentNode)strip.parentNode.insertBefore(host,strip.nextSibling);
-    else document.getElementById('app').prepend(host);
-  }
-  host.innerHTML=`<details class="tpick"><summary><span><i class="ti ti-arrows-shuffle" style="font-size:13px;margin-right:4px"></i>Switch tournament</span><span class="tcur">${(IDX.tournaments.find(t=>t.slug===current)||{}).short||''}</span></summary>${pickerHTML(current)}</details>`;
-  host.querySelectorAll('a.trow').forEach(a=>a.addEventListener('click',()=>{
-    try{localStorage.setItem(TKEY,decodeURIComponent(a.dataset.slug));}catch(e){}
-  }));
-}
-
-async function loadRegistry(){
+function adaptData(d, team){
+  var T=TOURNAMENT;
+  team=team||{};
   try{
-    const r=await fetch('tournaments.json?_='+Date.now());
-    if(!r.ok)return null;
-    const j=await r.json();
-    if(!j||!Array.isArray(j.tournaments))return null;
-    return j;
-  }catch(e){return null;}
+    if(team.name){
+      var age=(team.ageGroup||'U9').replace(/^0*(\d+)U$/,'U$1');
+      T.tournament.team=(team.shortName||team.name)+' · '+age+' · '+(team.format||'7v7');
+    }
+    if(d.tournament){
+      if(d.tournament.name) T.tournament.name=d.tournament.name;
+      // Keep the date range in the hero, e.g. "OCT 2–4 · IRMO, SC"
+      var loc=(d.venue&&(d.venue.city||d.venue.address))?String(d.venue.city||d.venue.address).split(',')[0].trim():(T.tournament.meta.split('·').pop()||'').trim();
+      var dt=d.tournament.dates;
+      if(dt&&dt.start&&dt.end){
+        var s=new Date(dt.start+'T12:00:00'), e=new Date(dt.end+'T12:00:00');
+        var mon=s.toLocaleDateString('en-US',{month:'short'}).toUpperCase();
+        var dstr=(s.getMonth()===e.getMonth())
+          ? (mon+' '+s.getDate()+'–'+e.getDate())
+          : (mon+' '+s.getDate()+'–'+e.toLocaleDateString('en-US',{month:'short'}).toUpperCase()+' '+e.getDate());
+        T.tournament.meta=dstr+' · '+loc;
+      }else{
+        T.tournament.meta=loc;
+      }
+    }
+    if(d.venue){
+      var v=d.venue, addr=v.address||'';
+      var known=!!addr && !/not yet announced|venue tbd|^tbd/i.test(addr);
+      T.venue.assigned=known;
+      T.venue.name=known?(v.name||addr.split(',')[0]):(v.name||'Venue not yet announced');
+      T.venue.address=known?addr:'';
+      T.venue.city=T.venue.city||(known?addr.split(',').slice(-2).join(',').trim():'');
+      T.venue.mapsUrl=v.mapsUrl||(known?('https://www.google.com/maps/?q='+encodeURIComponent(addr)):'');
+    }
+    if(d.tournament && d.tournament.dates && d.tournament.dates.start){
+      T.travel={date:d.tournament.dates.start,label:'Travel Day',
+                detail:(d.venue&&d.venue.city)||'',drive:''};
+    }
+    if(d.offline && d.offline.pdfGuideUrl) T.tournament.fullGuideUrl=d.offline.pdfGuideUrl;
+    if(team.pdfUrl) T.tournament.fullGuideUrl=team.pdfUrl;
+    if(team.name) TEAM_LABEL_FOR_GUIDE=team.name;
+
+    // games (per team)
+    if(Array.isArray(team.games) && team.games.length){
+      T.games=team.games.map(function(g,i){
+        return {
+          id:g.id||('game'+(i+1)),
+          label:(g.type==='final')?'Final':('Game '+(i+1)),
+          datetime:isoDT(g.date,g.time),
+          dayLabel:dayLabel(g.date),
+          time:hhmm(g.time),
+          opponent:g.opponent||'TBD',
+          /* keep any trailing letter - "Field 2A" is field 2A, not field 2.
+             fieldNum() alone drops the letter and the family walks to the wrong pitch. */
+          field:(function(f){var m=String(f||'').match(/([A-Za-z]?\d+[A-Za-z]?|[A-Za-z])\s*$/);return (m?m[1]:'TBD').toUpperCase();})(g.field),
+          /* the source distinguishes home/away per game; a null here rendered every
+             game as AWAY (5 of our 12 are actually HOME). Pass it through verbatim. */
+          home:(typeof g.home==='boolean')?g.home:null,
+          arrival:g.arrival||'',
+          arrivalStatus:'confirmed',
+          status:g.status||'scheduled',
+          type:g.type||'group'
+        };
+      });
+      T.venue.ourFields=T.games.map(function(g,i){ return {f:g.field||'?', label:g.dayLabel.split('·')[0].trim().slice(0,3).toUpperCase()+' · G'+(i+1)}; });
+    }
+
+    // venue
+    if(d.venue){
+      if(typeof d.venue.assigned!=='undefined') T.venue.assigned=d.venue.assigned;
+      if(Array.isArray(d.venue.complexes)) T.venue.complexes=d.venue.complexes;
+      if(d.venue.complexListUrl) T.venue.complexListUrl=d.venue.complexListUrl;
+      if(d.venue.name) T.venue.name=d.venue.name;
+      if(d.venue.address){
+        // data.json carries a full address ("1009 Bickley Road, Irmo, SC 29063").
+        // Split it so the renderer doesn't append the city a second time.
+        var parts=d.venue.address.split(',');
+        if(parts.length>=3){
+          T.venue.city=parts.slice(-2).join(',').trim();
+          T.venue.address=parts.slice(0,-2).join(',').trim();
+        }else{
+          T.venue.address=d.venue.address;
+        }
+      }
+      if(d.venue.mapsUrl) T.venue.mapsUrl=d.venue.mapsUrl;
+      if(d.venue.parking) T.venue.parking=d.venue.parking;
+      // NOTE: d.venue.fields.map is the club-wide Ballentine layout. It must NEVER be assigned
+      // here - that is what put Ballentine's map on every team's homepage. Resolve per team instead.
+      if(d.venue.fields && d.venue.fields.map && !T.venue.fieldMapUrl) T.venue.fieldMapUrl='';
+      if(d.venue.amenities){
+        var a=d.venue.amenities, out=[];
+        if(a.restrooms) out.push('Restrooms');
+        if(a.concessions) out.push('Concessions');
+        if(a.shade) out.push('Shade: '+a.shade);
+        if(out.length) T.venue.amenities=out;
+      }
+    }
+
+    // schedule-pending copy (per team)
+    if(team.scheduleExpected) T.schedulePending.detail=team.scheduleExpected;
+    if(team.breakPlan && team.breakPlan.steps && team.breakPlan.steps.length){
+      T.breakPlan={ title:team.breakPlan.title||'Between-Games Rhythm', intro:team.breakPlan.intro||'', steps:team.breakPlan.steps };
+    }
+
+    // weather note
+    if(d.weather){
+      if(d.weather.mini && d.weather.mini.temp) T.weather.mini=d.weather.mini;
+      else if(d.weather.summary) T.weather.mini={ day:'Outlook', temp:'—', feels:'open the weekend forecast', storm:'' };
+    }
+
+    // hotels
+    if(d.hotels){
+      var hs=[];
+      (d.hotels.official||[]).forEach(function(h){ hs.push({name:h.name, chain:h.chain, rate:h.rate, drive:h.drive, best:!!h.bestValue, tier:'pick', amenities:h.amenities||[]}); });
+      (d.hotels.nonOfficial||[]).forEach(function(h){ hs.push({name:h.name, chain:h.chain, rate:h.rate||'', drive:h.drive, best:false, tier:'alt', note:h.note||''}); });
+      T.hotels=hs;
+      if(d.hotels.updatedAt){var _p=String(d.hotels.updatedAt).split('-');
+        var _mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        T.hotelsUpdated='Hotel rates verified '+_mo[parseInt(_p[1],10)-1]+' '+parseInt(_p[2],10)+', '+_p[0]+'. Rates change daily';}
+    }
+
+    // per-team hotel ranking — a team's OWN complex decides which hotels are actually close.
+    // Written by ~/.hermes/scripts/rank-hotels-per-team.py once the schedule assigns a complex;
+    // absent until then, so the club-wide hedge list above remains the fallback.
+    if(team.hotels && team.hotels.length){
+      T.hotels=team.hotels.map(function(h){
+        var bandNote=(h.band && h.band!=='Primary' && h.band!=='Secondary')
+          ? (h.band+' — '+(h.distance||'')+' to '+(team.hotelsRankedFor||'the complex'))
+          : (h.note||'');
+        return {name:h.name, chain:h.chain, rate:h.rate||'', drive:h.distance||'', best:!!h.bestValue,
+                tier:(h.tier||'pick'), amenities:h.amenities||[], note:bandNote};
+      });
+      if(team.hotelsRankedFor) T.hotelsRankedFor=team.hotelsRankedFor;
+      T.hotelsUpdated='Ranked for '+team.hotelsRankedFor+' · every distance re-measured '
+        + (team.hotelsUpdated||'—') + '; rates as last verified by the provider. Rates change daily';
+    }
+
+    // per-team restaurants — same rule as hotels: THIS team's own complex decides the list
+    if(team.food && team.food.length){
+      T.food=team.food.map(function(f){ return {name:f.name, kind:f.kind||'', mi:f.mi, min:f.min,
+        addr:f.addr||'', rating:f.rating, reviews:f.reviews, why:f.why||'', mapsUrl:f.mapsUrl||''}; });
+      if(team.foodRankedFor) T.foodRankedFor=team.foodRankedFor;
+      T.foodNote=team.foodNote||'';
+      T.foodUpdated=team.foodUpdated||'';
+    }
+
+    // per-team venue override — teams can play at different SCUFC complexes
+    if(team.venue && (team.venue.assigned || team.venue.name)){
+      T.venue=Object.assign({}, T.venue, team.venue);
+      if(team.venue.address && team.venue.city){
+        T.venue.address=team.venue.address; T.venue.city=team.venue.city;
+      }
+    }
+
+    // nearby - each team carries its OWN list, measured from its own complex
+    if(team.nearby && team.nearby.groups && team.nearby.groups.length){
+      T.nearby.groups=[{ label:'Closest to '+(team.nearby.rankedFor||'this complex'),
+        items: team.nearby.groups.map(function(i){
+          return { name:i.name+' \u00b7 '+i.label,
+                   note:(i.address||'')+(i.phone? ' \u00b7 '+i.phone : ''),
+                   dist:(i.mi!=null? i.mi+' mi' : '')+(i.min!=null? ' \u00b7 '+i.min+' min' : ''),
+                   sub:'', url:(i.mapsUrl||'#'), icon:'shop' };
+        })}];
+      T.nearby.checked=team.nearby.checked||'';
+      T.nearby.src=team.nearby.src||'';
+    } else if(d.nearby){
+      var groups=[]; var cur=[];
+      [['urgentCare','Essentials'],['target','Big-box store'],['dicks','Sporting goods'],
+       ['pharmacy','Pharmacy'],['coffee','Coffee']].forEach(function(pair){
+        var v=d.nearby[pair[0]]; if(!v||!v.name) return;
+        cur.push({ name:v.name+' \u00b7 '+pair[1], note:(v.address||v.drive||''), dist:(v.drive||''), sub:'',
+                   url:(v.maps||'#'), icon:'shop' });
+      });
+      if(cur.length) groups.push({label:'Essentials & Emergency (club-wide, not per-team)', items:cur});
+      T.nearby.groups=groups;
+      T.nearby.checked=''; T.nearby.src='';
+    }
+
+    // rules
+    if(d.rules){
+      if(Array.isArray(d.rules.keyRules) && d.rules.keyRules.length){
+        T.rules.quick=d.rules.keyRules.slice(0,6).map(function(r){ return {v:String(r.value).split('·')[0].trim(), l:String(r.label).toLowerCase()}; });
+        T.rules.full=d.rules.keyRules.map(function(r){ return {k:r.label, v:r.value}; });
+      }
+      if(Array.isArray(d.rules.tiebreakers)) T.rules.tiebreakers=d.rules.tiebreakers;
+      if(d.rules.tiebreakersPending) T.rules.tiebreakersPending=d.rules.tiebreakersPending;
+      if(d.rules.tiebreakProcess) T.rules.tiebreakProcess=d.rules.tiebreakProcess;
+      if(d.rules.standingsLink) T.rules.standingsUrl=d.rules.standingsLink;
+      if(d.rules.docsLink) T.rules.docsUrl=d.rules.docsLink;
+      if(d.rules.fullLink) T.rules.fullRulesUrl=d.rules.fullLink;
+    }
+
+    // packing
+    if(d.checklist){
+      var G=[]; var map={player:'Player',weather:'Weather',parent:'Sideline',emergency:'Emergency'};
+      ['player','weather','parent','emergency'].forEach(function(k){
+        if(Array.isArray(d.checklist[k]) && d.checklist[k].length){
+          G.push({kind:(k==='weather'?'weather':'always'), title:map[k], items:d.checklist[k].map(function(x){ return [x,null]; })});
+        }
+      });
+      if(G.length) T.packing.groups=G;
+    }
+
+    // contacts — COACHES + TOURNAMENT CONTACTS ONLY.
+    // Parent team managers are deliberately NOT published here (Rich, 2026-09-29), and the
+    // PlayMetrics "Team Updates" row was dropped at the same time. Phones come from PlayMetrics,
+    // where only ONE coach has a number on file; the rest are email-only.
+    if(d.contacts){
+      var C=[]; var seen={};
+      function addContact(p, fallbackRole){
+        if(!p||!p.name) return;
+        var key=String(p.name).toLowerCase();
+        if(seen[key]) return;          // the per-team coach repeats Keith Gunn across all four teams
+        seen[key]=1;
+        C.push({ name:p.name,
+                 role:(p.role||fallbackRole||'Coach'),
+                 phone:(p.phone||'').replace(/[^0-9]/g,''),
+                 email:(p.email||''),
+                 initial:p.name.charAt(0) });
+      }
+      (d.contacts.coaches||[]).forEach(function(c){ addContact(c,'Coach'); });
+      var td=d.contacts.tournamentDirector;
+      if(td&&(td.name||td.email)){
+        addContact({name:td.name||'Tournament HQ',
+                    role:'Tournament Director · SCUFC',
+                    phone:td.phone, email:td.email},'Tournament HQ');
+      }
+      T.contacts=C;
+    }
+
+    // changes / updates (per team, falling back to shared)
+    var up=(Array.isArray(team.updates)&&team.updates.length)?team.updates:(d.updates||[]);
+    if(up.length){
+      T.changes=up.slice(0,6).map(function(u){ return {k:u.title, v:u.description}; });
+    }
+  }catch(e){ /* keep fallback on any shape mismatch */ }
 }
 
-// === TEAMS (4 travel squads, carolina-cup pattern) ===
-// The club fields four travel squads (U9 Premier/Blue, U10 Premier/Blue) and the
-// same away slate applies to all of them. Selection is independent of the
-// tournament: ?team= > localStorage > teams.json default. The team is an
-// OVERLAY on the tournament bundle (name/shortName/coach), never a second copy
-// of the event facts.
-async function loadTeams(){
-  try{
-    const r=await fetch('teams.json?_='+Date.now());
-    if(!r.ok)return null;
-    const j=await r.json();
-    if(!j||!Array.isArray(j.teams)||!j.teams.length)return null;
-    return j;
-  }catch(e){return null;}
-}
 
-function pickTeam(){
-  let want=null;
-  try{want=new URLSearchParams(location.search).get('team');}catch(e){}
-  const known=s=>TEAMS.teams.some(t=>t.slug===s);
-  if(want&&known(want))return want;
-  let saved=null;
-  try{saved=localStorage.getItem(MKEY);}catch(e){}
-  if(saved&&known(saved))return saved;
-  return TEAMS.defaultTeam||TEAMS.teams[0].slug;
-}
+/* ============================================================
+   TEMPLATE LOGIC — tournament-agnostic
+   ============================================================ */
 
-function teamChips(current){
-  return (TEAMS.teams||[]).map(t=>{
-    const on=t.slug===current?' on':'';
-    const href='?team='+encodeURIComponent(t.slug)+
-      (IDX&&pickSlug()?'&t='+encodeURIComponent(pickSlug()):'');
-    return `<a class="tchip${on}" href="${href}" data-team="${encodeURIComponent(t.slug)}">${t.label||t.shortName||t.name}</a>`;
-  }).join('');
-}
+// ---- NAV ----
+const navs=document.querySelectorAll('.nav a');
+function go(s){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));document.getElementById('scr-'+s).classList.add('on');navs.forEach(a=>a.classList.toggle('on',a.dataset.goto===s));window.scrollTo(0,0);}
+navs.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.goto);}));
+// Delegated handler so ANY [data-goto] element — including ones injected later via
+// innerHTML (e.g. the "See what changed" link in the updated banner) — navigates.
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-goto]');
+  if(t&&!t.classList.contains('nav')){ e.preventDefault(); go(t.dataset.goto); }
+});
 
-function renderTeams(current){
-  if(!TEAMS||TEAMS.teams.length<2)return;
-  let host=document.getElementById('tteam');
-  if(!host){
-    host=document.createElement('div');
-    host.id='tteam';
-    const strip=document.querySelector('.top-strip')||document.getElementById('app');
-    if(strip&&strip.parentNode)strip.parentNode.insertBefore(host,strip.nextSibling);
-    else document.getElementById('app').prepend(host);
-  }
-  host.innerHTML=`<div class="tchips">${teamChips(current)}</div>`;
-  host.querySelectorAll('a.tchip').forEach(a=>a.addEventListener('click',()=>{
-    try{localStorage.setItem(MKEY,decodeURIComponent(a.dataset.team));}catch(e){}
-  }));
+// ---- HERO ----
+function renderHero(){
+document.getElementById('heroKick').textContent=TOURNAMENT.tournament.kick;
+document.getElementById('heroTitle').textContent=TOURNAMENT.tournament.name;
+document.getElementById('heroTeam').textContent=TOURNAMENT.tournament.team;
+document.getElementById('heroMeta').textContent=TOURNAMENT.tournament.meta;
+document.title='Game Day — '+TOURNAMENT.tournament.team.split('·')[0].trim();
+document.getElementById('crestMark').innerHTML='<svg viewBox="0 0 100 100"><path d="M50 2 92 22v28c0 26-18 42-42 48C26 92 8 76 8 50V22L50 2z" fill="#fff"/><circle cx="50" cy="48" r="17" fill="none" stroke="'+TOURNAMENT.brand.primary+'" stroke-width="3"/><text x="50" y="55" text-anchor="middle" font-size="18" font-weight="bold" fill="'+TOURNAMENT.brand.primary+'">'+TOURNAMENT.brand.initial+'</text></svg>';
 }
+renderHero();
+document.documentElement.style.setProperty('--su',TOURNAMENT.brand.primary);
+document.documentElement.style.setProperty('--su-dark',TOURNAMENT.brand.dark);
+document.getElementById('updBanner').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span><b>Updated '+TOURNAMENT.tournament.updatesUpdated+(TOURNAMENT.tournament.build? ' &middot; build '+TOURNAMENT.tournament.build : '')+'.</b> See what changed &nbsp;<a href="#scr-more" data-goto="more">here</a>.</span>';
 
-function applyTeam(slug){
-  if(!TEAMS||!slug)return;
-  const t=(TEAMS.teams||[]).find(x=>x.slug===slug);
-  if(!t||!D)return;
-  D.team=Object.assign({},D.team||{},{
-    name:t.name||(D.team||{}).name,
-    shortName:t.shortName||(D.team||{}).shortName,
-    label:t.label,
-    ageGroup:t.ageGroup
+// ---- TOURNAMENT STATE RESOLVER (single source of truth for time) ----
+const TZ=TOURNAMENT.timezone;
+const DURATION=(TOURNAMENT.matchDurationMin||60)*60000; // active-match window
+function tzNow(){return new Date();}
+function tzTime(iso){return new Date(iso);}
+function fmtParts(diff){
+  diff=Math.max(0,diff);
+  const days=Math.floor(diff/86400000),hours=Math.floor((diff%86400000)/3600000),mins=Math.floor((diff%3600000)/60000);
+  return {days,hours,mins};
+}
+/* Resolve the full tournament state from data + now. Everything downstream
+   (countdown, Next Match, context, Today) consumes this ONE result, so they
+   can never disagree. Fully generic — knows nothing about any specific
+   tournament. */
+function resolveTournamentState(t, now){
+  const travel=t.travel?{...t.travel,start:tzTime(t.travel.date+"T00:00:00-04:00")}:null;
+  // Derive each game's active window [start, end] from data (or duration)
+  const games=(t.games||[]).map(g=>{
+    const start=tzTime(g.datetime);
+    const end=g.end?tzTime(g.end):new Date(start.getTime()+DURATION);
+    return {...g,start,end};
   });
+  // Only "active" games (confirmed, or conditional that has been confirmed) count toward next/current
+  const eligible=games.filter(g=>g.status==='confirmed'||(g.status==='conditional'&&g.confirmed));
+  // Determine each game's state
+  const withState=games.map(g=>{
+    let st;
+    if(g.status==='cancelled') st='cancelled';
+    else if(g.status==='postponed') st='postponed';
+    else if(g.status==='conditional'&&!g.confirmed) st='conditional';
+    else if(now<g.start) st='upcoming';
+    else if(now<g.end) st='current';
+    else st='completed';
+    return {...g,state:st};
+  });
+  const currentMatch=withState.find(g=>g.state==='current')||null;
+  const nextMatch=withState.find(g=>g.state==='upcoming')||null;
+  // Countdown target = the next event boundary. If a match is live, count its remaining window;
+  // else the next eligible start; travel is the earliest milestone.
+  let countdownTarget=null,countdownLabel='',phase;
+  // No games published yet — count down to travel day instead of claiming it's over.
+  if(!TOURNAMENT.games||!TOURNAMENT.games.length){
+    phase='awaiting-schedule';
+    if(travel&&now<travel.start){ countdownTarget=travel.start; countdownLabel='UNTIL TRAVEL DAY'; }
+    else { countdownTarget=null; countdownLabel='AWAITING SCHEDULE'; }
+    return {now,phase,currentMatch:null,nextMatch:null,countdownTarget,countdownLabel,travel,games,withState};
+  }
+  if(currentMatch){
+    phase='in-match';
+    countdownTarget=currentMatch.end;
+    countdownLabel=currentMatch.label.toUpperCase()+' · HAPPENING NOW';
+  } else if(nextMatch){
+    if(travel&&now<travel.start){ phase='pre-tournament'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
+    else if(travel&&now<new Date(travel.start.getTime()+24*3600000)){ phase='travel'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
+    else {
+      // Same calendar day as the next kickoff = game day, not "between games" (which used to show
+      // before a day's FIRST game - wrong on the morning of Oct 3). (Rich, 2026-09-27)
+      const sameDay = nextMatch.start.toLocaleDateString('en-US',{timeZone:TOURNAMENT.timezone})
+                   === now.toLocaleDateString('en-US',{timeZone:TOURNAMENT.timezone});
+      const firstOfDay = !withState.some(g=>g.state==='completed'
+        && g.start.toLocaleDateString('en-US',{timeZone:TOURNAMENT.timezone})===nextMatch.start.toLocaleDateString('en-US',{timeZone:TOURNAMENT.timezone}));
+      if(sameDay){ phase='game-day'; countdownTarget=nextMatch.start;
+        countdownLabel=(firstOfDay?'UNTIL KICKOFF':'UNTIL '+nextMatch.label.toUpperCase()); }
+      else { phase='between-games'; countdownTarget=nextMatch.start; countdownLabel='UNTIL '+nextMatch.label.toUpperCase(); }
+    }
+  } else {
+    // No current or upcoming match. If there's a still-pending conditional final whose
+    // scheduled time hasn't fully passed, we're waiting on a bracket result.
+    const pendFinal=withState.find(g=>g.state==='conditional');
+    if(pendFinal&&now<pendFinal.end){ phase='awaiting-final'; countdownTarget=null; countdownLabel='AWAITING BRACKET RESULT'; }
+    else { phase='complete'; countdownTarget=null; countdownLabel='TOURNAMENT COMPLETE'; }
+  }
+  return {now,phase,currentMatch,nextMatch,countdownTarget,countdownLabel,travel,games,withState};
 }
 
-// === INIT ===
-async function init(){
-  const safe=(name,fn)=>{try{fn();}catch(e){console.warn('[render] '+name,e);}};
-  try{
-    IDX=await loadRegistry();
-    TEAMS=await loadTeams();
-    const slug=pickSlug();
-    const team=pickTeam();
-    let src='data.json';
-    if(IDX&&slug)src='tournaments/'+slug+'.json';
-    let r=await fetch(src+'?_='+Date.now());
-    if(!r.ok&&src!=='data.json'){src='data.json';r=await fetch(src+'?_='+Date.now());}
-    D=await r.json();
-    if(!D.contacts)D.contacts={};
-    if(!D.contacts.tournamentDirector)D.contacts.tournamentDirector={email:'TDirector@SportingJaxAcademy.com'};
-    safe('team',()=>applyTeam(team));
-    safe('teams',()=>renderTeams(team));
-    renderPicker(slug);
-    safe('home',renderHome);safe('venue',renderVenue);safe('pack',renderPack);safe('games',renderGames);
-  }catch(e){document.getElementById('tname').textContent='Offline';const td=document.getElementById('tdates');if(td)td.textContent='Check connection';}
+// ---- LIVE COUNTDOWN (consumes resolver) ----
+const cdLabel=document.getElementById('cdLabel'),cdBody=document.getElementById('cdBody');
+function renderCountdown(state){
+  cdLabel.textContent=state.countdownLabel||'';
+  if(!state.countdownTarget){ cdBody.innerHTML=''; return; }
+  const p=fmtParts(state.countdownTarget-state.now);
+  let html;
+  if(p.days>0) html='<span class="cd-num num">'+p.days+'</span><span class="cd-unit">d</span><span class="cd-sep">·</span><span class="cd-num num">'+p.hours+'</span><span class="cd-unit">hr</span><span class="cd-sep">·</span><span class="cd-num num">'+p.mins+'</span><span class="cd-unit">min</span>';
+  else if(p.hours>0) html='<span class="cd-num num">'+p.hours+'</span><span class="cd-unit">hr</span><span class="cd-sep">·</span><span class="cd-num num">'+p.mins+'</span><span class="cd-unit">min</span>';
+  else html='<span class="cd-num num">'+p.mins+'</span><span class="cd-unit">min</span>';
+  cdBody.innerHTML=html;
 }
-init();
-try{document.body.classList.add(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'');}catch(e){}
-try{if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');}catch(e){}
+
+// ---- CONTEXT + NEED-NOW (consumes resolver) ----
+const ctxText=document.getElementById('ctxText'),ctxChip=document.getElementById('ctxChip');
+const needTitle=document.getElementById('needTitle'),needList=document.getElementById('needList');
+function refreshContext(state){
+  const {phase,currentMatch,nextMatch,travel,now}=state;
+  const g1=TOURNAMENT.games[0];
+  let txt,chip,need='before';
+  switch(phase){
+    case 'pre-tournament':
+      // The countdown below owns "how long until kickoff" - one clock, said once. This strip states
+      // the DATE (that team's own first kickoff) and the travel context, nothing that counts down.
+      const kd=new Date(tzTime(g1.datetime));
+      const wd=travel?new Date(travel.start.getTime()).toLocaleDateString('en-US',{weekday:'long',timeZone:TZ}):'';
+      txt='KICKOFF '+kd.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric',timeZone:TZ}).toUpperCase();
+      chip=(travel?travel.label+' · '+wd:'Game Day'); need='before'; break;
+    case 'travel': txt='TRAVEL DAY'; chip=travel.detail||travel.label; need='travel'; break;
+    case 'in-match': txt='HAPPENING NOW'; chip=currentMatch.label+' · '+currentMatch.time+' · Field '+currentMatch.field; need='game1'; break;
+    case 'between-games': txt='BETWEEN GAMES'; chip=nextMatch?nextMatch.label+' · '+nextMatch.time:'Next match'; need='between'; break;
+    case 'game-day': txt='GAME DAY'; chip=nextMatch?nextMatch.label+' · '+nextMatch.time:'Next match'; need=(nextMatch&&nextMatch.label==='Game 1')?'game1':'between'; break;
+    case 'awaiting-final': txt='AWAITING BRACKET RESULT'; chip='Final qualification not yet confirmed'; need='game3'; break;
+    case 'awaiting-schedule': txt='SCHEDULE PENDING'; chip='Bracket confirmed · Schedule Sep 26'; need='before'; break;
+    case 'complete': txt='TOURNAMENT COMPLETE'; chip='Great weekend!'; need='before'; break;
+    default: txt='GAME DAY'; chip=nextMatch?nextMatch.label+' · '+nextMatch.time:'Next match'; need='game1';
+  }
+  ctxText.textContent=txt; ctxChip.textContent=chip;
+  const needKey=need==='travel'?'travel':need==='between'?'between':need==='game1'?'game1':need==='game3'?'game3':'before';
+  const list=(TOURNAMENT.needs[needKey]||TOURNAMENT.needs.before);
+  let needTitleText='Before Friday';
+  if(need==='between') needTitleText='Between Games';
+  else if(need==='travel') needTitleText=(travel?travel.label:'Today');
+  else if(need==='game1') needTitleText=(g1?g1.label:'Game 1');
+  else if(need==='game3') needTitleText='Final Check';
+  needTitle.textContent=needTitleText;
+  needList.innerHTML=list.map(([a,b])=>'<li>'+a+' <span style="opacity:.75;font-weight:500">· '+b+'</span></li>').join('');
+}
+
+// ---- NEXT MATCH DASHBOARD (consumes the SAME resolver) ----
+const nextStatus=document.getElementById('nextStatus'),nextBody=document.getElementById('nextBody');
+function renderNextMatch(state){
+  const {currentMatch,nextMatch,phase}=state;
+  const venue=TOURNAMENT.venue;
+  // Determine which game to show: a live match first, else the next upcoming
+  const g=currentMatch||nextMatch;
+  if(!g){
+    if(phase==='awaiting-schedule'){
+      const SP=TOURNAMENT.schedulePending||{};
+      nextStatus.textContent='Awaiting'; nextStatus.className='status pend';
+      nextBody.innerHTML='<div class="day" style="color:var(--su)">SCHEDULE · '+(TOURNAMENT.tournament.meta||'')+'</div>'+
+        '<div style="font-size:16px;font-weight:800;color:var(--ink);line-height:1.35;margin:2px 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
+        '<div class="vs">'+(SP.detail||'')+'</div>'+
+        '<div class="arrive" style="border-top:none;margin-top:10px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venue.name+(venue.address?' &middot; '+venue.address:'')+(venue.city?', '+venue.city:'')+'</div>'+
+        '<div class="btn-row">'+
+          '<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">Directions</a>'+
+          '<a class="btn ghost" href="'+(TOURNAMENT.tournament.fullGuideUrl||'#')+'" target="_blank" rel="noopener">Full Guide</a>'+
+        '</div>';
+      return;
+    }
+    if(phase==='awaiting-final'){ nextStatus.textContent='Awaiting'; nextStatus.className='status pend'; nextBody.innerHTML='<div class="time num" style="font-size:26px">Final unconfirmed</div><div class="vs">Final qualification not yet decided.</div>'; return; }
+    nextStatus.textContent='Complete'; nextStatus.className='status conf';
+    nextBody.innerHTML='<div class="time num" style="font-size:30px">DONE</div><div class="vs">Tournament complete — safe travels home!</div>';
+    return;
+  }
+  const isLive=currentMatch&&currentMatch.id===g.id;
+  nextStatus.textContent = isLive?'Happening Now':(g.arrivalStatus==='pending-coach'?'Awaiting arrival':'Confirmed');
+  nextStatus.className='status '+((isLive||g.arrivalStatus==='pending-coach')?'pend':'conf');
+  const dayBg=isLive?'var(--red)':'var(--su)';
+  nextBody.innerHTML=
+    '<div class="day" style="color:'+(isLive?'var(--red)':'var(--su)')+'">'+(isLive?'HAPPENING NOW · ':'NEXT MATCH · ')+g.dayLabel+'</div>'+
+    '<div class="time num">'+g.time+'</div>'+
+    '<div class="vs">vs '+g.opponent+'</div>'+
+    '<div class="meta-line"><span class="pill field">FIELD '+g.field+'</span>'+(g.home===true?'<span class="pill home">HOME</span>':g.home===false?'<span class="pill away">AWAY</span>':'')+'</div>'+
+    (g.arrival&&!isLive?'<div class="arrive"><span class="dot" style="width:9px;height:9px;background:'+(g.arrivalStatus==='pending-coach'?'var(--amber)':'var(--green)')+'"></span> Player arrival <b>'+g.arrival+'</b>'+(g.arrivalStatus==='pending-coach'?' <span class="pend">· awaiting coach confirmation</span>':'')+'</div>':'')+
+    '<div class="arrive" style="border-top:none;margin-top:6px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venue.name+(venue.address?' &middot; '+venue.address:'')+(venue.city?', '+venue.city:'')+'</div>'+
+    '<div class="wx-mini"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg> '+TOURNAMENT.weather.mini.day+' '+TOURNAMENT.weather.mini.temp+' · '+TOURNAMENT.weather.mini.feels+' · '+TOURNAMENT.weather.mini.storm+'</span><span class="exp" data-wxopen>Weekend forecast ›</span></div>'+
+    '<div class="btn-row">'+
+      '<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+
+      '<a class="btn ghost" href="'+(complexMapFor(venue)||complexMapsFallbackUrl())+'" target="_blank" rel="noopener" title="'+complexMapLabel(venue)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>'+complexMapBtnText(venue)+'<br></a>'+
+      '<a class="btn ghost" href="https://playmetrics.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.4-.7L3 21l1.8-5.6A8.4 8.4 0 0 1 3 11.5a8.5 8.5 0 0 1 18 0z"/></svg>Message Team</a>'+
+    '</div>'+
+    (nextMatch&&nextMatch.id!==g.id?'<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)">Next: <b style="color:var(--su)">'+nextMatch.label+'</b> · '+nextMatch.time+' · Field '+nextMatch.field+'</div>':'');
+}
+
+// ---- MASTER REFRESH: countdown ticks fast, full state re-resolves on a slower cadence ----
+let lastStateKey='';
+function refreshAll(){
+  const state=resolveTournamentState(TOURNAMENT,tzNow());
+  // Countdown is cheap — run every second. Full re-render only when state changes.
+  const key=state.phase+'|'+(state.currentMatch?state.currentMatch.id:'')+'|'+(state.nextMatch?state.nextMatch.id:'');
+  renderCountdown(state);
+  if(key!==lastStateKey){ lastStateKey=key; refreshContext(state); renderNextMatch(state); renderSchedule(state); renderWeekendStatus(state); }
+}
+
+// ---- WEEKEND STATUS (compact progress derived from state) ----
+function renderWeekendStatus(state){
+  const st=state||resolveTournamentState(TOURNAMENT,tzNow());
+  const el=document.getElementById('weekendStatus');if(!el)return;
+  const curId=st.currentMatch?st.currentMatch.id:null,nextId=st.nextMatch?st.nextMatch.id:null;
+  const parts=[];
+  const travel=TOURNAMENT.travel;
+  if(travel){
+    const tStart=tzTime(travel.date+"T00:00:00-04:00");
+    const tDone=st.now>new Date(tStart.getTime()+24*3600000);
+    parts.push('<span>'+travel.label+' '+(tDone?'<span style="color:var(--green)">✓</span>':'<span style="color:var(--su)">●</span>')+'</span>');
+  }
+  const byDay={};
+  TOURNAMENT.games.forEach(g=>{(byDay[g.dayLabel]=byDay[g.dayLabel]||[]).push(g);});
+  for(const [day,games] of Object.entries(byDay)){
+    const dayShort=day.split('·')[0].trim().slice(0,3);
+    let cell=dayShort+' ';
+    cell+=games.map(g=>{
+      const done=st.withState.find(x=>x.id===g.id)?.state==='completed';
+      const live=g.id===curId;
+      const nxt=g.id===nextId;
+      const gnum=TOURNAMENT.games.findIndex(x=>x.id===g.id)+1;
+      const sym=g.type==='final'?'◇':(gnum>0?'G'+gnum:'?');
+      if(done)return '<span style="color:var(--green)">'+sym+'✓</span>';
+      if(live)return '<span style="color:var(--red)">'+sym+'●</span>';
+      if(nxt)return '<span style="color:var(--su)">'+sym+'●</span>';
+      return '<span style="opacity:.45">'+sym+'</span>';
+    }).join(' ');
+    parts.push('<span>'+cell+'</span>');
+  }
+  el.innerHTML=parts.join('<span style="opacity:.25">·</span>');
+}
+
+
+// ---- WEEKEND FORECAST + WATCH ----
+const wxFull=document.getElementById('wxFull');
+function renderWeather(){
+  const W0=TOURNAMENT.weather||{};
+  if(!(W0.days||[]).length){
+    var f=document.getElementById('wxFull'); if(f) f.innerHTML='<div class="section-title">Weekend Forecast</div><div class="card"><p class="small muted" style="margin:0">A forecast appears here once the event is close enough for one to mean anything. Nothing is guessed this far out.</p></div>';
+    var w=document.getElementById('watchCard'); if(w) w.innerHTML='';
+    return;
+  }
+  const WX=TOURNAMENT.weather||{}; const days=(WX.days||[]).map(d=>'<div class="wxcard '+d.className+'"><div class="wd">'+d.label+'</div><div class="wt num">'+d.high+'</div><div class="wf">'+d.feels+'</div><div class="wrow"><span>Storm</span><b>'+(d.storm.indexOf('88')>=0?'<b style="color:#ffd166">'+d.storm+'</b>':d.storm)+'</b></div><div class="wrow"><span>Concern</span><b>'+d.concern+'</b></div></div>').join('');
+  wxFull.innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4 4 0 0 1 0-8 5 5 0 0 1 9-3 4 4 0 0 1 1 7.9"/></svg>Weekend Forecast</div><div class="card" style="padding-bottom:14px"><div class="wx">'+days+'</div><p class="small muted" style="margin:10px 0 0;text-align:right">'+TOURNAMENT.weather.updated+' &nbsp;·&nbsp; <a href="'+TOURNAMENT.weather.forecastUrl+'" target="_blank" rel="noopener" style="color:var(--link);font-weight:700;text-decoration:none">Full forecast</a></p></div>';
+  const watch=(WX.watch||[]).map(w=>'<div class="wcell"><div class="wt">'+w.title+'</div><div class="wv num">'+w.value+'</div><div class="ws">'+w.sub+'</div></div>').join('');
+  document.getElementById('watchCard').innerHTML='<div class="wh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/><circle cx="12" cy="12" r="4"/></svg>Weather Watch</div><div class="wb">'+watch+'</div><div class="wfoot"><a href="'+TOURNAMENT.weather.forecastUrl+'" target="_blank" rel="noopener">View forecast ›</a></div>';
+}
+// Delegated on purpose: [data-wxopen] lives inside the Next Match card, which renderNext() rewrites on
+// every state change. A one-shot querySelectorAll binding here was lost on the first re-render, so the
+// "Weekend forecast >" tap did nothing at all - silently, with no console error.
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-wxopen]');
+  if(!t) return;
+  e.preventDefault();
+  const panel=document.getElementById('wxFull');
+  if(!panel) return;
+  // The panel lives on THIS screen (Home / #scr-today), immediately below the Next Match card.
+  // Do NOT navigate: an earlier revision called go('schedule') here, which switched screens and
+  // hid the panel it had just opened, so the tap looked like it did nothing at all.
+  if(!panel.classList.contains('open')){
+    if(!panel.innerHTML.trim() && typeof renderWeather==='function') renderWeather();
+    panel.classList.add('open');
+    setTimeout(()=>{try{panel.scrollIntoView({behavior:'smooth',block:'start'});}catch(_){}},60);
+  } else {
+    panel.classList.remove('open');
+  }
+});
+
+// ---- LIVE WEATHER (fetches fresh forecast for the game dates) ----
+// Throttled: this is the slowest request on the page (~480ms) and it fires on
+// every tab focus. 10 min is plenty for a forecast that updates hourly.
+let lastWxLoad=0;
+const WX_MIN_INTERVAL=600000;
+function loadWeather(){
+  const now=Date.now();
+  if(now-lastWxLoad<WX_MIN_INTERVAL) return;
+  lastWxLoad=now;
+  const src=(TOURNAMENT.weather||{}).source;
+  if(!src||!src.enabled) return; // keep static data as fallback
+  /* NATIONAL WEATHER SERVICE is the source of truth here - the same source the printed
+     guide and the PDFs quote. The old Open-Meteo feed ran 8-10F hotter on these dates
+     (93F/96F feels vs NWS 84F), which showed the family two contradicting forecasts.
+     If NWS is unreachable we fall back to Open-Meteo but the stamp says so, so the app
+     never silently contradicts the guide. (verified 2026-09-26) */
+  function nwsDaily(){
+    return fetch('https://api.weather.gov/points/'+src.lat+','+src.lng,{headers:{'Accept':'application/geo+json'}})
+      .then(r=>r.json())
+      .then(p=>fetch(p.properties.forecast,{headers:{'Accept':'application/geo+json'}}))
+      .then(r=>r.json())
+      .then(f=>{
+        const per=f.properties.periods||[];
+        const time=[],tmax=[],prob=[],sum=[],shorts=[];
+        per.filter(p=>p.isDaytime).forEach(p=>{
+          time.push(String(p.startTime).slice(0,10));
+          tmax.push(p.temperature);
+          prob.push((p.probabilityOfPrecipitation&&p.probabilityOfPrecipitation.value!=null)?p.probabilityOfPrecipitation.value:0);
+          const sf=(p.shortForecast||'');
+          sum.push((/rain|shower/i.test(sf))?0.05:0);
+          shorts.push(sf);
+        });
+        return {daily:{time:time,temperature_2m_max:tmax,apparent_temperature_max:tmax.slice(),precipitation_probability_max:prob,precipitation_sum:sum},shorts:shorts,provenance:'NWS'};
+      });
+  }
+  function openMeteoDaily(){
+    const url='https://api.open-meteo.com/v1/forecast'
+      +'?latitude='+src.lat+'&longitude='+src.lng
+      +'&daily=temperature_2m_max,apparent_temperature_max,precipitation_probability_max,precipitation_sum'
+      +'&temperature_unit=fahrenheit&precipitation_unit=inch&wind_speed_unit=mph'
+      +'&timezone='+encodeURIComponent(src.timezone||TOURNAMENT.timezone)
+      +'&forecast_days=8';
+    return fetch(url).then(r=>r.json()).then(d=>({daily:d.daily,shorts:[],provenance:'Open-Meteo (NWS unavailable)'}));
+  }
+  nwsDaily().catch(openMeteoDaily).then(res=>{
+    const data=res.daily||{}; const SHORTS=res.shorts||[]; const WHO=res.provenance||'NWS';
+    const daily=data.daily||{};
+    const times=daily.time||[];
+    // Map each game's date (YYYY-MM-DD) to the matching forecast day
+    const gameDates=TOURNAMENT.games.map(g=>g.datetime.slice(0,10));
+    const byGame={};
+    gameDates.forEach((d,i)=>{ const idx=times.indexOf(d); byGame[TOURNAMENT.games[i].id]=idx>=0?idx:null; });
+    // Build day cards for unique game dates that have forecast data
+    const seen={}; const days=[];
+    TOURNAMENT.games.forEach(g=>{
+      const idx=byGame[g.id]; if(idx==null||seen[g.datetime.slice(0,10)])return; seen[g.datetime.slice(0,10)]=true;
+      const high=Math.round(daily.temperature_2m_max[idx]);
+      const feels=(SHORTS[idx]||('Feels '+Math.round(daily.apparent_temperature_max[idx])+'\u00b0'));
+      const storm=Math.round(daily.precipitation_probability_max[idx]);
+      const rain=+(daily.precipitation_sum[idx]||0).toFixed(2);
+      const isSun=TOURNAMENT.games.find(x=>x.datetime.slice(0,10)===g.datetime.slice(0,10)&&x.id!==g.id)||g.datetime.slice(0,10)>=TOURNAMENT.games.find(x=>x.type!=='final').datetime.slice(0,10);
+      const dayName=new Date(g.datetime).toLocaleDateString('en-US',{weekday:'long',timeZone:src.timezone||TOURNAMENT.timezone});
+      const concern=feels>=100?'Extreme heat':storm>=70?'High storm risk':storm>=40?'Storms possible':'Mostly clear';
+      days.push({ label:dayName, high:high+'°', feels:feels, storm:storm+'%', concern, className:dayName==='Sunday'?'sun':'sat', rain });
+    });
+    // Pick the next game's day for the mini line
+    const state=resolveTournamentState(TOURNAMENT,tzNow());
+    const nextGame=(state.nextMatch||TOURNAMENT.games[0]);
+    const idx=byGame[nextGame.id];
+    let mini=TOURNAMENT.weather.mini;
+    if(idx!=null&&daily.temperature_2m_max&&daily.apparent_temperature_max&&daily.precipitation_probability_max){
+      const t=Math.round(daily.temperature_2m_max[idx]),f=Math.round(daily.apparent_temperature_max[idx]),st=Math.round(daily.precipitation_probability_max[idx]);
+      const dayName=new Date(nextGame.datetime).toLocaleDateString('en-US',{weekday:'long',timeZone:src.timezone||TOURNAMENT.timezone});
+      mini={ day:dayName, temp:t+'°', feels:(SHORTS[idx]?SHORTS[idx].toLowerCase():'feels '+f+'°'), storm:'rain '+st+'%' };
+    }
+    // Build watch cells from the two most relevant concerns
+    const watch=[];
+    if(days.length){
+      const hottest=[...days].sort((a,b)=>parseInt(b.feels.replace(/\D/g,''))-parseInt(a.feels.replace(/\D/g,'')))[0];
+      const stormiest=[...days].sort((a,b)=>parseInt(b.storm)-parseInt(a.storm))[0];
+      watch.push({ title:'Hottest · '+hottest.label.slice(0,3), value:hottest.high, sub:'high · hydrate either way', cls:'hot' });
+      watch.push({ title:'Storm Risk · '+stormiest.label.slice(0,3), value:stormiest.storm, sub:'chance · expect delays', cls:'storm' });
+    }
+    if(days.length){ TOURNAMENT.weather.days=days; }
+    TOURNAMENT.weather.mini=mini;
+    try{ if(typeof renderNextMatch==='function') renderNextMatch(resolveTournamentState(TOURNAMENT,tzNow())); }catch(e){}
+    if(watch.length){ TOURNAMENT.weather.watch=watch; }
+    const now=new Date();
+    TOURNAMENT.weather.updated='Live · '+WHO+' · '+now.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:src.timezone||TOURNAMENT.timezone})+' ET';
+    renderWeather();
+    // Weather feeds the Next Match mini-line, so re-render it too (state key may be unchanged).
+    refreshAll();
+    renderNextMatch(resolveTournamentState(TOURNAMENT,tzNow()));
+  }).catch(()=>{ /* keep static fallback on failure */ });
+}
+
+// ---- SCHEDULE (uses resolver to highlight NOW / NEXT) ----
+function renderSchedule(state){
+  const st=state||resolveTournamentState(TOURNAMENT,tzNow());
+  const currentId=st.currentMatch?st.currentMatch.id:null;
+  const nextId=st.nextMatch?st.nextMatch.id:null;
+  document.getElementById('schedVenueLine').textContent='All games at '+TOURNAMENT.venue.name+' · '+TOURNAMENT.venue.address+', '+TOURNAMENT.venue.city;
+  const byDay={};
+  TOURNAMENT.games.forEach(g=>{(byDay[g.dayLabel]=byDay[g.dayLabel]||[]).push(g);});
+  let out='';
+  for(const [day,games] of Object.entries(byDay)){
+    const isSat=day.toLowerCase().includes('saturday');
+    out+='<div class="daycard '+(isSat?'sat':'sun')+'"><div class="dh"><span>'+day+'</span><span class="dd">'+games.map(g=>g.label).join(' + ')+'</span></div>';
+    games.forEach((g,i)=>{
+      const badge = g.id===currentId?'<span style="float:right;font-size:10px;font-weight:800;color:var(--red);letter-spacing:.4px">NOW</span>':(g.id===nextId?'<span style="float:right;font-size:10px;font-weight:800;color:var(--su);letter-spacing:.4px">NEXT</span>':'');
+      if(g.type==='final'){
+        out+='<div class="final" style="'+(g.id===nextId?'border-color:var(--su);background:var(--su-soft)':'')+'"><div class="ftag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Potential Final · Not Guaranteed'+badge+'</div><div class="ftime num">'+g.time+'</div><div class="ftag" style="color:var(--su)">'+g.opponent+' · Field '+g.field+'</div><div class="fnote">'+g.note+'</div></div>';return;
+      }
+      out+='<div class="g" style="'+(g.id===currentId?'background:var(--red-bg);border-left:4px solid var(--red)':(g.id===nextId?'background:var(--su-soft);border-left:4px solid var(--su)':''))+'"><div class="ghome">'+(g.home===true?'Home':g.home===false?'Away':'')+'</div><div class="grow"><span class="gtime num">'+g.time+'</span><span class="pill field">Field '+g.field+'</span></div><div class="gvs">vs '+g.opponent+'</div>'+badge+'</div>';
+      // gap between games
+      const next=games[i+1];
+      if(next&&next.type!=='final'){
+        const h=Math.round((tzTime(next.datetime)-tzTime(g.datetime))/3600000);
+        if(h>=3) out+='<div class="gap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l3 2"/></svg>'+h+'-hour break</div>';
+      }
+    });
+    out+='</div>';
+  }
+  const SP=TOURNAMENT.schedulePending||{};
+  document.getElementById('scheduleDays').innerHTML = out || ('<div class="daycard sun"><div class="dh"><span>Schedule</span><span class="dd">Pending</span></div>'+
+    '<div style="padding:14px"><div style="font-weight:800;color:var(--su);font-size:13px;margin-bottom:6px">'+(SP.headline||'Not released yet')+'</div>'+
+    '<div style="font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:10px">'+(SP.detail||'')+'</div>'+
+    '<div style="font-size:12.5px;line-height:1.9;color:var(--ink)">'+
+    (SP.accepted?'&#9744; '+SP.accepted+'<br>':'')+
+    (SP.brackets?'&#9744; '+SP.brackets+'<br>':'')+
+    (SP.schedule?'&#9744; '+SP.schedule:'')+
+    '</div></div></div>');
+  // our weekend strip
+  if(TOURNAMENT.venue.ourFields&&TOURNAMENT.venue.ourFields.length){
+    const cells=TOURNAMENT.venue.ourFields.map(f=>'<div><div class="ow num">'+f.f+'</div><div class="owl">'+f.label+'</div></div>').join('<span class="arr">→</span>');
+    document.getElementById('ourWeekend').innerHTML='<div class="ourwk">'+cells+'</div><p class="small muted" style="text-align:center;margin:8px 0 0">Memorize the field order</p>';
+  }
+}
+
+// ---- VENUE ----
+// Per-complex official field layouts (SCUFC publishes one per complex).
+// Using the Ballentine map for a team playing elsewhere would be wrong.
+var CLUB_FACILITIES_URL='https://www.southcarolinaunitedfc.com/facilities';
+function complexMapFor(v){ return COMPLEX_MAPS[(v&&v.name)||'']||''; }
+function complexMapLabel(v){
+  var nm=(v&&v.name)||'';
+  if(!COMPLEX_MAPS[nm]) return (nm? nm+' has no published field layout - this opens the SCUFC facilities page' : 'Field info');
+  return COMPLEX_MAP_LABELS[nm]||(nm+' layout');
+}
+function complexMapBtnText(v){
+  return COMPLEX_MAPS[(v&&v.name)||''] ? 'Field Map' : 'Field Info';
+}
+function complexMapsFallbackUrl(){ return CLUB_FACILITIES_URL; }
+var COMPLEX_MAP_LABELS={
+  'Ballentine Park Complex':'Official Ballentine Park layout, 2025 edition (latest published)',
+  'Polo Road Park':'Official Polo Road Park layout, 2026 edition',
+  'SCUFC West Soccer Complex':'Official SCUFC West layout',
+  'Southeastern Freight Lines Soccer Center':'Official Southeastern Freight Lines layout',
+  'SV Presbyterian Church Fields':'Official SV Presbyterian fields layout'
+};
+var COMPLEX_MAPS={
+  'Ballentine Park Complex':'https://irp.cdn-website.com/44ba685a/files/uploaded/Ballentine_Park_field_layout_2025.pdf',
+  'SCUFC West Soccer Complex':'https://irp.cdn-website.com/44ba685a/files/uploaded/SCUFC%20West%20all%2011v11AB%20practice.pdf',
+  'Polo Road Park':'https://irp.cdn-website.com/44ba685a/files/uploaded/Polo+Road+field+layout+2026-0124803d.pdf',
+  'Southeastern Freight Lines Soccer Center':'https://irp.cdn-website.com/44ba685a/files/uploaded/SEFL%20tournament%20all%2011v11.pdf',
+  'SV Presbyterian Church Fields':'https://irp.cdn-website.com/44ba685a/files/uploaded/sv%20church%20regular%20layout.pdf'
+};
+function renderVenue(){
+  const v=TOURNAMENT.venue;
+  // Never imply a venue the tournament has not assigned yet — naming a single
+  // complex here would send families to the wrong place.
+  if(v.assigned===false){
+    const list=(v.complexes||[]).map(function(c){
+      return '<div style="padding:9px 0;border-top:1px solid var(--line)"><div style="font-weight:700;font-size:13.5px">'+c.name+'</div><div class="muted small">'+c.address+'</div></div>';
+    }).join('');
+    document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--amber)">'
+      +'<div class="label" style="color:var(--amber)">Venue</div>'
+      +'<div style="font-size:17px;font-weight:800;margin:3px 0 6px">Complex not yet assigned</div>'
+      +'<p class="muted small" style="margin:0;line-height:1.55">The Carolina Cup is played across five SCUFC complexes in the Columbia / Irmo area. Our team\'s complex and field are confirmed when the schedule posts on <b>September 26</b>.</p>'
+      +'<div style="margin-top:10px">'+list+'</div>'
+      +'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+(v.complexListUrl||'https://www.southcarolinaunitedfc.com/facilities')+'" target="_blank" rel="noopener">Complex addresses &mdash; SCUFC &rsaquo;</a>'
+      +'</div>';
+    document.getElementById('fieldsCard').innerHTML='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">Field and complex assignments are published with the schedule on September 26.</p></div>';
+    const amen0=(v.amenities||[]).map(function(a){return '<div class="amenity">'+a+'</div>';}).join('');
+    document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="label" style="margin-bottom:6px">Parking &amp; Amenities</div><p class="small" style="margin:0 0 10px;line-height:1.55">'+v.parking+'</p><div class="amenities">'+amen0+'</div><p class="small muted" style="margin:12px 0 0">'+v.bring+'</p></div>';
+    return;
+  }
+  document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--su)"><div class="label">'+v.name+'</div><div style="font-size:16px;font-weight:700;margin:2px 0 2px">'+v.address+'</div><div class="muted" style="margin-bottom:12px">'+v.city+'</div><a class="btn" style="flex-direction:row;font-size:14px;gap:8px" href="'+v.mapsUrl+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+((v.assigned===false)?'<div style="margin-top:12px;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12.5px;font-weight:700;color:var(--amber);line-height:1.5">Complex not yet assigned. The Carolina Cup is played across five SCUFC complexes — ours is confirmed when the schedule posts on Sep 26.</div><div style="margin-top:8px"><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="font-size:12px;font-weight:800;color:var(--link)">Tournament info (SincSports) &rsaquo;</a></div></div>':'')+'</div>';
+  // fields grid — only render once fields are actually assigned by the tournament
+  const hasFields=(v.fieldCount>0 && v.ourFields && v.ourFields.length>0);
+  let grid='';
+  if(hasFields){
+  grid='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">';
+  for(let i=1;i<=v.fieldCount;i++){
+    const our=v.ourFields.find(f=>f.f===i);
+    if(our) grid+='<div style="aspect-ratio:4/3;border-radius:10px;background:var(--su);border:3px solid var(--su-dark);box-shadow:0 2px 8px rgba(0,85,164,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:#fff;line-height:1.1">'+i+'<span style="font-size:8px;font-weight:700;opacity:.9;letter-spacing:.3px">'+our.label+'</span></div>';
+    else grid+='<div style="aspect-ratio:4/3;border-radius:10px;background:var(--bg);border:2px solid transparent;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#c3c9d1">'+i+'</div>';
+  }
+  grid+='</div><div class="ourwk" style="margin-top:14px">';
+  grid+=v.ourFields.map(f=>'<div><div class="ow num">'+f.f+'</div><div class="owl">'+f.label+'</div></div>').join('<span class="arr">→</span>');
+  grid+='</div><p class="small" style="margin:10px 0 0;text-align:center;color:var(--su);font-weight:800;letter-spacing:.5px">'+v.ourFields.map(f=>f.f).join(' → ')+'</p>';
+  grid+='<a class="btn ghost" style="margin-top:10px;flex-direction:row;gap:7px" href="'+(COMPLEX_MAPS[v.name]||v.fieldMapUrl)+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>Official field map</a>';
+  } else {
+    var fmsg=(v.assigned===false)
+      ? 'Field and complex assignments are published with the schedule on September 26.'
+      : 'Field numbers for our games are on the Schedule tab.';
+    var fmap=COMPLEX_MAPS[v.name]||'';
+    var fLabel=(COMPLEX_MAP_LABELS[v.name]||((v.name||'Complex')+' layout'));
+    var fno=(!fmap && v.name)?'<p class="small muted" style="margin:8px 0 0">'+v.name+' is a school site, not an SCUFC complex, so the club publishes no field layout for it. The field labels on the Schedule tab match the signs on site.</p><a class="btn ghost" style="margin-top:10px;flex-direction:row;gap:7px" href="'+CLUB_FACILITIES_URL+'" target="_blank" rel="noopener">SCUFC facilities page</a>':'';
+grid='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">'+fmsg+'</p>'+(fmap?'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+fmap+'" target="_blank" rel="noopener">'+fLabel+' (PDF)</a>':'')+fno+'</div>';
+  }
+  document.getElementById('fieldsCard').innerHTML=grid;
+  // amenities
+  const amen=v.amenities.map(a=>'<div class="amenity"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>'+a+'</div>').join('');
+  document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="tap"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h16M5 20v-7M19 20v-7M5 13V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/></svg></span><div class="tt"><div class="tl">Parking</div><div class="ts">'+v.parking+'</div></div></div><div class="amenities" style="margin-top:12px">'+amen+'</div><p class="small muted" style="margin:12px 0 0">'+v.bring+'</p></div>';
+}
+
+// ---- MORE: break, nearby, contacts, rules, changes ----
+function renderBreak(){
+  var BP=TOURNAMENT.breakPlan||{};
+  if(!(BP.steps||[]).length){ var b0=document.getElementById('breakSection'); if(b0) b0.innerHTML=''; return; }
+  const b=TOURNAMENT.breakPlan;if(!b)return;
+  const steps=(BP.steps||[]).map(s=>'<div class="tlstep'+(s.end?'':'')+'"><div class="tt">'+s.label+' <span class="tk num">'+s.time+'</span></div><div class="ts">'+s.note+'</div></div>').join('');
+  document.getElementById('breakSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'+b.title+'</div><div class="card"><p class="small muted" style="margin:0 0 8px">'+b.intro+'</p><div class="tl">'+steps+'</div></div>';
+}
+function renderNearby(){
+  var NB=TOURNAMENT.nearby||{};
+  if(!(NB.groups||[]).length){ var n0=document.getElementById('nearbySection'); if(n0) n0.innerHTML=''; return; }
+  const nbNote=TOURNAMENT.nearby.checked
+    ? '<p class="small muted" style="margin:0 0 10px">Measured from this team&rsquo;s own complex address on '
+      +TOURNAMENT.nearby.checked+' with the Google Routes API - door-to-door driving miles, not estimates.</p>'
+    : '';
+  const groups=(NB.groups||[]).map(g=>'<div class="card"><div class="label" style="margin-bottom:4px">'+g.label+'</div>'+g.items.map(i=>'<a class="tap" href="'+i.url+'" '+(i.url.indexOf('tel:')===0?'':'target="_blank" rel="noopener"')+'><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16M4 19h16M4 11v4a5 5 0 0 0 8 3M4 11V8l4-4h9l3 3v4"/></svg></span><div class="tt"><div class="tl">'+i.name+'</div><div class="ts">'+i.note+'</div></div><span class="dist">'+i.dist+'<div class="d">'+i.sub+'</div></span></a>').join('')+'</div>').join('');
+  document.getElementById('nearbySection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16M4 19h16M4 11v4a5 5 0 0 0 8 3M4 11V8l4-4h9l3 3v4"/></svg>Nearby · During the Break</div>'+nbNote+groups;
+}
+function renderContacts(){
+  const rows=TOURNAMENT.contacts.map(c=>'<div class="contact"><span class="ci">'+c.initial+'</span><div class="cn"><div class="cnm">'+c.name+'</div><div class="crl">'+c.role+'</div>'+(c.email?'<div class="cmail"><a href="mailto:'+c.email+'">'+c.email+'</a></div>':'')+'</div>'+(c.phone?'<a href="tel:'+c.phone+'">Call</a>':(c.url?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':''))+'</div>').join('');
+  document.getElementById('contactsSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Need Help?</div><div class="card" style="padding:6px 14px">'+rows+'</div>';
+}
+function renderRules(){
+  const R=TOURNAMENT.rules||{}; const quick=(R.quick||[]).map(q=>'<div class="qr"><div class="qrv num">'+q.v+'</div><div class="qrl">'+q.l+'</div></div>').join('');
+  const full=(R.full||[]).map(r=>'<div class="ruleline"><b>'+r.k+'</b><span>'+r.v+'</span></div>').join('');
+  const tb=(R.tiebreakers||[]).length
+    ? (R.tiebreakers||[]).map((t,i)=>'<div class="ruleline"><b>'+(i+1)+'</b><span>'+t+'</span></div>').join('')
+    : '<div class="ruleline"><b>&mdash;</b><span>'+(TOURNAMENT.rules.tiebreakersPending||'Not published by the tournament yet.')+'</span></div>';
+  const tbNote=TOURNAMENT.rules.tiebreakProcess
+    ? '<div style="margin:12px 0 0;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12px;font-weight:700;color:var(--amber);line-height:1.55">What the event does say</div><div style="font-size:12.5px;color:var(--text);line-height:1.6;margin-top:4px">'+TOURNAMENT.rules.tiebreakProcess+'</div></div>'
+    : '';
+  document.getElementById('rulesSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 21 8 9l4-6 4 6z"/></svg>Parents Should Know</div><div class="card"><div class="quickrules">'+quick+'</div><details class="acc"><summary>View all tournament rules <span>＋</span></summary><div class="accbody">'+full+'</div></details><details class="acc"><summary>Tiebreakers — in order <span>＋</span></summary><div class="accbody">'+tb+'</div></details>'+tbNote+'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener">Tournament info &amp; rules (SincSports)</a>'+((TOURNAMENT.rules.standingsUrl)?'<a class="btn ghost" style="margin-top:8px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.standingsUrl+'" target="_blank" rel="noopener">Live standings &amp; tiebreak page</a>':'')+((TOURNAMENT.rules.docsUrl)?'<a class="btn ghost" style="margin-top:8px;flex-direction:row;gap:7px" href="'+TOURNAMENT.rules.docsUrl+'" target="_blank" rel="noopener">Team documents &mdash; rules (SincSports login)</a>':'')+'</div>';
+}
+function renderChanges(){
+  const rows=(TOURNAMENT.changes||[]).map(c=>'<p style="margin:0 0 6px"><b>'+c.k+':</b> '+c.v+'</p>').join('');
+  document.getElementById('changesSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>What Changed · '+TOURNAMENT.tournament.updatesUpdated+'</div><div class="card" style="font-size:13px">'+rows+'</div>'
+    +'<div class="section-title" style="margin-top:18px"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Where This Comes From</div>'
+    +'<div class="card" style="font-size:12.5px;line-height:1.65">'
+    +'<p style="margin:0 0 10px"><b>Tournament facts</b> &mdash; dates, formats, fees, check-in rules, contacts and complexes &mdash; are taken from the official SCUFC tournament page.<br><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">soccer.sincsports.com &mdash; Carolina Cup &rsaquo;</a></p>'
+    +'<p style="margin:0 0 10px"><b>Complex addresses</b> from South Carolina United FC.<br><a href="https://www.southcarolinaunitedfc.com/facilities" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">southcarolinaunitedfc.com/facilities &rsaquo;</a></p>'
+    +'<p style="margin:0 0 10px"><b>Hotel rates</b> were checked live for Oct 2&ndash;4 (2 adults, 1 child) and change daily &mdash; confirm before booking. <b>Drive distances</b> were measured by routing against the actual venue address, not copied from a tournament portal.</p>'
+    +'<p style="margin:0"><b>Weather</b> is based on ten years of recorded early-October observations for Columbia, SC (Open-Meteo archive). <b>Nearby amenities</b> come from OpenStreetMap. Anything not sourced above is parent-manager research, not official tournament information.</p>'
+    +'</div>';
+}
+
+// ---- FULL GUIDE LINK (per team) ----
+var TEAM_LABEL_FOR_GUIDE='';
+function renderFullGuide(){
+  var fg=document.getElementById('fullGuideLink'); if(!fg) return;
+  fg.href=TOURNAMENT.tournament.fullGuideUrl||'#';
+  document.getElementById('fg1').textContent='Full '+(TEAM_LABEL_FOR_GUIDE||TOURNAMENT.tournament.name)+' Guide';
+  document.getElementById('fg2').textContent='Everything in one detailed document — hotel, travel scenarios, full rules, itinerary.';
+}
+renderFullGuide();
+
+// ---- PACKING (template-driven groups with kind badges) ----
+const KIND_LABEL={always:'Always',weather:'Weather',tournament:'Tournament'};
+const LS='gd-pack-'+TOURNAMENT.tournament.name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+document.getElementById('packAlert').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span><b>'+TOURNAMENT.packing.alert+'</b></span>';
+function loadPack(){try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}}
+function savePack(o){localStorage.setItem(LS,JSON.stringify(o));}
+function renderPack(){
+  const pack=loadPack();const wrap=document.getElementById('packLists');
+  const LISTS=(TOURNAMENT.packing&&TOURNAMENT.packing.groups)||[];
+  let html='',total=0,done=0;
+  LISTS.forEach(grp=>{
+    html+='<div class="chkgrp"><h4>'+grp.title+' <span style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">'+(KIND_LABEL[grp.kind]||grp.kind)+'</span></h4>';
+    grp.items.forEach(([name,sub])=>{
+      const id=grp.title+'::'+name;const checked=!!pack[id];if(checked)done++;total++;
+      html+='<div class="chk '+(checked?'done':'')+'" onclick="tog(\''+id.replace(/'/g,"\\'")+'\',this)"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="chkname">'+name+(sub?' <span class="muted small">('+sub+')</span>':'')+'</span></div>';
+    });
+    html+='</div>';
+  });
+  wrap.innerHTML=html;
+  document.getElementById('packCount').textContent=done+' of '+total;
+  document.getElementById('packBar').style.width=(total?Math.round(done/total*100):0)+'%';
+}
+function tog(id,el){const pack=loadPack();pack[id]=!pack[id];savePack(pack);el.classList.toggle('done',!!pack[id]);renderPack();}
+function resetPack(){if(confirm('Reset the packing checklist?')){localStorage.removeItem(LS);renderPack();}}
+
+
+// ---- HOTELS (from data.json) ----
+function renderFood(){
+  var el=document.getElementById('foodSection'); if(!el) return;
+  var f=TOURNAMENT.food||[]; if(!f.length) return;
+  var rows=f.map(function(x,i){
+    var lnk=(x.mapsUrl||'');
+    return '<div class="ruleline"><b>'+(i+1)+'</b><span><strong>'
+      +(lnk? ('<a href="'+lnk+'" target="_blank" rel="noopener" style="color:var(--link);text-decoration:none">'+x.name+'</a>') : x.name)
+      +'</strong>'
+      +'<span class="muted"> \u00b7 '+x.kind+'</span>'
+      +'<div class="muted" style="font-size:12.5px;margin-top:2px">'+x.mi+' mi \u00b7 ~'+x.min+' min from '+TOURNAMENT.foodRankedFor
+      +(x.rating? (' \u00b7 '+x.rating+'\u2605 ('+x.reviews+' reviews)'):'')+'</div>'
+      +(x.why? ('<div style="font-size:12.5px;margin-top:3px">'+x.why+'</div>'):'')
+      +(x.addr? ('<div class="muted" style="font-size:12px;margin-top:3px">'+x.addr+'</div>'):'')
+      +(lnk? ('<div style="margin-top:5px"><a href="'+lnk+'" target="_blank" rel="noopener" style="font-size:12.5px;font-weight:700;color:var(--link)">Directions &rsaquo;</a></div>'):'')
+      +'</span></div>';
+  }).join('');
+  el.innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v7a2 2 0 0 0 4 0V3M7 10v11M17 3c-1.5 2-2 3.5-2 5.5 0 1.5.7 2.5 2 2.5v10"/></svg>Where to Eat</div>'
+    +'<div class="card">'
+    +(TOURNAMENT.foodNote? ('<div class="muted" style="margin-bottom:10px;font-size:13px;line-height:1.55">'+TOURNAMENT.foodNote+'</div>'):'')
+    +rows
+    +'<div class="muted" style="margin-top:10px;font-size:12px;line-height:1.5">Five restaurants for '+TOURNAMENT.foodRankedFor
+    +', each distance measured to that complex with the Google Routes API and checked '+TOURNAMENT.foodUpdated+'. Ratings are Google&#39;s at the time of checking.</div>'
+    +'</div>';
+}
+
+function renderHotels(){
+  var el=document.getElementById('hotelsSection'); if(!el) return;
+  var HT=TOURNAMENT.hotels||{}; var _picks=HT.official||[];
+  if(!_picks.length){ el.innerHTML='<div class="card"><p class="small muted" style="margin:0">The host has not published its hotel block yet. Nothing is recommended until it does.</p></div>'; return; }
+  var picks=TOURNAMENT.hotels.filter(function(h){return h.tier==='pick';});
+  var alts =TOURNAMENT.hotels.filter(function(h){return h.tier==='alt';});
+  function card(h){
+    return '<div style="padding:12px 14px;border-bottom:1px solid var(--line)">'
+      + '<div style="font-weight:700;font-size:14px">'+h.name+'</div>'
+      + '<div class="muted small">'+(h.chain||'')+(h.rate?' · '+h.rate:'')+'</div>'
+      + '<div style="color:var(--su);font-weight:700;font-size:12.5px;margin-top:3px">Drive to venue: '+(h.drive||'—')+'</div>'
+      + (h.best?'<div style="color:var(--green);font-weight:700;font-size:12px;margin-top:3px">Best value</div>':'')
+      + (h.note?'<div class="muted small" style="margin-top:3px">'+h.note+'</div>':'')
+      + '</div>';
+  }
+  var html='<div class="card" style="padding:0;overflow:hidden">';
+  html+='<div style="padding:12px 14px;background:var(--amber-bg);color:var(--amber);font-size:12px;font-weight:700">'+(TOURNAMENT.hotelsUpdated||'Rates change daily')+' — confirm the current price before booking.</div>';
+  html+=picks.map(card).join('');
+  if(alts.length){ html+='<div style="padding:10px 14px;background:var(--bg);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)">Also available</div>'+alts.map(card).join(''); }
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+// ---- INIT + LIVE TICK ----
+function renderAll(){
+renderVenue();renderBreak();renderNearby();renderContacts();renderRules();renderChanges();renderWeather();renderPack();renderHotels(); renderFood();renderFullGuide();
+}
+renderAll();
+// ---- TEAM SELECTION ----
+var ACTIVE_TEAM=null;
+function teamFromUrl(){ try{ var m=location.search.match(/[?&]team=([^&]+)/); return m?decodeURIComponent(m[1]):null; }catch(e){ return null; } }
+function pickTeam(shared){
+  var list=(shared&&shared.teams)||[];
+  var slug=teamFromUrl();
+  if(!slug){ try{ slug=localStorage.getItem('cc-team'); }catch(e){} }
+  if(!slug||!list.some(function(t){return t.slug===slug;})) slug=(shared&&shared.defaultTeam)||(list[0]&&list[0].slug);
+  return slug;
+}
+function renderTeamPicker(shared){
+  var el=document.getElementById('teamPicker'); if(!el) return;
+  var list=(shared&&shared.teams)||[];
+  if(list.length<2){ el.innerHTML=''; return; }
+  el.innerHTML='<span style="font-size:10px;font-weight:800;letter-spacing:.8px;color:#cfe0f5;width:100%;text-transform:uppercase;margin-bottom:2px">Select your team</span>'
+    +list.map(function(t){
+      return '<a class="tpick'+(t.slug===ACTIVE_TEAM?' on':'')+'" href="?team='+encodeURIComponent(t.slug)+'&t='+encodeURIComponent((new URLSearchParams(location.search)).get('t')||'')+'">'+(t.label||t.shortName||t.name)+'</a>';
+    }).join('');
+}
+
+// Load shared data + the selected team, overriding the fallback above.
+(async function(){
+  try{
+    // Which tournament? ?t= > stored > registry default. Legacy data.json is the fallback.
+    var TSLUG=null;
+    try{ var qs=new URLSearchParams(location.search); TSLUG=qs.get('t'); }catch(e){}
+    var reg=null;
+    try{ reg=await (await fetch('tournaments.json?_='+Date.now())).json(); }catch(e){}
+    var valid=(reg&&reg.tournaments)?reg.tournaments.some(function(t){return t.slug===TSLUG;}):false;
+    if(!valid){
+      try{ TSLUG=localStorage.getItem('tj_tournament_v1'); }catch(e){}
+      valid=(reg&&reg.tournaments)?reg.tournaments.some(function(t){return t.slug===TSLUG;}):false;
+    }
+    if(!valid) TSLUG=(reg&&reg.defaultTournament)||null;
+    if(TSLUG){ try{ localStorage.setItem('tj_tournament_v1',TSLUG); }catch(e){} }
+    var dataUrl=TSLUG?('tournaments/'+TSLUG+'.json'):'data.json';
+    var shared=await (await fetch(dataUrl+'?_='+Date.now())).json();
+    if(reg&&reg.tournaments&&!shared.teams){
+      shared.teams=reg.teams||[];
+    }
+    // the team registry lives beside the app as teams.json
+    try{ var tr=await (await fetch('teams.json?_='+Date.now())).json();
+         if(tr&&tr.teams&&!shared.teams) shared.teams=tr.teams;
+         if(tr&&tr.defaultTeam&&!shared.defaultTeam) shared.defaultTeam=tr.defaultTeam; }catch(e){}
+    var slug=pickTeam(shared);
+    var team={};
+    if(slug){ try{ team=await (await fetch('teams/'+slug+'.json?_='+Date.now())).json(); }catch(e2){} }
+    ACTIVE_TEAM=slug;
+    try{ localStorage.setItem('cc-team',slug); }catch(e){}
+    adaptData(shared, team);
+    renderHero(); renderTeamPicker(shared); renderAll();
+    lastStateKey=''; refreshAll();
+  }catch(e){ /* keep fallback */ }
+})();
+lastStateKey=''; // force initial full render (schedule, countdown, next-match, context, weekend status)
+refreshAll();
+// Load the live forecast once on load; then refresh whenever the tab regains focus so
+// new daily reports appear without a manual reload.
+loadWeather();
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) loadWeather(); });
+// Countdown ticks every second; full state (Next Match / context / schedule highlight /
+// weekend status) re-resolves every second too, but only re-renders when the resolved
+// state actually changes (cheap + consistent).
+setInterval(refreshAll,1000);
+</script>
+<script>
+// Site-wide offline support — covers this page, the hub and the PDF.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
 </script>
 </body>
 </html>
