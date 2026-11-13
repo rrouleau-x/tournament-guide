@@ -16,7 +16,8 @@ h1{font-size:23px;margin:0 0 6px;color:#1d1d1f;letter-spacing:-.4px}
 .chip{flex:0 0 auto;padding:9px 13px;border-radius:999px;border:1px solid #e5e5ea;background:#fff;color:#1d1d1f;
   font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .chip.on{background:#0055A4;border-color:#0055A4;color:#fff}
-select{width:100%;font-size:15px;padding:13px 12px;border-radius:11px;border:1px solid #d1d1d6;background:#fff;color:#1d1d1f;
+select{width:100%;font-size:15px;padding:13px 40px 13px 12px;border-radius:11px;border:1px solid #d1d1d6;background:#fff;color:#1d1d1f;
+  text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
   appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%238e8e93' stroke-width='2' fill='none'/></svg>");
   background-repeat:no-repeat;background-position:right 14px center}
 .go{display:block;text-align:center;background:#0055A4;color:#fff;text-decoration:none;padding:15px;border-radius:11px;
@@ -25,7 +26,9 @@ a.card{display:block;background:#fff;border-radius:14px;padding:14px 16px;margin
 .date{font-size:11.5px;font-weight:700;color:#0055A4;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
 .nm{font-size:15.5px;font-weight:700;color:#1d1d1f;line-height:1.3;margin-bottom:2px}
 .city{font-size:13px;color:#6e6e73}
-.meta{font-size:11.5px;color:#aeaeb2;margin-top:6px}
+.meta{font-size:11.5px;color:#6e6e73;margin-top:6px}
+.chipwrap{position:relative}
+.chipwrap:after{content:'';position:absolute;top:0;right:0;width:26px;height:100%;background:linear-gradient(90deg,rgba(255,255,255,0),#fff);pointer-events:none}
 .note{font-size:11.5px;color:#8e8e93;line-height:1.6;margin-top:16px}
 </style></head><body><div class="wrap">
 <span class="badge">Spring 2027</span>
@@ -34,55 +37,55 @@ a.card{display:block;background:#fff;border-radius:14px;padding:14px 16px;margin
 
 <div class="panel">
   <p class="lbl">1 · Your team</p>
-  <div class="chips" id="chips">
+  <div class="chipwrap"><div class="chips" id="chips">
     <button class="chip" data-team="u9-premier">U9 Premier</button>
     <button class="chip" data-team="u9-blue">U9 Blue</button>
     <button class="chip" data-team="u10-premier">U10 Premier</button>
     <button class="chip" data-team="u10-blue">U10 Blue</button>
-  </div>
+  </div></div>
   <p class="lbl" style="margin-top:16px">2 · Tournament</p>
-  <select id="tn"><option value="sporting-jax-winter-invitational-2027">Saturday January 23 – Sunday January 24, 2027 — Sporting Jax Winter Invitational (Jacksonville / St Johns County, FL)</option><option value="usa-jfc-jekyll-festival-2027">Saturday January 30, 2027 — 1 Day Festival — United Soccer Alliance &amp; JFC (Jekyll Island, GA)</option><option value="sporting-jax-festival-2027">Saturday February 27, 2027 — 1 Day Festival — Sporting Jax (Jacksonville, FL)</option><option value="augusta-arsenal-festival-2027">Saturday March 20, 2027 — 1 Day Festival — Augusta Arsenal (Augusta, GA)</option><option value="fesa-florida-state-invitational-2027">Saturday April 3 – Sunday April 4, 2027 — FESA Florida State Invitational (OPTIONAL) (Tallahassee, FL)</option><option value="macon-afc-lightning-festival-2027">Saturday April 10, 2027 — 1 Day Festival — Macon SC &amp; AFC Lightning (Macon, GA)</option><option value="coast-fa-spring-classic-2027">Saturday April 24 – Sunday April 25, 2027 — Conway Medical Center Coast Spring Classic (Myrtle Beach, SC)</option><option value="bvbia-dublin-festival-2027">Saturday May 8, 2027 — 1 Day Festival — BVBIA (Dublin, GA)</option></select>
+  <select id="tn"><option value="sporting-jax-winter-invitational-2027">Jan 23–24, 2027 · Sporting Jax Winter Invitational</option><option value="usa-jfc-jekyll-festival-2027">Jan 30, 2027 · 1 Day Festival — United Soccer Alliance &amp; JFC</option><option value="sporting-jax-festival-2027">Feb 27, 2027 · 1 Day Festival — Sporting Jax</option><option value="augusta-arsenal-festival-2027">Mar 20, 2027 · 1 Day Festival — Augusta Arsenal</option><option value="fesa-florida-state-invitational-2027">Apr 3–4, 2027 · FESA Florida State Invitational (OPTIONAL)</option><option value="macon-afc-lightning-festival-2027">Apr 10, 2027 · 1 Day Festival — Macon SC &amp; AFC Lightning</option><option value="coast-fa-spring-classic-2027">Apr 24–25, 2027 · Conway Medical Center Coast Spring Classic</option><option value="bvbia-dublin-festival-2027">May 8, 2027 · 1 Day Festival — BVBIA</option></select>
   <a class="go" id="go" href="../app/?t=sporting-jax-winter-invitational-2027&team=u9-premier">Open the guide →</a>
 </div>
 
 <p class="lbl" style="padding-left:4px">All tournaments</p>
 <a class="card" data-slug="sporting-jax-winter-invitational-2027" href="../app/?t=sporting-jax-winter-invitational-2027&team=u9-premier">
-  <div class="date">Saturday January 23 – Sunday January 24, 2027</div>
+  <div class="date">Jan 23–24, 2027</div>
   <div class="nm">Sporting Jax Winter Invitational</div>
   <div class="city">Jacksonville / St Johns County, FL</div>
   <div class="meta">Official facts verified</div>
 </a><a class="card" data-slug="usa-jfc-jekyll-festival-2027" href="../app/?t=usa-jfc-jekyll-festival-2027&team=u9-premier">
-  <div class="date">Saturday January 30, 2027</div>
+  <div class="date">Jan 30, 2027</div>
   <div class="nm">1 Day Festival — United Soccer Alliance &amp; JFC</div>
   <div class="city">Jekyll Island, GA</div>
   <div class="meta">Structure ready — host details pending</div>
 </a><a class="card" data-slug="sporting-jax-festival-2027" href="../app/?t=sporting-jax-festival-2027&team=u9-premier">
-  <div class="date">Saturday February 27, 2027</div>
+  <div class="date">Feb 27, 2027</div>
   <div class="nm">1 Day Festival — Sporting Jax</div>
   <div class="city">Jacksonville, FL</div>
   <div class="meta">Structure ready — host details pending</div>
 </a><a class="card" data-slug="augusta-arsenal-festival-2027" href="../app/?t=augusta-arsenal-festival-2027&team=u9-premier">
-  <div class="date">Saturday March 20, 2027</div>
+  <div class="date">Mar 20, 2027</div>
   <div class="nm">1 Day Festival — Augusta Arsenal</div>
   <div class="city">Augusta, GA</div>
   <div class="meta">Structure ready — host details pending</div>
 </a><a class="card" data-slug="fesa-florida-state-invitational-2027" href="../app/?t=fesa-florida-state-invitational-2027&team=u9-premier">
-  <div class="date">Saturday April 3 – Sunday April 4, 2027</div>
+  <div class="date">Apr 3–4, 2027</div>
   <div class="nm">FESA Florida State Invitational (OPTIONAL)</div>
   <div class="city">Tallahassee, FL</div>
   <div class="meta">Structure ready — host details pending</div>
 </a><a class="card" data-slug="macon-afc-lightning-festival-2027" href="../app/?t=macon-afc-lightning-festival-2027&team=u9-premier">
-  <div class="date">Saturday April 10, 2027</div>
+  <div class="date">Apr 10, 2027</div>
   <div class="nm">1 Day Festival — Macon SC &amp; AFC Lightning</div>
   <div class="city">Macon, GA</div>
   <div class="meta">Structure ready — host details pending</div>
 </a><a class="card" data-slug="coast-fa-spring-classic-2027" href="../app/?t=coast-fa-spring-classic-2027&team=u9-premier">
-  <div class="date">Saturday April 24 – Sunday April 25, 2027</div>
+  <div class="date">Apr 24–25, 2027</div>
   <div class="nm">Conway Medical Center Coast Spring Classic</div>
   <div class="city">Myrtle Beach, SC</div>
   <div class="meta">Official facts verified</div>
 </a><a class="card" data-slug="bvbia-dublin-festival-2027" href="../app/?t=bvbia-dublin-festival-2027&team=u9-premier">
-  <div class="date">Saturday May 8, 2027</div>
+  <div class="date">May 8, 2027</div>
   <div class="nm">1 Day Festival — BVBIA</div>
   <div class="city">Dublin, GA</div>
   <div class="meta">Structure ready — host details pending</div>
