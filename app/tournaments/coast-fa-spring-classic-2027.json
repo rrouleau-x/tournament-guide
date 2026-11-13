@@ -8,8 +8,8 @@
     "cleatsLabel": "Cleats"
   },
   "tournament": {
-    "name": "Coast FA Spring Classic",
-    "shortName": "Coast FA Classic",
+    "name": "Conway Medical Center Coast Spring Classic",
+    "shortName": "Coast Spring Classic",
     "organizer": "Coast FA",
     "dates": {
       "start": "2027-04-24",
@@ -26,19 +26,56 @@
     "logo": ""
   },
   "venue": {
-    "name": "Venue TBD — Myrtle Beach, SC",
-    "address": "Myrtle Beach, SC (venue not yet announced)"
+    "name": "Market Commons Complex / Socastee Park (7v7)",
+    "address": "Myrtle Beach, SC (7v7 fields; 9v9 at North Myrtle Beach Park Sports Park, subject to change)"
   },
   "games": [],
   "scheduleStatus": "pending",
-  "scheduleExpected": "Club calendar: '2 day Tournament', Myrtle Beach SC. 2-day event, 2027-04-24–2027-04-25. Tournament schedule not yet published — dates are the club's calendar placeholder, not a confirmed bracket.",
+  "scheduleExpected": "Official: 19th Annual Coast Spring Classic, Apr 24-25 2027, Myrtle Beach SC. U8-U12 boys & girls, Rec/Challenge/Classic/Premier. We play 7v7 (U9/U10) at Market Commons Complex and Socastee Park. Registration closes midnight Apr 12; divisions posted Apr 14; schedules posted Apr 17. Entry $750 (7v7) / $850 (9v9), online check-in only.",
   "hotels": {
     "stayToPlay": false,
     "official": [],
     "nonOfficial": []
   },
   "weather": {},
-  "rules": {},
+  "rules": {
+    "fullLink": "https://soccer.sincsports.com/ttcontent.aspx?tid=COASTSP8&tab=1",
+    "keyRules": [
+      {
+        "label": "Dates",
+        "value": "April 24-25, 2027"
+      },
+      {
+        "label": "Ages",
+        "value": "U8-U12 boys and girls; Rec, Challenge, Classic, Premier"
+      },
+      {
+        "label": "Format (U9/U10)",
+        "value": "7v7 at Market Commons Complex and Socastee Park"
+      },
+      {
+        "label": "Entry fee",
+        "value": "$750 for 7v7 · $850 for 9v9"
+      },
+      {
+        "label": "Registration closes",
+        "value": "Midnight April 12, 2027"
+      },
+      {
+        "label": "Divisions posted",
+        "value": "April 14, 2027"
+      },
+      {
+        "label": "Schedules posted",
+        "value": "April 17, 2027"
+      },
+      {
+        "label": "Check-in",
+        "value": "Online check-in only"
+      }
+    ],
+    "tiebreakers": []
+  },
   "updates": [],
   "contacts": {
     "manager": {
