@@ -257,6 +257,13 @@ body.is-offline .offlineBar{display:block}
 .need li.chk.done .chkname{text-decoration:line-through}
 button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px solid var(--line);font:inherit;font-size:14px;color:inherit;text-align:left;justify-content:flex-start}
 .empty{font-size:13px;color:var(--muted);margin:4px 0 8px;line-height:1.55}
+.liveflag{font-size:13px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--red);margin:5px 0 0}
+.arrive-strong{margin:12px 0 0;padding:10px 13px;background:var(--green-bg);border-radius:12px}
+.arrive-strong .label{font-size:10.5px;color:#146c34}
+.arrive-strong.late{background:var(--amber-bg)}
+.arrive-strong.late .label,.arrive-strong.late .at{color:var(--amber)}
+.arrive-strong .at{font-size:21px;font-weight:800;color:#146c34;letter-spacing:-.4px;line-height:1.2}
+.nextline{display:block;margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);text-decoration:none}
 .chk-stamp{font-size:11px;color:var(--muted);margin-top:10px;text-align:right;letter-spacing:.2px}
 
 </style>
@@ -777,7 +784,7 @@ function resolveTournamentState(t, now){
   if(currentMatch){
     phase='in-match';
     countdownTarget=currentMatch.end;
-    countdownLabel=currentMatch.label.toUpperCase()+' · TIME LEFT';
+    countdownLabel=currentMatch.label.toUpperCase()+' · EST. TIME REMAINING';
   } else if(nextMatch){
     if(travel&&now<travel.start){ phase='pre-tournament'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
     else if(travel&&!travel.opening&&now<new Date(travel.start.getTime()+24*3600000)){ phase='travel'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
@@ -837,7 +844,8 @@ function renderCountdown(state){
       lbl='TOURNAMENT STARTS '+state.countdownTarget.toLocaleDateString('en-US',{weekday:'long',timeZone:TZ}).toUpperCase();
     }
   }
-  setCountdown(lbl, state.countdownTarget?cdParts(state.countdownTarget-now):'');
+  const est=state.currentMatch?'<div style="width:100%;text-align:center;font-size:10.5px;color:#cfe0f5;opacity:.8;margin-top:2px">estimated from the published kickoff — not the referee&rsquo;s clock</div>':'';
+  setCountdown(lbl, state.countdownTarget?(cdParts(state.countdownTarget-now)+est):'');
 }
 
 // ---- CONTEXT + NEED-NOW (consumes resolver) ----
@@ -890,6 +898,15 @@ function refreshContext(state){
 }
 
 // ---- NEXT MATCH DASHBOARD (consumes the SAME resolver) ----
+// "7:15 AM" alone is not a moment in time - anchor it to the kickoff's own day.
+function arrivalAt(g){
+  var m=String((g&&g.arrival)||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if(!m||!g.start) return null;
+  var d=new Date(g.start.getTime()), h=parseInt(m[1],10), ap=(m[3]||'').toUpperCase();
+  if(ap==='PM'&&h!==12) h+=12; if(ap==='AM'&&h===12) h=0;
+  d.setHours(h,parseInt(m[2],10),0,0);
+  return d;
+}
 function setNowHead(t){ var h=document.getElementById('nextHead'); if(h) h.textContent=t; }
 const nextStatus=document.getElementById('nextStatus'),nextBody=document.getElementById('nextBody');
 function renderNextMatch(state){
@@ -918,26 +935,48 @@ function renderNextMatch(state){
     return;
   }
   const isLive=currentMatch&&currentMatch.id===g.id;
-  setNowHead(isLive?'Live Now':'Next Match');
+  setNowHead(isLive?'In Progress':'Next Match');
   const WXM=(TOURNAMENT.weather||{}).mini, FMAP=complexMapFor(venue)||complexMapsFallbackUrl();
-  nextStatus.textContent = isLive?'Happening Now':(g.arrivalStatus==='pending-coach'?'Awaiting arrival':'Confirmed');
+  // The blue bar above already says HAPPENING NOW; a third repeat wasted the badge.
+  // Progress through the day is what a parent standing at the field does not know.
+  // Count only the games that are actually scheduled: a potential final is not "of 4".
+  const realGames=TOURNAMENT.games.filter(function(x){return x.type!=='final';});
+  const gi=realGames.findIndex(function(x){return x.id===g.id;}), gtotal=realGames.length;
+  nextStatus.textContent = isLive
+    ? (gi>=0 ? ('Game '+(gi+1)+' of '+gtotal) : 'Final')
+    : (g.arrivalStatus==='pending-coach'?'Awaiting arrival':'Confirmed');
   nextStatus.className='status '+((isLive||g.arrivalStatus==='pending-coach')?'pend':'conf');
   const dayBg=isLive?'var(--red)':'var(--su)';
   nextBody.innerHTML=
     '<div class="day" style="color:'+(isLive?'var(--red)':'var(--su)')+'">'+g.dayLabel+'</div>'+
-    (isLive?'<div class="label" style="margin-top:6px">Kickoff</div>':'')+
-    '<div class="time num">'+g.time+'</div>'+
-    '<div class="vs">vs '+g.opponent+'</div>'+
+    (isLive
+      // The card head already reads IN PROGRESS and the bar above says HAPPENING NOW —
+      // a third banner was the repetition the reviewer flagged. Opponent becomes the focus.
+      ? '<div class="vs" style="font-size:25px;font-weight:800;margin:8px 0 1px">vs '+g.opponent+'</div>'+
+        '<div class="small muted">Kicked off '+g.time+'</div>'
+      : '<div class="time num">'+g.time+'</div>'+
+        '<div class="vs">vs '+g.opponent+'</div>'+
+        // Arrival is the question before kickoff, so it is stated next to the time in its own
+        // block, and disappears the moment play starts.
+        (g.arrival?(function(){
+          var a=arrivalAt(g), late=a&&state.now>a, mins=late?Math.round((state.now-a)/60000):0;
+          return '<div class="arrive-strong'+(late?' late':'')+'">'
+            +'<div class="label">'+(late?'Arrival time has passed':'Arrive by')+'</div>'
+            +'<div class="at num">'+g.arrival+'</div>'
+            +(late?'<div class="small" style="color:var(--amber);font-weight:700">'+mins+' min ago</div>'
+                  :(g.arrivalStatus==='pending-coach'?'<div class="small" style="color:var(--amber);font-weight:700">awaiting coach confirmation</div>':''))
+            +'</div>';
+        })():''))+
+    
     '<div class="meta-line"><span class="pill field">FIELD '+g.field+'</span>'+(g.home===true?'<span class="pill home">HOME</span>':g.home===false?'<span class="pill away">AWAY</span>':'')+'</div>'+
-    (g.arrival&&!isLive?'<div class="arrive"><span class="dot" style="width:9px;height:9px;background:'+(g.arrivalStatus==='pending-coach'?'var(--amber)':'var(--green)')+'"></span> Player arrival <b>'+g.arrival+'</b>'+(g.arrivalStatus==='pending-coach'?' <span class="pend">· awaiting coach confirmation</span>':'')+'</div>':'')+
     '<div class="arrive" style="border-top:none;margin-top:6px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venueLine(venue)+'</div>'+
     (WXM&&WXM.temp?'<div class="wx-mini"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg> '+[WXM.day+' '+WXM.temp,WXM.feels,WXM.storm].filter(Boolean).join(' · ')+'</span><a href="#wxFull" class="exp" data-wxopen>Weekend forecast ›</a></div>':'')+
     '<div class="btn-row">'+
       '<a class="btn" href="'+(venue.mapsUrl||'#venue')+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+
       (FMAP?'<a class="btn ghost" href="'+FMAP+'" target="_blank" rel="noopener" title="'+complexMapLabel(venue)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4 9a3 3 0 0 0 2.6 1.5h6.8A3 3 0 0 0 18 18l-4-9V3"/></svg>'+complexMapBtnText(venue)+'</a>':'')+
-      '<a class="btn ghost" href="https://playmetrics.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.4-.7L3 21l1.8-5.6A8.4 8.4 0 0 1 3 11.5a8.5 8.5 0 0 1 18 0z"/></svg>Message Team</a>'+
+      '<a class="btn ghost" href="https://playmetrics.com" target="_blank" rel="noopener" title="Opens PlayMetrics in your browser — team messages live there"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.4-.7L3 21l1.8-5.6A8.4 8.4 0 0 1 3 11.5a8.5 8.5 0 0 1 18 0z"/></svg>PlayMetrics</a>'+
     '</div>'+
-    (nextMatch&&nextMatch.id!==g.id?'<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)">Next: <b style="color:var(--su)">'+nextMatch.label+'</b> · '+nextMatch.time+' · Field '+nextMatch.field+'</div>':'')+
+    (nextMatch&&nextMatch.id!==g.id?'<a class="nextline" href="#schedule" data-goto="schedule">Next: <b style="color:var(--su)">'+nextMatch.label+'</b> · '+nextMatch.time+' · Field '+nextMatch.field+' ›</a>':'')+
     checkedStamp();
 }
 
