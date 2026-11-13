@@ -230,6 +230,8 @@
 .legendToggle{background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;padding:6px 14px 8px;width:100%;text-align:right}
 .offlineBar{display:none;background:var(--amber-bg,#fff6e5);color:#8a5a00;font-size:12.5px;font-weight:600;padding:8px 14px;text-align:center;border-bottom:1px solid var(--line)}
 body.is-offline .offlineBar{display:block}
+.screen:not(#scr-today) + .countdown, body.not-today .countdown{display:none}
+
 </style>
 </head>
 <body>
@@ -269,7 +271,7 @@ body.is-offline .offlineBar{display:block}
     <section class="screen on" id="scr-today">
       <div class="updated-banner" id="updBanner"></div>
       <div class="next">
-        <div class="head"><span class="who">Next Match</span><span class="status conf" id="nextStatus"></span></div>
+        <div class="head"><span class="who">Next Match</span> <span class="status conf" id="nextStatus"></span></div>
         <div class="body" id="nextBody"></div>
       </div>
       <div class="need">
@@ -695,7 +697,7 @@ document.getElementById('crestMark').innerHTML='<svg viewBox="0 0 100 100"><path
 renderHero();
 document.documentElement.style.setProperty('--su',TOURNAMENT.brand.primary);
 document.documentElement.style.setProperty('--su-dark',TOURNAMENT.brand.dark);
-document.getElementById('updBanner').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span><b>Updated '+TOURNAMENT.tournament.updatesUpdated+(TOURNAMENT.tournament.build? ' &middot; build '+TOURNAMENT.tournament.build : '')+'.</b> See what changed &nbsp;<a href="#scr-more" data-goto="more">here</a>.</span>';
+document.getElementById('updBanner').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span><b>'+(TOURNAMENT.tournament.updatesUpdated?('Updated '+TOURNAMENT.tournament.updatesUpdated+(TOURNAMENT.tournament.build? ' &middot; build '+TOURNAMENT.tournament.build:'')):'Guide generated from the tournament platform')+'.</b> See what changed &nbsp;<a href="#scr-more" data-goto="more">here</a>.</span>';
 
 // ---- TOURNAMENT STATE RESOLVER (single source of truth for time) ----
 const TZ=TOURNAMENT.timezone;
@@ -1382,10 +1384,13 @@ lastStateKey=''; // force initial full render (schedule, countdown, next-match, 
 // ---- game-day-first ordering (review): next match above the countdown ----
 (function(){
   try{
-    var next=document.getElementById('nextBody');
+    var nextBody=document.getElementById('nextBody');
     var cd=document.getElementById('countdown');
-    var card=next&&next.closest?next.closest('.card'):null;
-    if(card&&cd&&cd.parentNode){ cd.parentNode.insertBefore(card, cd); }
+    if(nextBody&&cd&&cd.parentNode){
+      var panel=nextBody.closest('.next');
+      while(panel&&panel.parentNode&&panel.parentNode!==cd.parentNode){ panel=panel.parentNode; }
+      if(panel&&panel.parentNode===cd.parentNode){ cd.parentNode.insertBefore(panel, cd); }
+    }
     // The colour key is reference material: it lives at the bottom of More,
     // not above the next match on every screen.
     var lg=document.querySelector('.legend'), more=document.getElementById('scr-more');
@@ -1400,6 +1405,18 @@ lastStateKey=''; // force initial full render (schedule, countdown, next-match, 
   }catch(e){}
 })();
 refreshAll();
+
+// secondary tabs get a compact header: no countdown competing with content
+(function(){
+  function syncTab(){
+    var active=document.querySelector('.screen.active');
+    document.body.classList.toggle('not-today', !!(active && active.id!=='scr-today'));
+  }
+  document.querySelectorAll('.nav a, .nav button').forEach(function(el){
+    el.addEventListener('click', function(){ setTimeout(syncTab, 0); });
+  });
+  syncTab();
+})();
 // Load the live forecast once on load; then refresh whenever the tab regains focus so
 // new daily reports appear without a manual reload.
 loadWeather();
