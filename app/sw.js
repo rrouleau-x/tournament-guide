@@ -13,7 +13,7 @@
  *     keys.filter(k => k !== CACHE) nukes every other cache on the origin.
  *  2. Never precache large binaries (PDFs). They get cached on first view.
  */
-const CACHE = 'tournament-guide-v9';
+const CACHE = 'tournament-guide-v10';
 const PREFIX = 'tournament-guide-';
 const SHELL = ['./', './index.html', './data.json', './tournaments.json', './teams.json', './manifest.json'];
 
@@ -52,7 +52,9 @@ self.addEventListener('fetch', e => {
   // wrong for content: a parent would see yesterday's schedule on the first
   // load after an update. JSON is fetched fresh and only falls back to cache
   // when the network fails.
-  const isData = /\/(data|tournaments|teams)\.json$/.test(key.pathname);
+  const isData = true;   // network-first for EVERYTHING: an out-of-date shell or
+                         // stylesheet is the worst failure for a parent mid-event.
+                         // Cache is only the offline fallback.
 
   e.respondWith((async () => {
     const cache = await caches.open(CACHE);
