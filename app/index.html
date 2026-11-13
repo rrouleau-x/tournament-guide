@@ -221,6 +221,13 @@
   .fullguide .fgb{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700}
   .alert{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;display:flex;gap:10px;align-items:flex-start}
   .alert svg{width:20px;height:20px;flex-shrink:0}
+.nav-inner a,.nav-inner button{min-height:44px}
+.btn,.chip,.tpick,button,a.btn{min-height:44px}
+.legend{display:none}
+.legend.open{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+.legendToggle{background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;padding:6px 14px 8px;width:100%;text-align:right}
+.offlineBar{display:none;background:var(--amber-bg,#fff6e5);color:#8a5a00;font-size:12.5px;font-weight:600;padding:8px 14px;text-align:center;border-bottom:1px solid var(--line)}
+body.is-offline .offlineBar{display:block}
 </style>
 </head>
 <body>
@@ -241,6 +248,8 @@
   </div>
 
   <!-- LIVE COUNTDOWN -->
+  <div class="offlineBar" id="offlineBar">Showing the saved copy — you're offline. Details may be out of date.</div>
+  <button class="legendToggle" id="legendToggle" aria-expanded="false">What do the colours mean?</button>
   <div class="countdown" id="countdown">
     <span class="cd-label" id="cdLabel"></span>
     <span id="cdBody"></span>
@@ -765,6 +774,32 @@ function resolveTournamentState(t, now){
 // ---- LIVE COUNTDOWN (consumes resolver) ----
 const cdLabel=document.getElementById('cdLabel'),cdBody=document.getElementById('cdBody');
 function renderCountdown(state){
+  // Game-day meaning (review): before the event a countdown is useful; on the day
+  // the only question is "when do I need to leave?", and afterwards it should say
+  // the tournament is done rather than counting down to a date in the past.
+  try{
+    var now=state.now, G=(TOURNAMENT.games||[]).slice().sort(function(a,b){return a.datetime-b.datetime;});
+    var today=new Date(now); today.setHours(0,0,0,0);
+    var dayGames=G.filter(function(g){var d=new Date(g.datetime);d.setHours(0,0,0,0);return d.getTime()===today.getTime();});
+    var nextToday=dayGames.filter(function(g){return g.datetime>now;})[0];
+    var lastGame=G.length?G[G.length-1]:null;
+    if(lastGame && lastGame.datetime + 90*60000 < now && !dayGames.length){
+      cdLabel.textContent='Tournament complete'; cdBody.innerHTML='<span class="cd-num num">Done</span>'; return;
+    }
+    if(nextToday){
+      var mins=Math.round((nextToday.datetime-now)/60000);
+      cdLabel.textContent=(mins<=90?'Kickoff in':'Next game in');
+      var h=Math.floor(mins/60), m=mins%60;
+      cdBody.innerHTML=(h?('<span class="cd-num num">'+h+'</span><span class="cd-unit">hr</span><span class="cd-sep">·</span>'):'')
+        +'<span class="cd-num num">'+m+'</span><span class="cd-unit">min</span>';
+      if(nextToday.arrivalBy){
+        cdLabel.textContent='Arrive by '+nextToday.arrivalBy; 
+        cdBody.innerHTML='<span class="cd-num num">'+mins+'</span><span class="cd-unit">min to kickoff</span>';
+      }
+      return;
+    }
+    if(dayGames.length){ cdLabel.textContent='Game day'; cdBody.innerHTML='<span class="cd-num num">Today</span>'; return; }
+  }catch(e){}
   cdLabel.textContent=state.countdownLabel||'';
   if(!state.countdownTarget){ cdBody.innerHTML=''; return; }
   const p=fmtParts(state.countdownTarget-state.now);
@@ -1346,6 +1381,24 @@ function renderTeamPicker(shared){
   }catch(e){ /* keep fallback */ }
 })();
 lastStateKey=''; // force initial full render (schedule, countdown, next-match, context, weekend status)
+
+// ---- game-day-first ordering (review): next match above the countdown ----
+(function(){
+  try{
+    var next=document.getElementById('nextBody');
+    var cd=document.getElementById('countdown');
+    var card=next&&next.closest?next.closest('.card'):null;
+    if(card&&cd&&cd.parentNode){ cd.parentNode.insertBefore(card, cd); }
+    var tog=document.getElementById('legendToggle'), lg=document.querySelector('.legend');
+    if(tog&&lg){ tog.addEventListener('click',function(){
+      var open=lg.classList.toggle('open');
+      tog.setAttribute('aria-expanded',open?'true':'false');
+      tog.textContent=open?'Hide the colour key':'What do the colours mean?';
+    }); }
+    function offline(){ document.body.classList.toggle('is-offline', !navigator.onLine); }
+    window.addEventListener('online',offline); window.addEventListener('offline',offline); offline();
+  }catch(e){}
+})();
 refreshAll();
 // Load the live forecast once on load; then refresh whenever the tab regains focus so
 // new daily reports appear without a manual reload.
