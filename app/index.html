@@ -286,7 +286,7 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
     <section class="screen on" id="scr-today" aria-label="Today">
       <div class="updated-banner" id="updBanner" hidden></div>
       <div class="next">
-        <div class="head"><span class="who">Next Match</span> <span class="status conf" id="nextStatus"></span></div>
+        <div class="head"><span class="who" id="nextHead">Next Match</span> <span class="status conf" id="nextStatus"></span></div>
         <div class="body" id="nextBody"></div>
       </div>
       <!-- LIVE COUNTDOWN: sits directly under the next match, on Today only -->
@@ -777,7 +777,7 @@ function resolveTournamentState(t, now){
   if(currentMatch){
     phase='in-match';
     countdownTarget=currentMatch.end;
-    countdownLabel=currentMatch.label.toUpperCase()+' · HAPPENING NOW';
+    countdownLabel=currentMatch.label.toUpperCase()+' · TIME LEFT';
   } else if(nextMatch){
     if(travel&&now<travel.start){ phase='pre-tournament'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
     else if(travel&&!travel.opening&&now<new Date(travel.start.getTime()+24*3600000)){ phase='travel'; countdownTarget=nextMatch.start; countdownLabel='UNTIL KICKOFF'; }
@@ -890,6 +890,7 @@ function refreshContext(state){
 }
 
 // ---- NEXT MATCH DASHBOARD (consumes the SAME resolver) ----
+function setNowHead(t){ var h=document.getElementById('nextHead'); if(h) h.textContent=t; }
 const nextStatus=document.getElementById('nextStatus'),nextBody=document.getElementById('nextBody');
 function renderNextMatch(state){
   const {currentMatch,nextMatch,phase}=state;
@@ -899,6 +900,7 @@ function renderNextMatch(state){
   if(!g){
     if(phase==='awaiting-schedule'){
       const SP=TOURNAMENT.schedulePending||{};
+      setNowHead('Next Match');
       nextStatus.textContent='Awaiting'; nextStatus.className='status pend';
       nextBody.innerHTML='<div style="font-size:17px;font-weight:800;color:var(--ink);line-height:1.35;margin:0 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
         '<div class="muted" style="font-size:13.5px;line-height:1.5">'+(SP.detail||'')+'</div>'+
@@ -910,18 +912,20 @@ function renderNextMatch(state){
         '</div>'+checkedStamp();
       return;
     }
-    if(phase==='awaiting-final'){ nextStatus.textContent='Awaiting'; nextStatus.className='status pend'; nextBody.innerHTML='<div class="time num" style="font-size:26px">Final unconfirmed</div><div class="vs">Final qualification not yet decided.</div>'+checkedStamp(); return; }
-    nextStatus.textContent='Complete'; nextStatus.className='status conf';
+    if(phase==='awaiting-final'){ setNowHead('Next Match'); nextStatus.textContent='Awaiting'; nextStatus.className='status pend'; nextBody.innerHTML='<div class="time num" style="font-size:26px">Final unconfirmed</div><div class="vs">Final qualification not yet decided.</div>'+checkedStamp(); return; }
+    setNowHead('Next Match'); nextStatus.textContent='Complete'; nextStatus.className='status conf';
     nextBody.innerHTML='<div class="time num" style="font-size:30px">DONE</div><div class="vs">Tournament complete — safe travels home!</div>'+checkedStamp();
     return;
   }
   const isLive=currentMatch&&currentMatch.id===g.id;
+  setNowHead(isLive?'Live Now':'Next Match');
   const WXM=(TOURNAMENT.weather||{}).mini, FMAP=complexMapFor(venue)||complexMapsFallbackUrl();
   nextStatus.textContent = isLive?'Happening Now':(g.arrivalStatus==='pending-coach'?'Awaiting arrival':'Confirmed');
   nextStatus.className='status '+((isLive||g.arrivalStatus==='pending-coach')?'pend':'conf');
   const dayBg=isLive?'var(--red)':'var(--su)';
   nextBody.innerHTML=
-    '<div class="day" style="color:'+(isLive?'var(--red)':'var(--su)')+'">'+(isLive?'HAPPENING NOW · ':'NEXT MATCH · ')+g.dayLabel+'</div>'+
+    '<div class="day" style="color:'+(isLive?'var(--red)':'var(--su)')+'">'+g.dayLabel+'</div>'+
+    (isLive?'<div class="label" style="margin-top:6px">Kickoff</div>':'')+
     '<div class="time num">'+g.time+'</div>'+
     '<div class="vs">vs '+g.opponent+'</div>'+
     '<div class="meta-line"><span class="pill field">FIELD '+g.field+'</span>'+(g.home===true?'<span class="pill home">HOME</span>':g.home===false?'<span class="pill away">AWAY</span>':'')+'</div>'+
@@ -1302,7 +1306,7 @@ function checkedStamp(){
   if(!lastCheckedIso) return '';
   try{
     var t=new Date(lastCheckedIso).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:TOURNAMENT.timezone});
-    return '<div class="chk-stamp">Data checked '+t+' ET</div>';
+    return '<div class="chk-stamp">Schedule last checked '+t+' ET</div>';
   }catch(e){ return ''; }
 }
 function renderFullGuide(){
