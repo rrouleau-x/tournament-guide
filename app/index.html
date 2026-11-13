@@ -231,7 +231,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[role=checkbox]:focus
 .tpicks-label{font-size:11px;font-weight:800;letter-spacing:.8px;color:#cfe0f5;text-transform:uppercase;margin:9px 0 0;position:relative;z-index:2}
 .tpicks-label + .tpicks{margin-top:5px}
 /* Today-only countdown card + weekend progress */
-.countdown{border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.countdown{border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow);padding:9px 14px}
 .wkstatus{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 14px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);margin-bottom:12px;font-size:12px;font-weight:700;color:var(--muted)}
 /* Secondary tabs get a compact header: title, team and the team switch only */
 body:not([data-tab="today"]) .hero{padding:12px 18px 12px}
@@ -249,8 +249,9 @@ body.is-offline .offlineBar{display:block}
 .need li.chk{background:none;border:0;padding:7px 0;gap:10px;width:100%;min-height:44px;cursor:pointer;text-align:left;font:inherit;font-size:13.5px;font-weight:600;color:#fff;display:flex;align-items:center}
 .need li.chk::before{display:none}
 .need li.chk .box{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.need li.chk .box svg{width:13px;height:13px;stroke:#fff}
-.need li.chk.done{opacity:.65}
+.need li.chk .box svg{width:13px;height:13px}
+.need li.chk.done{opacity:.85}
+.need li.chk.done .chkname{color:#dbe7f5;text-decoration:line-through}
 .need li.chk.done .box{background:#fff;border-color:#fff}
 .need li.chk.done .box svg{stroke:var(--su)}
 .need li.chk.done .chkname{text-decoration:line-through}
@@ -296,7 +297,7 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
       <div class="wkstatus" id="weekendStatus" hidden></div>
       <div class="need">
         <div class="nh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/><circle cx="12" cy="12" r="4"/></svg><span id="needTitle"></span></div>
-        <ul id="needList"></ul>
+        <ul id="needList" role="group" aria-labelledby="needTitle"></ul>
       </div>
       <div class="wx-full" id="wxFull"></div>
       <div class="watch" id="watchCard"></div>
@@ -866,10 +867,11 @@ function refreshContext(state){
   if(ctxBar) ctxBar.classList.toggle('hide', phase==='awaiting-schedule');
   // "Before You Go" is a checklist parents actually use on the drive, so the ticks persist per tournament.
   lastNeedGroup=needKey;
-  var ticks=loadNeed(), _nt={}; Object.keys(ticks).forEach(function(k){ var p=k.split(':'); if(p[0]===needKey) _nt[p[1]]=ticks[k]; }); ticks=_nt;
+  // Keyed by the item's text, not its position, so editing or reordering the list never moves a tick.
+  var ticks=loadNeed();
   needList.innerHTML=list.map(function(pair,i){
-    var on=!!ticks[i];
-    return '<li class="chk'+(on?' done':'')+'" role="checkbox" tabindex="0" aria-checked="'+on+'" data-need="'+i+'">'
+    var on=!!(ticks[needKey+':'+pair[0]]||ticks[needKey+':'+i]);
+    return '<li class="chk'+(on?' done':'')+'" role="checkbox" tabindex="0" aria-checked="'+on+'" data-need="'+encodeURIComponent(pair[0])+'" data-idx="'+i+'">'
       +'<span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>'
       +'<span class="chkname">'+pair[0]+' <span style="opacity:.75;font-weight:500">· '+pair[1]+'</span></span></li>';
   }).join('');
@@ -886,12 +888,11 @@ function renderNextMatch(state){
     if(phase==='awaiting-schedule'){
       const SP=TOURNAMENT.schedulePending||{};
       nextStatus.textContent='Awaiting'; nextStatus.className='status pend';
-      nextBody.innerHTML='<div class="day" style="color:var(--su)">NEXT MATCH STATUS</div>'+
-        '<div style="font-size:16px;font-weight:800;color:var(--ink);line-height:1.35;margin:2px 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
+      nextBody.innerHTML='<div style="font-size:17px;font-weight:800;color:var(--ink);line-height:1.35;margin:0 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
         '<div class="muted" style="font-size:13.5px;line-height:1.5">'+(SP.detail||'')+'</div>'+
         '<div class="arrive" style="border-top:none;margin-top:10px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venueLine(venue)+'</div>'+
         '<div class="btn-row">'+
-          (venue.mapsUrl?'<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">'+(venueKnown(venue)?'Directions':'Explore '+areaName(venue))+'</a>':'')+
+          (venue.mapsUrl?'<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">'+(venueKnown(venue)?'Directions':'Explore Area')+'</a>':'')+
           (TOURNAMENT.tournament.fullGuideUrl?'<a class="btn ghost" href="'+TOURNAMENT.tournament.fullGuideUrl+'" target="_blank" rel="noopener">Full Guide</a>':'')+
           '<a class="btn ghost" href="#schedule" data-goto="schedule">Schedule</a>'+
         '</div>';
@@ -1294,10 +1295,12 @@ var lastNeedGroup='before';
 function needStore(){ return 'gd-need-'+(ACTIVE_TOURNAMENT||'default'); }
 function loadNeed(){ try{ return JSON.parse(localStorage.getItem(needStore()))||{}; }catch(e){ return {}; } }
 function toggleNeed(el){
-  var i=el.dataset.need, all=loadNeed(), k=lastNeedGroup+':'+i;
-  all[k]=!all[k];
+  var all=loadNeed(), k=lastNeedGroup+':'+decodeURIComponent(el.dataset.need), old=lastNeedGroup+':'+el.dataset.idx;
+  var on=!(all[k]||all[old]);
+  delete all[old]; delete all[k];              // 'old' = position key written by the previous build
+  if(on) all[k]=true;
   try{ localStorage.setItem(needStore(),JSON.stringify(all)); }catch(e){}
-  el.classList.toggle('done',!!all[k]); el.setAttribute('aria-checked',String(!!all[k]));
+  el.classList.toggle('done',on); el.setAttribute('aria-checked',String(on));
 }
 document.getElementById('needList').addEventListener('click',function(e){
   var el=e.target.closest('[data-need]'); if(el) toggleNeed(el);
