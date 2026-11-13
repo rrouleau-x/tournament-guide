@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -248,9 +250,6 @@ body.is-offline .offlineBar{display:block}
   <!-- LIVE COUNTDOWN -->
   <div class="offlineBar" id="offlineBar">Showing the saved copy — you're offline. Details may be out of date.</div>
   <button class="legendToggle" id="legendToggle" aria-expanded="false">What do the colours mean?</button>
-<!DOCTYPE html>
-<html lang="en">
-
   <div class="countdown" id="countdown">
     <span class="cd-label" id="cdLabel"></span>
     <span id="cdBody"></span>
@@ -363,7 +362,7 @@ let TOURNAMENT = {
   games: [],
   schedulePending: {
     headline: "Schedule Not Released Yet",
-    detail: "The host has not published game times, fields or pairings yet. They appear here the moment the release lands.",
+    detail: "The host has not published game times, fields or pairings yet.",
     accepted: "Accepted team list confirmed (Sep 14)",
     brackets: "Bracket posted Sep 16 — verified",
     schedule: "Full schedule posts September 26"
@@ -386,13 +385,13 @@ let TOURNAMENT = {
         ]},
       { label:"Emergency", items:[
           { name:"Urgent care", note:"search nearest open clinic", dist:"maps", sub:"", url:"", icon:"phone" },
-          { name:"Tournament HQ", note:"see tournament contacts", dist:"call", sub:"", url:"", icon:"phone" }
+          { name:"Tournament HQ", note:"see tournament contacts", dist:"call", sub:"", url:"tel:8774572832", icon:"phone" }
         ]}
     ] },
   contacts:[
     { name:"Keith Gunn", role:"Director of Coaching", phone:"", email:"k.gunn@savannahunited.com", initial:"K" },
     { name:"Carson Gray", role:"Coach", phone:"", email:"carsonzgray@gmail.com", initial:"C" },
-    { name:"Mitchell Heath", role:"Coach", phone:"", email:"m.heath@savannahunited.com", initial:"M" },
+    { name:"Mitchell Heath", role:"Coach", phone:"", email:"m.heath@savannahunited.com", initial:"M" }
     
   ],
   rules:{ quick:[], full:[], tiebreakers:[], tiebreakersPending:"", tiebreakProcess:"", fullRulesUrl:"", standingsUrl:"", docsUrl:"" },
@@ -1132,10 +1131,10 @@ var COMPLEX_MAP_LABELS={
   'SV Presbyterian Church Fields':'Official SV Presbyterian fields layout'
 };
 var COMPLEX_MAPS={
-  'Ballentine Park Complex':'',
-  'Polo Road Park':'',
-  'Southeastern Freight Lines Soccer Center':'',
-  'SV Presbyterian Church Fields':''
+  'Ballentine Park Complex':'https://irp.cdn-website.com/44ba685a/files/uploaded/Ballentine_Park_field_layout_2025.pdf',
+  'Polo Road Park':'https://irp.cdn-website.com/44ba685a/files/uploaded/Polo+Road+field+layout+2026-0124803d.pdf',
+  'Southeastern Freight Lines Soccer Center':'https://irp.cdn-website.com/44ba685a/files/uploaded/SEFL%20tournament%20all%2011v11.pdf',
+  'SV Presbyterian Church Fields':'https://irp.cdn-website.com/44ba685a/files/uploaded/sv%20church%20regular%20layout.pdf'
 };
 function renderVenue(){
   const v=TOURNAMENT.venue;
@@ -1148,9 +1147,9 @@ function renderVenue(){
     document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--amber)">'
       +'<div class="label" style="color:var(--amber)">Venue</div>'
       +'<div style="font-size:17px;font-weight:800;margin:3px 0 6px">Complex not yet assigned</div>'
-      +'<p class="muted small" style="margin:0;line-height:1.55">The host has not published the venue assignment yet. The complex and field appear here as soon as the schedule is released.</p>'
+      +'<p class="muted small" style="margin:0;line-height:1.55">The host has not published the venue assignment yet.<b>September 26</b>.</p>'
       +'<div style="margin-top:10px">'+list+'</div>'
-      +'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+(v.complexListUrl||'')+'" target="_blank" rel="noopener">Host facility information &rsaquo;</a>'
+      +'<a class="btn ghost" style="margin-top:12px;flex-direction:row;gap:7px" href="'+(v.complexListUrl||'https://www.southcarolinaunitedfc.com/facilities')+'" target="_blank" rel="noopener">Host facility information &rsaquo;</a>'
       +'</div>';
     document.getElementById('fieldsCard').innerHTML='<div class="card" style="text-align:center;padding:22px"><div class="label" style="margin-bottom:6px">Field map</div><p class="small muted" style="margin:0">Field and complex assignments are published with the schedule on September 26.</p></div>';
     const amen0=(v.amenities||[]).map(function(a){return '<div class="amenity">'+a+'</div>';}).join('');
@@ -1226,7 +1225,7 @@ function renderChanges(){
     +'<div class="section-title" style="margin-top:18px"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Where This Comes From</div>'
     +'<div class="card" style="font-size:12.5px;line-height:1.65">'
     +'<p style="margin:0 0 10px"><b>Tournament facts</b> &mdash; dates, formats, fees, check-in rules, contacts and complexes &mdash; are taken from the official tournament page.<br><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">Official tournament page &rsaquo;</a></p>'
-    +'<p style="margin:0 0 10px"><b>Venue addresses</b> from the host club.</p>'
+    +'<p style="margin:0 0 10px"><b>Venue addresses</b> from the host club.<br><a href="https://www.southcarolinaunitedfc.com/facilities" target="_blank" rel="noopener" style="color:var(--link);font-weight:700">Host facilities &rsaquo;</a></p>'
     +'<p style="margin:0 0 10px"><b>Hotel rates</b> were checked live for Oct 2&ndash;4 (2 adults, 1 child) and change daily &mdash; confirm before booking. <b>Drive distances</b> were measured by routing against the actual venue address, not copied from a tournament portal.</p>'
     +'<p style="margin:0"><b>Weather</b> is based on ten years of recorded early-October observations for Columbia, SC (Open-Meteo archive). <b>Nearby amenities</b> come from OpenStreetMap. Anything not sourced above is parent-manager research, not official tournament information.</p>'
     +'</div>';
