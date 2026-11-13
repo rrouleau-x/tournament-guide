@@ -456,7 +456,10 @@ function adaptData(d, team){
       if(dt&&dt.start&&dt.end){
         var s=new Date(dt.start+'T12:00:00'), e=new Date(dt.end+'T12:00:00');
         var mon=s.toLocaleDateString('en-US',{month:'short'}).toUpperCase();
-        var dstr=(s.getMonth()===e.getMonth())
+        // A one-day festival is "JAN 30", never "JAN 30–30".
+        var dstr=(s.getTime()===e.getTime())
+          ? (mon+' '+s.getDate())
+          : (s.getMonth()===e.getMonth())
           ? (mon+' '+s.getDate()+'–'+e.getDate())
           : (mon+' '+s.getDate()+'–'+e.toLocaleDateString('en-US',{month:'short'}).toUpperCase()+' '+e.getDate());
         T.tournament.meta=dstr+' · '+loc;

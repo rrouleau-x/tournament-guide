@@ -13,7 +13,7 @@
  *     keys.filter(k => k !== CACHE) nukes every other cache on the origin.
  *  2. Never precache large binaries (PDFs). They get cached on first view.
  */
-const CACHE = 'tournament-guide-v32';
+const CACHE = 'tournament-guide-v33';
 const PREFIX = 'tournament-guide-';
 const SHELL = ['./', './tournaments.json', './teams.json', './manifest.json'];
 const NET_TIMEOUT = 3000;
