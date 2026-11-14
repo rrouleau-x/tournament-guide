@@ -43,7 +43,7 @@
   .countdown{background:var(--su-dark);color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
   .countdown .cd-label{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#cfe0f5;width:100%;text-align:center}
   .countdown .cd-num{font-size:24px;font-weight:800;letter-spacing:-1px}
-  .countdown .cd-unit{font-size:12px;font-weight:700;color:#cfe0f5;text-transform:uppercase;letter-spacing:.4px}
+  .countdown .cd-unit{margin-left:5px;font-size:12px;font-weight:700;color:#cfe0f5;text-transform:uppercase;letter-spacing:.4px}
   .countdown .cd-sep{color:#cfe0f5;opacity:.6;font-weight:800}
 
   .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -193,8 +193,12 @@
   .contact .cn{flex:1}
   .contact .cn .cnm{font-size:14px;font-weight:700}
   .contact .cn .crl{font-size:11.5px;color:var(--muted)}
-  .contact>a{background:var(--su);color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:0 16px;min-height:44px;display:inline-flex;align-items:center;border-radius:12px;flex-shrink:0}
-  .contact .cn .cmail{font-size:11.5px;padding-top:2px;word-break:break-all}
+  .contact .cact{display:flex;gap:6px;flex-shrink:0}
+  .contact .cact a.alt{background:var(--su-soft);color:var(--su)}
+  .contact .cact a:not(:only-child){padding:0 12px}
+  .contact .cact a{background:var(--su);color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:0 16px;min-height:44px;display:inline-flex;align-items:center;border-radius:12px;flex-shrink:0}
+  .contact .cn{min-width:0}
+  .contact .cn .cmail{font-size:11.5px;padding-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}   /* never break an address mid-word; the Email button carries the action */
   .contact .cn .cmail a{color:var(--link);font-weight:600;text-decoration:none}
 
   .quickrules{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -292,6 +296,13 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 .venueline .vl-v{font-size:14px;font-weight:700;color:var(--ink);line-height:1.35}
 .venueline .vl-n{font-size:12px;color:var(--muted);line-height:1.45}
 .demoBar{background:#eef1f6;color:#0055A4;font-size:12px;font-weight:700;padding:7px 14px;text-align:center;border-bottom:1px solid #d8e0ec}
+.offnote{margin:0 0 12px;padding:10px 13px;background:var(--red-bg);border-radius:12px;border-left:4px solid var(--red)}
+.offnote .label{font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--red)}
+.offnote .what{font-size:14px;font-weight:700;color:var(--ink);line-height:1.4;margin-top:2px}
+.offnote .what s{color:var(--muted);font-weight:600}
+.offtag{float:right;padding:1px 8px;border-radius:10px;background:var(--red-bg);color:var(--red);font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.g.goff .gtime{text-decoration:line-through;color:var(--muted)}
+.g.goff .gvs,.g.goff .pill,.g.goff .ghome{opacity:.55}
 .chk-stamp.warn{color:var(--amber);font-weight:700}
 .chg{margin:12px 0 0;padding:10px 13px;background:var(--amber-bg);border-radius:12px;border-left:4px solid var(--amber)}
 .chg .label{font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--amber)}
@@ -554,11 +565,11 @@ function adaptData(d, team){
           home:(typeof g.home==='boolean')?g.home:null,
           arrival:g.arrival||'',
           arrivalStatus:'confirmed',
-          status:g.status||'scheduled',
+          status:normStatus(g.status),
           type:g.type||'group'
         };
       });
-      T.venue.ourFields=T.games.map(function(g,i){ return {f:g.field||'?', label:g.dayLabel.split('·')[0].trim().slice(0,3).toUpperCase()+' · G'+(i+1)}; });
+      T.venue.ourFields=T.games.filter(function(g){return !isOff(g);}).map(function(g,i){ return {f:g.field||'?', label:g.dayLabel.split('·')[0].trim().slice(0,3).toUpperCase()+' · G'+((String(g.label||'').match(/\d+/)||[i+1])[0])}; });
     }
 
     // venue
@@ -986,6 +997,10 @@ function agoText(mins){ return mins<60 ? mins+' min ago' : Math.floor(mins/60)+'
 function setNowHead(t){ var h=document.getElementById('nextHead'); if(h) h.textContent=t; }
 const nextStatus=document.getElementById('nextStatus'),nextBody=document.getElementById('nextBody');
 function renderNextMatch(state){
+  renderNextMatchCard(state);
+  var n=offNotice(state); if(n) nextBody.insertAdjacentHTML('afterbegin',n);
+}
+function renderNextMatchCard(state){
   const {currentMatch,nextMatch,phase}=state;
   const venue=TOURNAMENT.venue;
   // Determine which game to show: a live match first, else the next upcoming
@@ -1261,14 +1276,14 @@ function renderSchedule(state){
     const isSat=day.toLowerCase().includes('saturday');
     out+='<div class="daycard '+(isSat?'sat':'sun')+'"><div class="dh"><span>'+day+'</span><span class="dd">'+games.map(g=>g.label).join(' + ')+'</span></div>';
     games.forEach((g,i)=>{
-      const badge = g.id===currentId?'<span style="float:right;font-size:12px;font-weight:800;color:var(--red);letter-spacing:.4px">NOW</span>':(g.id===nextId?'<span style="float:right;font-size:12px;font-weight:800;color:var(--su);letter-spacing:.4px">NEXT</span>':'');
+      const badge = g.id===currentId?'<span style="float:right;font-size:12px;font-weight:800;color:var(--red);letter-spacing:.4px">NOW</span>':(g.id===nextId?'<span style="float:right;font-size:12px;font-weight:800;color:var(--su);letter-spacing:.4px">NEXT</span>':(isOff(g)?'<span class="offtag">'+g.status+'</span>':''));
       if(g.type==='final'){
         out+='<div class="final" style="'+(g.id===nextId?'border-color:var(--su);background:var(--su-soft)':'')+'"><div class="ftag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Potential Final · Not Guaranteed'+badge+'</div><div class="ftime num">'+g.time+'</div><div class="ftag" style="color:var(--su)">'+g.opponent+' · Field '+g.field+'</div><div class="fnote">'+(g.note||'')+'</div></div>';return;
       }
-      out+='<div class="g" style="'+(g.id===currentId?'background:var(--red-bg);border-left:4px solid var(--red)':(g.id===nextId?'background:var(--su-soft);border-left:4px solid var(--su)':''))+'"><div class="ghome">'+(g.home===true?'Home':g.home===false?'Away':'')+'</div><div class="grow"><span class="gtime num">'+g.time+'</span><span class="pill field">Field '+g.field+'</span>'+changeTag(g)+'</div><div class="gvs">vs '+g.opponent+'</div>'+badge+'</div>';
+      out+='<div class="g'+(isOff(g)?' goff':'')+'" style="'+(g.id===currentId?'background:var(--red-bg);border-left:4px solid var(--red)':(g.id===nextId?'background:var(--su-soft);border-left:4px solid var(--su)':''))+'"><div class="ghome">'+(g.home===true?'Home':g.home===false?'Away':'')+'</div><div class="grow"><span class="gtime num">'+g.time+'</span><span class="pill field">Field '+g.field+'</span>'+changeTag(g)+'</div><div class="gvs">vs '+g.opponent+'</div>'+badge+'</div>';
       // gap between games
       const next=games[i+1];
-      if(next&&next.type!=='final'){
+      if(next&&next.type!=='final'&&!isOff(g)&&!isOff(next)){   // no "break" beside a game that is off
         const h=Math.round((tzTime(next.datetime)-tzTime(g.datetime))/3600000);
         if(h>=3) out+='<div class="gap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l3 2"/></svg>'+h+'-hour break</div>';
       }
@@ -1468,7 +1483,11 @@ function renderContacts(){
   const rows=TOURNAMENT.contacts.map(c=>'<div class="contact"><span class="ci">'+c.initial+'</span><div class="cn"><div class="cnm">'+c.name+'</div><div class="crl">'+c.role+'</div>'+(c.email?'<div class="cmail"><a href="mailto:'+c.email+'">'+c.email+'</a></div>':'')+'</div>'
     // One labelled action per row, whatever the row actually has: Call if there is a number,
     // otherwise Email. A row with no button read as broken rather than as "no number on file".
-    +(c.phone?'<a href="tel:'+c.phone+'">Call</a>':(c.email?'<a href="mailto:'+c.email+'">Email</a>':(c.url?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':'')))+'</div>').join('');
+    // Call AND Email when the row has both (it used to be Call only, which hid the email action
+    // for the one coach with a number and made the rows look inconsistent).
+    +'<div class="cact">'+(c.phone?'<a href="tel:'+c.phone+'">Call</a>':'')
+      +(c.email?'<a'+(c.phone?' class="alt"':'')+' href="mailto:'+c.email+'">Email</a>':'')
+      +((!c.phone&&!c.email&&c.url)?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':'')+'</div></div>').join('');
   document.getElementById('contactsSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Need Help?</div><div class="card" style="padding:6px 14px">'+rows+'</div>';
 }
 function renderRules(){
@@ -1526,11 +1545,35 @@ function checkedStamp(){
   }catch(e){ return ''; }
 }
 
+// The data files are edited by hand, and "canceled" (one L) is the usual American spelling.
+// Only "cancelled" was recognised, so a canceled game stayed on the card as a live fixture.
+function normStatus(s){
+  s=String(s||'').trim().toLowerCase();
+  if(/^cancel/.test(s)) return 'cancelled';
+  if(/^postpon/.test(s)) return 'postponed';
+  return s||'scheduled';
+}
+function isOff(g){ return g.status==='cancelled'||g.status==='postponed'; }
+// A cancelled or postponed game used to vanish silently: the card skipped to the next game and
+// the Schedule tab listed it as an ordinary row. This notice stays on the Today card until the
+// day of that game is over - there is no "Got it", because it must not be dismissible by accident.
+function offNotice(state){
+  var now=state.now, rows=state.withState.filter(function(g){ return isOff(g)&&calDays(now,g.start)>=0; });
+  if(!rows.length) return '';
+  return '<div class="offnote" role="alert"><div class="label">'+(rows.length>1?'Games off':(rows[0].status==='postponed'?'Game postponed':'Game cancelled'))+'</div>'
+    +rows.map(function(g){
+      return '<div class="what">'+g.label+' &middot; <s>'+g.dayLabel.split('·')[0].trim().slice(0,3)+' '+g.time+'</s> vs '+g.opponent
+        +(rows.length>1?' &mdash; '+g.status:'')+(g.status==='postponed'?'<br><span style="font-weight:600;color:var(--muted)">New time not announced yet.</span>':'')+'</div>';
+    }).join('')+'</div>';
+}
+
 // ---- SCHEDULE CHANGES (what moved since this phone last saw the schedule) ----
 // Kept per tournament + team until the parent taps "Got it" or the game is over.
 function chgStore(t,team){ return 'tg-chg-v1:'+(t||'')+':'+(team||''); }
 function chgMap(){ try{ return JSON.parse(lsGet(chgStore(ACTIVE_TOURNAMENT,ACTIVE_TEAM)))||{}; }catch(e){ return {}; } }
-function rawGame(g){ return {date:g.date||'',time:g.time||'',field:g.field||'',opponent:g.opponent||''}; }
+function rawGame(g){ return {date:g.date||'',time:g.time||'',field:g.field||'',opponent:g.opponent||'',status:normStatus(g.status)}; }
+// Entries saved before status was tracked have no status: read them as 'scheduled'.
+function chgVal(o,k){ return o[k]||(k==='status'?'scheduled':''); }
 function recordChanges(t,team,oldGames,newGames){
   if(!Array.isArray(oldGames)||!oldGames.length||!Array.isArray(newGames)) return;   // first publication is not a "change"
   var m; try{ m=JSON.parse(lsGet(chgStore(t,team)))||{}; }catch(e){ m={}; }
@@ -1539,7 +1582,13 @@ function recordChanges(t,team,oldGames,newGames){
     var was=(m[id]&&m[id].was)||old;                 // keep the ORIGINAL value across several edits
     if(!old&&!m[id]){ m[id]={added:true,now:now}; return; }
     if(m[id]&&m[id].added){ m[id].now=now; return; }
-    var same=was&&['date','time','field','opponent'].every(function(k){ return was[k]===now[k]; });
+    // Cancelled/postponed, then reinstated: returning to the original values must not erase the
+    // flag - a parent who saw "cancelled" has to be told the game is back on.
+    var prevOff=m[id]&&m[id].now&&/^(cancelled|postponed)$/.test(chgVal(m[id].now,'status'));
+    if(prevOff&&!/^(cancelled|postponed)$/.test(now.status)){
+      m[id]={was:Object.assign({},now,{status:chgVal(m[id].now,'status')}),now:now}; return;
+    }
+    var same=was&&['date','time','field','opponent','status'].every(function(k){ return chgVal(was,k)===chgVal(now,k); });
     if(same) delete m[id]; else if(was) m[id]={was:was,now:now};
   });
   Object.keys(m).forEach(function(id){ var n=parseInt(id.replace('game',''),10); if(n>newGames.length) delete m[id]; });
@@ -1550,6 +1599,8 @@ function changeParts(g){
   if(g.start&&g.end&&tzNow()>g.end) return null;     // a finished game needs no warning
   if(c.added) return ['New game added to the schedule'];
   var w=c.was, n=c.now, out=[], was=function(x){ return ' <span class="was">'+x+'</span>'; };
+  var off=function(x){ return x==='cancelled'||x==='postponed'; };
+  if(off(chgVal(w,'status'))&&!off(chgVal(n,'status'))) out.push('Back on'+was(chgVal(w,'status')));
   if(w.date!==n.date) out.push('Day moved to '+g.dayLabel.split('·')[0].trim()+was(w.date));
   if(w.time!==n.time) out.push('Kickoff now '+n.time+was(w.time));
   if(w.field!==n.field) out.push('Now '+n.field+was(w.field));
