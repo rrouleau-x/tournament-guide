@@ -291,6 +291,13 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 .venueline .vl-k{font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
 .venueline .vl-v{font-size:14px;font-weight:700;color:var(--ink);line-height:1.35}
 .venueline .vl-n{font-size:12px;color:var(--muted);line-height:1.45}
+.demoBar{background:#eef1f6;color:#0055A4;font-size:12px;font-weight:700;padding:7px 14px;text-align:center;border-bottom:1px solid #d8e0ec}
+.chk-stamp.warn{color:var(--amber);font-weight:700}
+.chg{margin:12px 0 0;padding:10px 13px;background:var(--amber-bg);border-radius:12px;border-left:4px solid var(--amber)}
+.chg .label{font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--amber)}
+.chg .what{font-size:14px;font-weight:700;color:var(--ink);line-height:1.4;margin-top:2px}
+.chg .was{color:var(--muted);font-weight:600;text-decoration:line-through}
+.chgtag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:10px;background:var(--amber-bg);color:var(--amber);font-size:11px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;vertical-align:middle}
 .chk-stamp{font-size:11px;color:var(--muted);margin-top:10px;text-align:right;letter-spacing:.2px}
 
 </style>
@@ -299,6 +306,7 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 <div class="app loading" id="app">
 
   <div class="offlineBar" id="offlineBar" role="status">Showing the saved copy — you're offline. Details may be out of date.</div>
+  <div class="demoBar" id="demoBar" hidden>Demo build &middot; synthetic schedule, not a real tournament</div>
   <div class="failBar" id="loadFail" role="alert" hidden><span>Couldn't load the latest tournament details.</span><button type="button" id="retryLoad">Retry</button></div>
 
   <header class="hero">
@@ -410,6 +418,12 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 
 /* Fallback config — correct at build time. At runtime this is OVERWRITTEN
    by data.json via adaptData(), so the cron job keeps the app current. */
+// The same file is served at /app/ and at /demo/ (scripts/build_demo.py keeps them identical).
+// Everything that must differ in the demo - banner, title, storage - keys off this one flag.
+// This block was lost after 829f1d6: the demo then ran with no banner and shared the real
+// app's storage, so a demo visit could paint the synthetic schedule inside the real app.
+const IS_DEMO=/\/demo\//.test(location.pathname);
+if(IS_DEMO){ document.getElementById('demoBar').hidden=false; }
 let TOURNAMENT = {
   timezone: "America/New_York",
   matchDurationMin: 65,
@@ -424,6 +438,7 @@ let TOURNAMENT = {
     updatesUpdated: ""
   },
   travel: null,
+  scheduleUpdated: '',      // ISO time the team's games were last edited (set by scripts/stamp_schedule.py)
   weather: {},
   games: [],
   schedulePending: {
@@ -520,6 +535,7 @@ function adaptData(d, team){
     if(team.pdfUrl) T.tournament.fullGuideUrl=team.pdfUrl;
     if(team.name) TEAM_LABEL_FOR_GUIDE=team.name;
 
+    T.scheduleUpdated=team.scheduleUpdated||'';
     // games (per team)
     if(Array.isArray(team.games) && team.games.length){
       T.games=team.games.map(function(g,i){
@@ -748,7 +764,7 @@ document.getElementById('heroKick').textContent=TOURNAMENT.tournament.kick;
 document.getElementById('heroTitle').textContent=TOURNAMENT.tournament.name;
 document.getElementById('heroTeam').textContent=TOURNAMENT.tournament.team;
 document.getElementById('heroMeta').textContent=TOURNAMENT.tournament.meta;
-document.title='Game Day — '+TOURNAMENT.tournament.team.split('·')[0].trim();
+document.title=(IS_DEMO?'Demo — ':'Game Day — ')+TOURNAMENT.tournament.team.split('·')[0].trim();
 document.getElementById('crestMark').innerHTML='<svg viewBox="0 0 100 100"><path d="M50 2 92 22v28c0 26-18 42-42 48C26 92 8 76 8 50V22L50 2z" fill="#fff"/><circle cx="50" cy="48" r="17" fill="none" stroke="'+TOURNAMENT.brand.primary+'" stroke-width="3"/><text x="50" y="55" text-anchor="middle" font-size="18" font-weight="bold" fill="'+TOURNAMENT.brand.primary+'">'+TOURNAMENT.brand.initial+'</text></svg>';
 }
 renderHero();
@@ -978,7 +994,7 @@ function renderNextMatch(state){
     if(phase==='awaiting-schedule'){
       const SP=TOURNAMENT.schedulePending||{};
       setNowHead('Next Match');
-      nextStatus.textContent='Awaiting Schedule'; nextStatus.className='status pend';
+      nextStatus.textContent=SCHEDULE_UNAVAILABLE?'Not loaded':'Awaiting Schedule'; nextStatus.className='status pend';
       nextBody.innerHTML='<div style="font-size:17px;font-weight:800;color:var(--ink);line-height:1.35;margin:0 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
         '<div class="muted" style="font-size:13.5px;line-height:1.5">'+(SP.detail||'')+'</div>'+
         venuePendingLine(venue)+
@@ -1018,7 +1034,9 @@ function renderNextMatch(state){
         '<div class="small muted">Kicked off '+g.time+'</div>'
       : '<div class="time num">'+g.time+'</div>'+
         '<div class="vs">vs '+g.opponent+'</div>'+
-        // Arrival is the question before kickoff, so it is stated next to the time in its own
+        // A moved kickoff or field is the one thing a parent must not miss: say what it WAS too.
+    changeNote(g)+
+    // Arrival is the question before kickoff, so it is stated next to the time in its own
         // block, and disappears the moment play starts.
         (g.arrival?(function(){
           var a=arrivalAt(g);
@@ -1247,7 +1265,7 @@ function renderSchedule(state){
       if(g.type==='final'){
         out+='<div class="final" style="'+(g.id===nextId?'border-color:var(--su);background:var(--su-soft)':'')+'"><div class="ftag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Potential Final · Not Guaranteed'+badge+'</div><div class="ftime num">'+g.time+'</div><div class="ftag" style="color:var(--su)">'+g.opponent+' · Field '+g.field+'</div><div class="fnote">'+(g.note||'')+'</div></div>';return;
       }
-      out+='<div class="g" style="'+(g.id===currentId?'background:var(--red-bg);border-left:4px solid var(--red)':(g.id===nextId?'background:var(--su-soft);border-left:4px solid var(--su)':''))+'"><div class="ghome">'+(g.home===true?'Home':g.home===false?'Away':'')+'</div><div class="grow"><span class="gtime num">'+g.time+'</span><span class="pill field">Field '+g.field+'</span></div><div class="gvs">vs '+g.opponent+'</div>'+badge+'</div>';
+      out+='<div class="g" style="'+(g.id===currentId?'background:var(--red-bg);border-left:4px solid var(--red)':(g.id===nextId?'background:var(--su-soft);border-left:4px solid var(--su)':''))+'"><div class="ghome">'+(g.home===true?'Home':g.home===false?'Away':'')+'</div><div class="grow"><span class="gtime num">'+g.time+'</span><span class="pill field">Field '+g.field+'</span>'+changeTag(g)+'</div><div class="gvs">vs '+g.opponent+'</div>'+badge+'</div>';
       // gap between games
       const next=games[i+1];
       if(next&&next.type!=='final'){
@@ -1480,17 +1498,70 @@ function renderChanges(){
 var TEAM_LABEL_FOR_GUIDE='';
 // Absolute, not "2 min ago": a relative stamp freezes between renders and silently lies.
 var lastCheckedIso=null;
+var lastCheckFailed=false;     // the most recent refresh did not get through
+function stampTime(d){
+  var tz=TOURNAMENT.timezone, t=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:tz});
+  // A time from another day must say so, or yesterday's check reads as this morning's.
+  if(calDays(d,tzNow())!==0) t=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz})+', '+t;
+  return t+' ET';
+}
+// Two different facts, kept apart:
+//   "updated" = when the schedule data itself was last edited (from the team file)
+//   "checked" = when this phone last fetched it successfully
+// A fetch that fails never moves "checked", and the stamp says the copy on screen is a saved one.
 function checkedStamp(){
-  if(!lastCheckedIso) return '';
   try{
+    var upd=TOURNAMENT.scheduleUpdated?new Date(TOURNAMENT.scheduleUpdated):null;
+    if(upd&&isNaN(upd)) upd=null;
     // With the demo clock frozen, a real fetch time would read as nonsense beside it.
-    var d=forcedNow()||new Date(lastCheckedIso), tz=TOURNAMENT.timezone;
-    var t=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:tz});
-    // A stamp from another day must say so, or yesterday's check reads as this morning's.
-    if(calDays(d,tzNow())!==0) t=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:tz})+', '+t;
-    return '<div class="chk-stamp">Schedule last checked '+t+' ET</div>';
+    var chk=lastCheckedIso?(forcedNow()||new Date(lastCheckedIso)):null;
+    // navigator.onLine===false counts as a failed check even when the service worker answers
+    // from cache: that response is a saved copy, whatever the fetch promise says.
+    if(lastCheckFailed||navigator.onLine===false){
+      var why=(navigator.onLine===false)?'Offline':'Couldn&rsquo;t refresh';
+      return '<div class="chk-stamp warn">'+why+(chk?' &middot; showing the schedule saved '+stampTime(chk):'')+'</div>';
+    }
+    if(!chk) return '';
+    return '<div class="chk-stamp">'+(upd?'Schedule updated '+stampTime(upd)+' &middot; checked ':'Schedule last checked ')+stampTime(chk)+'</div>';
   }catch(e){ return ''; }
 }
+
+// ---- SCHEDULE CHANGES (what moved since this phone last saw the schedule) ----
+// Kept per tournament + team until the parent taps "Got it" or the game is over.
+function chgStore(t,team){ return 'tg-chg-v1:'+(t||'')+':'+(team||''); }
+function chgMap(){ try{ return JSON.parse(lsGet(chgStore(ACTIVE_TOURNAMENT,ACTIVE_TEAM)))||{}; }catch(e){ return {}; } }
+function rawGame(g){ return {date:g.date||'',time:g.time||'',field:g.field||'',opponent:g.opponent||''}; }
+function recordChanges(t,team,oldGames,newGames){
+  if(!Array.isArray(oldGames)||!oldGames.length||!Array.isArray(newGames)) return;   // first publication is not a "change"
+  var m; try{ m=JSON.parse(lsGet(chgStore(t,team)))||{}; }catch(e){ m={}; }
+  newGames.forEach(function(g,i){
+    var id=g.id||('game'+(i+1)), now=rawGame(g), old=oldGames[i]?rawGame(oldGames[i]):null;
+    var was=(m[id]&&m[id].was)||old;                 // keep the ORIGINAL value across several edits
+    if(!old&&!m[id]){ m[id]={added:true,now:now}; return; }
+    if(m[id]&&m[id].added){ m[id].now=now; return; }
+    var same=was&&['date','time','field','opponent'].every(function(k){ return was[k]===now[k]; });
+    if(same) delete m[id]; else if(was) m[id]={was:was,now:now};
+  });
+  Object.keys(m).forEach(function(id){ var n=parseInt(id.replace('game',''),10); if(n>newGames.length) delete m[id]; });
+  lsSet(chgStore(t,team),JSON.stringify(m));
+}
+function changeParts(g){
+  var c=chgMap()[g.id]; if(!c) return null;
+  if(g.start&&g.end&&tzNow()>g.end) return null;     // a finished game needs no warning
+  if(c.added) return ['New game added to the schedule'];
+  var w=c.was, n=c.now, out=[], was=function(x){ return ' <span class="was">'+x+'</span>'; };
+  if(w.date!==n.date) out.push('Day moved to '+g.dayLabel.split('·')[0].trim()+was(w.date));
+  if(w.time!==n.time) out.push('Kickoff now '+n.time+was(w.time));
+  if(w.field!==n.field) out.push('Now '+n.field+was(w.field));
+  if(w.opponent!==n.opponent) out.push('Opponent now '+n.opponent+was(w.opponent));
+  return out.length?out:null;
+}
+function changeNote(g){
+  var p=changeParts(g); if(!p) return '';
+  return '<div class="chg" role="status"><div class="label">Schedule changed</div><div class="what">'+p.join('<br>')+'</div>'
+    +'<button type="button" class="btn-here" data-chg-ok="'+g.id+'">Got it</button></div>';
+}
+function changeTag(g){ return changeParts(g)?'<span class="chgtag">Changed</span>':''; }
 function renderFullGuide(){
   var fg=document.getElementById('fullGuideLink'); if(!fg) return;
   fg.href=TOURNAMENT.tournament.fullGuideUrl||'../guides/';
@@ -1511,6 +1582,13 @@ function toggleNeed(el){
   el.classList.toggle('done',on); el.setAttribute('aria-checked',String(on));
 }
 document.getElementById('nextBody').addEventListener('click',function(e){
+  var ok=e.target.closest('[data-chg-ok]');
+  if(ok){                                             // change acknowledged: clear it everywhere
+    e.preventDefault();
+    var cm=chgMap(); delete cm[ok.dataset.chgOk];
+    lsSet(chgStore(ACTIVE_TOURNAMENT,ACTIVE_TEAM),JSON.stringify(cm));
+    lastStateKey=''; refreshAll(); return;
+  }
   var on=e.target.closest('[data-here]'), off=e.target.closest('[data-here-off]');
   if(!on&&!off) return;
   e.preventDefault();
@@ -1633,9 +1711,14 @@ function renderAll(){
 
 // ---- TOURNAMENT + TEAM SELECTION ----
 var ACTIVE_TEAM=null, ACTIVE_TOURNAMENT=null;
-var STORE_NS='';          // 'demo-' in the demo build: separate storage per product
+var STORE_NS=IS_DEMO?'demo-':'';   // /app/ and /demo/ share one origin, so the demo gets its own storage keys
 const BASE=JSON.stringify(TOURNAMENT);          // pristine template, re-cloned for every load
 const SNAP_KEY='tg-snap-v1';
+// Last good copy per tournament + team, so a failed refresh (or a team switch with no signal)
+// always has that team's own schedule to fall back on. SNAP_KEY alone held only the last one viewed.
+function snapKey(t,team){ return SNAP_KEY+':'+(t||'')+':'+(team||''); }
+function readSnap(k){ try{ return JSON.parse(lsGet(k)||'null'); }catch(e){ return null; } }
+var SCHEDULE_UNAVAILABLE=false;
 function qsGet(k){ try{ return new URLSearchParams(location.search).get(k); }catch(e){ return null; } }
 function lsGet(k){ try{ return localStorage.getItem(STORE_NS+k); }catch(e){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(STORE_NS+k,v); }catch(e){} }
@@ -1673,6 +1756,10 @@ function applyData(shared,team,tslug,slug){
   ACTIVE_TEAM=slug; ACTIVE_TOURNAMENT=tslug; TEAM_LABEL_FOR_GUIDE='';
   if(tslug) TOURNAMENT.tournament.fullGuideUrl='../guides/'+tslug+'/guide.pdf';
   adaptData(shared,team||{});
+  // The team's schedule could not be fetched and no saved copy exists. That is NOT the same
+  // as "the host has not published it", so the card must not say so.
+  if(SCHEDULE_UNAVAILABLE) TOURNAMENT.schedulePending={headline:'Couldn&rsquo;t load this team&rsquo;s schedule',
+    detail:'It may already be published. Check your connection and try again &mdash; this is a loading problem, not a schedule announcement.'};
   renderTeamPicker(shared); renderAll();
   lastStateKey=''; lastWxLoad=0; refreshAll(); loadWeather();
   document.getElementById('app').classList.remove('loading');
@@ -1686,11 +1773,16 @@ async function load(){
   lastLoadAt=Date.now();
   var t=qsGet('t')||lsGet('tj_tournament_v1'), wantTeam=qsGet('team')||lsGet('cc-team');
   try{
-    var snap=JSON.parse(lsGet(SNAP_KEY)||'null');
-    if(snap&&snap.shared&&(!t||snap.t===t)&&(!wantTeam||snap.team===wantTeam)){
+    var snap=(t&&wantTeam)?readSnap(snapKey(t,wantTeam)):null;
+    if(!snap){ snap=readSnap(SNAP_KEY); if(snap&&!((!t||snap.t===t)&&(!wantTeam||snap.team===wantTeam))) snap=null; }
+    // A copy written by the other bundle (before the namespaces existed) is never painted.
+    if(snap&&snap.shared&&(/^demo/.test(snap.t||'')===IS_DEMO)){
       var sig0=JSON.stringify([snap.shared,snap.teamData]);
-      if(!lastCheckedIso&&snap.checkedAt) lastCheckedIso=snap.checkedAt;   // when the saved copy was fetched
-      if(sig0!==lastSig){ lastSig=sig0; applyData(snap.shared,snap.teamData,snap.t,snap.team); }
+      if(sig0!==lastSig){
+        lastSig=sig0; SCHEDULE_UNAVAILABLE=false;
+        lastCheckedIso=snap.checkedAt||null;          // when THIS saved copy was fetched
+        applyData(snap.shared,snap.teamData,snap.t,snap.team);
+      }
     }
   }catch(e){}
   try{
@@ -1709,23 +1801,42 @@ async function load(){
     if(tr){ if(tr.teams&&!shared.teams) shared.teams=tr.teams;
             if(tr.defaultTeam&&!shared.defaultTeam) shared.defaultTeam=tr.defaultTeam; }
     var slug=pickTeam(shared,wantTeam), team=null;
+    var teamFailed=false;
     if(slug){ team=(slug===wantTeam)?await teamP:null;
-              if(!team) team=await getJSON('teams/'+encodeURIComponent(slug)+'.json').catch(function(){return {};}); }
+              if(!team){ try{ team=await getJSON('teams/'+encodeURIComponent(slug)+'.json'); }catch(e2){ teamFailed=true; } } }
     if(seq!==loadSeq) return;                       // a newer load (team switch) superseded this one
+    if(teamFailed){
+      // A failed schedule fetch used to be treated as an empty schedule: the card fell back to
+      // "not released yet", the stamp advanced, and the good saved copy was overwritten.
+      // Now: keep this team's saved copy if it is on screen; otherwise show the tournament with
+      // an explicit "couldn't load" state. Either way this counts as a FAILED check.
+      if(!(lastSig&&ACTIVE_TOURNAMENT===tslug&&ACTIVE_TEAM===slug)){
+        SCHEDULE_UNAVAILABLE=true; lastSig=JSON.stringify([shared,null]); lastCheckedIso=null;
+        applyData(shared,{},tslug,slug);
+      }
+      throw new Error('team schedule unavailable');
+    }
     if(tslug) lsSet('tj_tournament_v1',tslug);
     if(slug) lsSet('cc-team',slug);
-    fail.hidden=true;
-    lastCheckedIso=new Date().toISOString();      // only a real fetch stamps the card
+    fail.hidden=true; lastCheckFailed=false;
+    lastCheckedIso=new Date().toISOString();      // only a real, complete fetch stamps the card
+    // Compare with what this phone last saw for this team, so a moved game can be flagged.
+    var prev=readSnap(snapKey(tslug,slug));
+    if(!prev){ prev=readSnap(SNAP_KEY); if(prev&&!(prev.t===tslug&&prev.team===slug)) prev=null; }
+    if(prev&&prev.teamData) recordChanges(tslug,slug,prev.teamData.games,(team||{}).games);
     var sig=JSON.stringify([shared,team]);
-    if(sig!==lastSig){ lastSig=sig; applyData(shared,team,tslug,slug); }   // unchanged data = no re-render
+    if(sig!==lastSig){ lastSig=sig; SCHEDULE_UNAVAILABLE=false; applyData(shared,team,tslug,slug); }   // unchanged data = no re-render
     else { lastStateKey=''; refreshAll(); }                               // ...but the stamp still moves
-    lsSet(SNAP_KEY,JSON.stringify({t:tslug,team:slug,shared:shared,teamData:team,checkedAt:lastCheckedIso}));
+    var snapJson=JSON.stringify({t:tslug,team:slug,shared:shared,teamData:team,checkedAt:lastCheckedIso});
+    lsSet(SNAP_KEY,snapJson); lsSet(snapKey(tslug,slug),snapJson);
   }catch(e){
     if(seq!==loadSeq) return;
     // Nothing fresh: keep whatever is on screen (saved copy or the empty template) and say so.
     document.getElementById('app').classList.remove('loading');
     fail.hidden=!navigator.onLine;                  // offline already has its own banner
-    if(!lastSig){ renderAll(); lastStateKey=''; refreshAll(); }
+    lastCheckFailed=true;                           // the stamp now says the copy on screen is a saved one
+    if(!lastSig) renderAll();
+    lastStateKey=''; refreshAll();
   }
 }
 document.getElementById('retryLoad').addEventListener('click',load);
