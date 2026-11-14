@@ -1485,9 +1485,12 @@ function renderContacts(){
     // otherwise Email. A row with no button read as broken rather than as "no number on file".
     // Call AND Email when the row has both (it used to be Call only, which hid the email action
     // for the one coach with a number and made the rows look inconsistent).
-    +'<div class="cact">'+(c.phone?'<a href="tel:'+c.phone+'">Call</a>':'')
-      +(c.email?'<a'+(c.phone?' class="alt"':'')+' href="mailto:'+c.email+'">Email</a>':'')
-      +((!c.phone&&!c.email&&c.url)?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':'')+'</div></div>').join('');
+    // One action, the same one for every coach: Email. A Call button on the single coach who
+    // happens to have a number made the three rows look inconsistent (Rich, 2026-11-14).
+    // The number is still in the data; only the button is gone.
+    +'<div class="cact">'+(c.email?'<a href="mailto:'+c.email+'">Email</a>':'')
+      +((!c.email&&c.phone)?'<a href="tel:'+c.phone+'">Call</a>':'')
+      +((!c.email&&!c.phone&&c.url)?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':'')+'</div></div>').join('');
   document.getElementById('contactsSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Need Help?</div><div class="card" style="padding:6px 14px">'+rows+'</div>';
 }
 function renderRules(){
