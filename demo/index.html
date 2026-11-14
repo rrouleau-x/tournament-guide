@@ -24,14 +24,14 @@
   .app{max-width:520px;margin:0 auto;background:var(--bg);min-height:100vh;padding-bottom:calc(96px + env(safe-area-inset-bottom));position:relative}
   .num{font-family:"SF Pro Display","Segoe UI",system-ui,sans-serif;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 
-  .hero{background:linear-gradient(160deg,var(--su) 0%,var(--su-dark) 100%);color:#fff;padding:15px 18px 13px;position:relative;overflow:hidden}
+  .hero{background:linear-gradient(160deg,var(--su) 0%,var(--su-dark) 100%);color:#fff;padding:12px 18px 11px;position:relative;overflow:hidden}
   .hero .kick{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#cfe0f5;margin:0 0 3px;font-weight:600}
-  .hero h1{font-size:21px;margin:0;font-weight:800;letter-spacing:-.4px}
-  .hero .team{font-size:13.5px;color:#fff;opacity:.92;margin:3px 0 0;font-weight:600}
+  .hero h1{font-size:20px;margin:0;font-weight:800;letter-spacing:-.4px}
+  .hero .team{font-size:13px;color:#fff;opacity:.92;margin:2px 0 0;font-weight:600}
   .hero .meta{font-size:12.5px;color:#cfe0f5;margin:5px 0 0;letter-spacing:.3px}
   .hero .crest{position:absolute;right:-18px;top:-18px;width:120px;height:120px;opacity:.10;pointer-events:none}
   .hero .crest svg{width:100%;height:100%}
-  .tpicks{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:9px;position:relative;z-index:2}
+  .tpicks{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:7px;position:relative;z-index:2}
   .tpicks::-webkit-scrollbar{display:none}
   .tpick{flex:0 0 auto;white-space:nowrap}
   .tpick{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;padding:0 10px;min-height:44px;border-radius:22px;letter-spacing:0;border:1px solid rgba(255,255,255,.25);line-height:1}
@@ -287,6 +287,10 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 .empty-card .eic svg{width:21px;height:21px}
 .empty-card .et{margin:0 0 3px;font-size:13.5px;font-weight:800;color:var(--ink)}
 .empty-card .eb{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
+.venueline{margin-top:12px;display:flex;flex-direction:column;gap:2px}
+.venueline .vl-k{font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.venueline .vl-v{font-size:14px;font-weight:700;color:var(--ink);line-height:1.35}
+.venueline .vl-n{font-size:12px;color:var(--muted);line-height:1.45}
 .chk-stamp{font-size:11px;color:var(--muted);margin-top:10px;text-align:right;letter-spacing:.2px}
 
 </style>
@@ -974,14 +978,16 @@ function renderNextMatch(state){
     if(phase==='awaiting-schedule'){
       const SP=TOURNAMENT.schedulePending||{};
       setNowHead('Next Match');
-      nextStatus.textContent='Awaiting'; nextStatus.className='status pend';
+      nextStatus.textContent='Awaiting Schedule'; nextStatus.className='status pend';
       nextBody.innerHTML='<div style="font-size:17px;font-weight:800;color:var(--ink);line-height:1.35;margin:0 0 6px">'+(SP.headline||'Not released yet')+'</div>'+
         '<div class="muted" style="font-size:13.5px;line-height:1.5">'+(SP.detail||'')+'</div>'+
-        '<div class="arrive" style="border-top:none;margin-top:10px;padding-top:0"><span class="dot" style="width:9px;height:9px;background:var(--link)"></span> '+venueLine(venue)+'</div>'+
+        venuePendingLine(venue)+
         '<div class="btn-row">'+
-          (venue.mapsUrl?'<a class="btn" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">'+(venueKnown(venue)?'Directions':'Explore Area')+'</a>':'')+
+          // Nothing is assigned yet, so the useful action is the one that will announce it.
+          // A big Directions button here implied the venue was already confirmed.
+          '<a class="btn" href="#schedule" data-goto="schedule">Schedule</a>'+
           (TOURNAMENT.tournament.fullGuideUrl?'<a class="btn ghost" href="'+TOURNAMENT.tournament.fullGuideUrl+'" target="_blank" rel="noopener">Full Guide</a>':'')+
-          '<a class="btn ghost" href="#schedule" data-goto="schedule">Schedule</a>'+
+          (venue.mapsUrl?'<a class="btn ghost" href="'+venue.mapsUrl+'" target="_blank" rel="noopener">Explore Area</a>':'')+
         '</div>'+checkedStamp();
       return;
     }
@@ -1299,6 +1305,46 @@ function areaName(v){
   c=c.replace(/\bFL\b|\bGA\b|\bSC\b/,'').trim();
   return c||'Tournament Area';
 }
+// "Market Commons Complex / Socastee Park (7v7)" is two places and a format note, not an
+// address. Split the parts so the card can say "either of these" instead of one dense line.
+var STREET_RE=/\d+[^,]*\b(st|street|ave|avenue|rd|road|dr|drive|blvd|lane|ln|pkwy|parkway|way|ct|court|cir|hwy)\b/i;
+function venueParts(v){
+  var name=String((v&&v.name)||'');
+  var addr=String((v&&v.address)||'');
+  var note=(addr.match(/\(([^)]+)\)/)||[])[1]||'';
+  var unknown=/\btbd\b|to be (?:determined|announced)|not yet/i.test(name+' '+addr);
+  var names=unknown?[]:name.replace(/\([^)]*\)/g,'').split(/\s*\/\s*|\s+or\s+/).map(function(x){return x.trim();}).filter(Boolean);
+  // "9v9 at North Myrtle Beach Park" contains digits but is a note, not an address.
+  var looksLikeStreet=STREET_RE.test(addr)||/^\d+\s/.test(addr);
+  // "Myrtle Beach, SC (7v7 fields; 9v9 at …, subject to change)" is three comma parts, so the
+  // adapter's split put the note into the city. Read "City, ST" straight off the address.
+  var m2=addr.match(/^([^,()]+),\s*([A-Z]{2})\b/);
+  var city='';
+  if(m2) city=m2[1].trim()+', '+m2[2];
+  else if(/^[A-Za-z][A-Za-z .'\-]+$/.test(addr)){
+    // the adapter already split "Myrtle Beach, SC (…)" leaving the bare city in address
+    var st=String((v&&v.city)||'').match(/^([A-Z]{2})\b/);
+    city=addr+(st?', '+st[1]:'');
+  }
+  if(!city){ var c0=String((v&&v.city)||'').split(',')[0].trim(); if(c0&&c0.length<30) city=c0; }
+  return {names:names, note:note, city:city, unknown:unknown, looksLikeStreet:looksLikeStreet};
+}
+// Until a field is assigned, say which complexes are possible and when it will be settled.
+function venuePendingLine(v){
+  var p=venueParts(v);
+  if(p.unknown||!p.names.length){
+    return '<div class="venueline"><span class="vl-k">Venue</span>'
+      +'<span class="vl-v">Not assigned yet'+(p.city?' &middot; '+p.city:'')+'</span>'
+      +'<span class="vl-n">The host publishes the complex together with the schedule.</span></div>';
+  }
+  var list=p.names.length>1
+    ? p.names.slice(0,-1).join(', ')+' or '+p.names[p.names.length-1]
+    : p.names[0];
+  return '<div class="venueline"><span class="vl-k">'+(p.names.length>1?'Possible venues':'Venue')+'</span>'
+    +'<span class="vl-v">'+list+(p.city?' &middot; '+p.city:'')+'</span>'
+    +'<span class="vl-n">'+(p.names.length>1?'Final field assignment is confirmed when the schedule is published.':'This is not a street address yet — directions unlock once the host names the complex.')+'</span>'
+    +'</div>';
+}
 // A venue is only "known" once the host names a real complex. Data can say assigned:true
 // while the name is still "Venue TBD - <area>", so check the text as well as the flag.
 function venueKnown(v){ return !!v && v.assigned!==false && !!(v.name||v.address) && !/\btbd\b|not yet/i.test((v.name||'')+' '+(v.address||'')); }
@@ -1329,7 +1375,14 @@ function renderVenue(){
     document.getElementById('venueInfoCard').innerHTML='<div class="card"><div class="label" style="margin-bottom:6px">Parking &amp; Amenities</div><p class="small" style="margin:0 0 10px;line-height:1.55">'+(v.parking||'Parking details have not been published yet.')+'</p>'+(amen0?'<div class="amenities">'+amen0+'</div>':'')+(v.bring?'<p class="small muted" style="margin:12px 0 0">'+v.bring+'</p>':'')+'</div>';
     return;
   }
-  document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--su)"><div class="label">'+v.name+'</div><div style="font-size:16px;font-weight:700;margin:2px 0 2px">'+v.address+'</div><div class="muted" style="margin-bottom:12px">'+((v.city&&String(v.address||'').indexOf(v.city)<0)?v.city:'')+'</div><a class="btn" style="flex-direction:row;font-size:14px;gap:8px" href="'+v.mapsUrl+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Directions</a>'+((v.assigned===false)?'<div style="margin-top:12px;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12.5px;font-weight:700;color:var(--amber);line-height:1.5">Venue not yet assigned by the host.</div><div style="margin-top:8px"><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="font-size:12px;font-weight:800;color:var(--link)">Official tournament info &rsaquo;</a></div></div>':'')+'</div>';
+  // A "venue" whose address field is a note ("9v9 at …, subject to change") is not a street
+  // address: show the possible complexes, keep the note as small print, and do not offer
+  // turn-by-turn directions that would land the family at a city centroid.
+  var VP=venueParts(v);
+  var vTitle=VP.names.length?VP.names.join(' or '):v.name;
+  var vAddr=VP.looksLikeStreet?v.address:(VP.city||'');
+  var vNote=VP.looksLikeStreet?'':(VP.note.replace(/,\s*subject to change/i,'')||'This is not a street address yet — directions unlock once the host names the complex.');
+  document.getElementById('venueCard').innerHTML='<div class="card" style="border-top:4px solid var(--su)"><div class="label">'+vTitle+'</div><div style="font-size:16px;font-weight:700;margin:2px 0 2px">'+vAddr+'</div><div class="muted" style="margin-bottom:12px">'+((v.city&&String(v.address||'').indexOf(v.city)<0&&VP.looksLikeStreet)?v.city:'')+'</div>'+(vNote?'<p class="small muted" style="margin:-4px 0 12px;line-height:1.5">'+vNote+'</p>':'')+'<a class="btn" style="flex-direction:row;font-size:14px;gap:8px" href="'+v.mapsUrl+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>'+(VP.looksLikeStreet?'Directions':'Area Map')+'</a>'+((v.assigned===false)?'<div style="margin-top:12px;padding:10px 12px;background:var(--amber-bg);border-radius:10px"><div style="font-size:12.5px;font-weight:700;color:var(--amber);line-height:1.5">Venue not yet assigned by the host.</div><div style="margin-top:8px"><a href="'+TOURNAMENT.rules.fullRulesUrl+'" target="_blank" rel="noopener" style="font-size:12px;font-weight:800;color:var(--link)">Official tournament info &rsaquo;</a></div></div>':'')+'</div>';
   // fields grid — only render once fields are actually assigned by the tournament
   const hasFields=(v.fieldCount>0 && v.ourFields && v.ourFields.length>0);
   let grid='';

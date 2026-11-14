@@ -15,7 +15,7 @@
  */
 // One file serves /app/ and /demo/. The demo's caches use a prefix the app's cleanup can
 // never match ('tournament-guide-demo-…' was being deleted by the app as one of its own).
-const VERSION = 'v44';
+const VERSION = 'v45';
 const PREFIX = /\/demo\//.test(self.location.pathname) ? 'tg-demo-' : 'tournament-guide-';
 const CACHE = PREFIX + VERSION;
 const SHELL = ['./', './tournaments.json', './teams.json', './manifest.json'];
