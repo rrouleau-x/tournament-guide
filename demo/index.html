@@ -1724,7 +1724,13 @@ function lsGet(k){ try{ return localStorage.getItem(STORE_NS+k); }catch(e){ retu
 function lsSet(k,v){ try{ localStorage.setItem(STORE_NS+k,v); }catch(e){} }
 // 'no-cache' revalidates with the server (cheap 304s) instead of the old ?_=<timestamp>
 // cache-buster, which forced a full download of every file on every visit.
-function getJSON(url){ return fetch(url,{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(url+' → '+r.status); return r.json(); }); }
+// 'net' collects one fact per load: did the service worker answer any request from its cache
+// (offline, server down, or slower than its timeout)? Such a response is a saved copy, so the
+// load must not count as a schedule check even though the fetch promise resolved.
+function getJSON(url,net){ return fetch(url,{cache:'no-cache'}).then(r=>{
+  if(!r.ok) throw new Error(url+' → '+r.status);
+  if(net&&r.headers.get('X-TG-Cached')) net.stale=true;
+  return r.json(); }); }
 function pickTeam(shared,wanted){
   var list=(shared&&shared.teams)||[];
   if(wanted&&list.some(function(t){return t.slug===wanted;})) return wanted;
@@ -1786,24 +1792,25 @@ async function load(){
     }
   }catch(e){}
   try{
+    var net={stale:false};
     var regP=getJSON('tournaments.json').catch(function(){return null;});
     var teamsP=getJSON('teams.json').catch(function(){return null;});
-    var sharedP=t?getJSON('tournaments/'+encodeURIComponent(t)+'.json').catch(function(){return null;}):null;
-    var teamP=wantTeam?getJSON('teams/'+encodeURIComponent(wantTeam)+'.json').catch(function(){return null;}):null;
+    var sharedP=t?getJSON('tournaments/'+encodeURIComponent(t)+'.json',net).catch(function(){return null;}):null;
+    var teamP=wantTeam?getJSON('teams/'+encodeURIComponent(wantTeam)+'.json',net).catch(function(){return null;}):null;
     // Which tournament? ?t= > stored > registry default. Legacy data.json is the fallback.
     var reg=await regP;
     var valid=function(s){ return !!(reg&&reg.tournaments&&reg.tournaments.some(function(x){return x.slug===s;})); };
     var cands=[qsGet('t'),lsGet('tj_tournament_v1'),reg&&reg.defaultTournament].filter(Boolean);
     var tslug=reg?(cands.find(valid)||null):(cands[0]||null);
     var shared=(tslug&&tslug===t)?await sharedP:null;
-    if(!shared) shared=await getJSON(tslug?('tournaments/'+encodeURIComponent(tslug)+'.json'):'data.json');
+    if(!shared) shared=await getJSON(tslug?('tournaments/'+encodeURIComponent(tslug)+'.json'):'data.json',net);
     var tr=await teamsP;
     if(tr){ if(tr.teams&&!shared.teams) shared.teams=tr.teams;
             if(tr.defaultTeam&&!shared.defaultTeam) shared.defaultTeam=tr.defaultTeam; }
     var slug=pickTeam(shared,wantTeam), team=null;
     var teamFailed=false;
     if(slug){ team=(slug===wantTeam)?await teamP:null;
-              if(!team){ try{ team=await getJSON('teams/'+encodeURIComponent(slug)+'.json'); }catch(e2){ teamFailed=true; } } }
+              if(!team){ try{ team=await getJSON('teams/'+encodeURIComponent(slug)+'.json',net); }catch(e2){ teamFailed=true; } } }
     if(seq!==loadSeq) return;                       // a newer load (team switch) superseded this one
     if(teamFailed){
       // A failed schedule fetch used to be treated as an empty schedule: the card fell back to
@@ -1815,6 +1822,18 @@ async function load(){
         applyData(shared,{},tslug,slug);
       }
       throw new Error('team schedule unavailable');
+    }
+    if(net.stale||navigator.onLine===false){
+      // The data is real but it is the service worker's saved copy, not a fresh answer. Show it
+      // if nothing for this team is on screen yet; never move the "checked" time, never record
+      // changes against it, never overwrite the saved copy's own timestamp.
+      if(!(lastSig&&ACTIVE_TOURNAMENT===tslug&&ACTIVE_TEAM===slug)){
+        lastSig=JSON.stringify([shared,team]); SCHEDULE_UNAVAILABLE=false; lastCheckedIso=null;
+        applyData(shared,team,tslug,slug);
+      }
+      if(tslug) lsSet('tj_tournament_v1',tslug);
+      if(slug) lsSet('cc-team',slug);
+      throw new Error('answered from the saved copy');
     }
     if(tslug) lsSet('tj_tournament_v1',tslug);
     if(slug) lsSet('cc-team',slug);

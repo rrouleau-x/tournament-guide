@@ -15,7 +15,7 @@
  */
 // One file serves /app/ and /demo/. The demo's caches use a prefix the app's cleanup can
 // never match ('tournament-guide-demo-…' was being deleted by the app as one of its own).
-const VERSION = 'v46';
+const VERSION = 'v47';
 const PREFIX = /\/demo\//.test(self.location.pathname) ? 'tg-demo-' : 'tournament-guide-';
 const CACHE = PREFIX + VERSION;
 const SHELL = ['./', './tournaments.json', './teams.json', './manifest.json'];
@@ -38,6 +38,16 @@ self.addEventListener('activate', e => {
       .then(() => self.clients.claim())
   );
 });
+
+// A cached answer to a data request is labelled, so the page can tell "the server just said
+// this" from "this is what we had". Without the label an offline or timed-out load looked like
+// a successful schedule check. Page navigations are returned untouched.
+async function saved(cached, req) {
+  if (req.mode === 'navigate') return cached;
+  const headers = new Headers(cached.headers);
+  headers.set('X-TG-Cached', '1');
+  return new Response(await cached.blob(), { status: cached.status, statusText: cached.statusText, headers });
+}
 
 self.addEventListener('fetch', e => {
   const req = e.request;
@@ -72,9 +82,9 @@ self.addEventListener('fetch', e => {
     const timeout = new Promise(resolve => setTimeout(() => resolve(null), NET_TIMEOUT));
     try {
       const res = await Promise.race([network, timeout]);
-      return (res && res.status === 200) ? res : cached;
+      return (res && res.status === 200) ? res : saved(cached, req);
     } catch (_) {
-      return cached;                                  // offline
+      return saved(cached, req);                      // offline
     }
   })());
 });
