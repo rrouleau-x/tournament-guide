@@ -114,12 +114,14 @@
       {
         "name": "Carson Gray",
         "role": "Coach",
-        "phone": "912-856-9442"
+        "phone": "912-856-9442",
+        "email": "carsonzgray@gmail.com"
       },
       {
         "name": "Mitchell Heath",
         "role": "Coach",
-        "phone": ""
+        "phone": "",
+        "email": "m.heath@savannahunited.com"
       }
     ],
     "emergency": "911",
@@ -133,12 +135,14 @@
       {
         "name": "Carson Gray",
         "role": "Coach",
-        "phone": "912-856-9442"
+        "phone": "912-856-9442",
+        "email": "carsonzgray@gmail.com"
       },
       {
         "name": "Mitchell Heath",
         "role": "Coach",
-        "phone": ""
+        "phone": "",
+        "email": "m.heath@savannahunited.com"
       }
     ],
     "tournamentDirector": {}

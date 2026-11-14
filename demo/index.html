@@ -215,9 +215,9 @@
   .updated-banner svg{width:17px;height:17px;color:var(--link);stroke:var(--link);flex-shrink:0}
   .updated-banner a{color:var(--link);font-weight:700;text-decoration:none}
 
-  .fullguide{border-radius:14px;background:linear-gradient(150deg,var(--su),var(--su-dark));color:#fff;padding:16px;margin-bottom:14px;text-decoration:none;display:block}
-  .fullguide .fg1{font-size:14px;font-weight:800;margin-bottom:3px}
-  .fullguide .fg2{font-size:12px;opacity:.85;margin-bottom:10px}
+  .fullguide{border-radius:14px;background:linear-gradient(150deg,var(--su),var(--su-dark));color:#fff;padding:13px 15px;margin-bottom:14px;text-decoration:none;display:block}
+  .fullguide .fg1{font-size:14px;font-weight:800;margin-bottom:2px}
+  .fullguide .fg2{font-size:12px;opacity:.85;margin-bottom:8px;line-height:1.4}
   .fullguide .fgb{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700}
   .alert{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;display:flex;gap:10px;align-items:flex-start}
   .alert svg{width:20px;height:20px;flex-shrink:0}
@@ -268,6 +268,11 @@ button.chk{width:100%;min-height:48px;background:none;border:0;border-bottom:1px
 .btn-here{margin-top:9px;width:100%;min-height:44px;border-radius:12px;border:1px solid rgba(0,0,0,.10);background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:block}
 .arrive-strong.late .btn-here{border-color:rgba(183,110,0,.35);color:var(--amber)}
 .nextline{display:block;margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);text-decoration:none}
+.empty-card{display:flex;gap:13px;align-items:flex-start}
+.empty-card .eic{width:40px;height:40px;border-radius:12px;background:var(--su-soft);color:var(--su);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.empty-card .eic svg{width:21px;height:21px}
+.empty-card .et{margin:0 0 3px;font-size:13.5px;font-weight:800;color:var(--ink)}
+.empty-card .eb{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
 .chk-stamp{font-size:11px;color:var(--muted);margin-top:10px;text-align:right;letter-spacing:.2px}
 
 </style>
@@ -1355,13 +1360,15 @@ function renderNearby(){
     // distances for a complex nobody has been assigned yet - invented miles are worse than none.
     var n0=document.getElementById('nearbySection'); if(!n0) return;
     var v=TOURNAMENT.venue, known=venueKnown(v);
-    n0.innerHTML='<div class="section-title">Nearby &middot; Shops &amp; Food</div><div class="card">'
-      +'<p class="small" style="margin:0 0 6px;font-weight:700;color:var(--ink)">Not listed yet</p>'
-      +'<p class="small muted" style="margin:0;line-height:1.55">'
+    n0.innerHTML='<div class="section-title">Nearby &middot; Shops &amp; Food</div>'
+      +'<div class="card empty-card">'
+      +'<span class="eic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>'
+      +'<div><p class="et">Nearby recommendations coming soon</p>'
+      +'<p class="eb">'
       +(known
-        ? 'Restaurants, pharmacy and sporting goods near '+v.name+' have not been checked yet. Every distance here is measured door to door from the field, so this fills in before the event.'
-        : 'Every distance here is measured from your team&rsquo;s assigned complex, and the host has not published it yet. Rather than guess for the whole city, this stays empty until the venue is known.')
-      +'</p></div>';
+        ? 'Restaurants, grocery stores and other essentials near '+v.name+' will appear once we have checked the area.'
+        : 'Restaurants, grocery stores, and other essentials will appear once your team&rsquo;s playing location is confirmed.')
+      +'</p></div></div>';
     return;
   }
   const nbNote=TOURNAMENT.nearby.checked
@@ -1373,7 +1380,10 @@ function renderNearby(){
 }
 function renderContacts(){
   if(!(TOURNAMENT.contacts||[]).length){ document.getElementById('contactsSection').innerHTML=''; return; }
-  const rows=TOURNAMENT.contacts.map(c=>'<div class="contact"><span class="ci">'+c.initial+'</span><div class="cn"><div class="cnm">'+c.name+'</div><div class="crl">'+c.role+'</div>'+(c.email?'<div class="cmail"><a href="mailto:'+c.email+'">'+c.email+'</a></div>':'')+'</div>'+(c.phone?'<a href="tel:'+c.phone+'">Call</a>':(c.url?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':''))+'</div>').join('');
+  const rows=TOURNAMENT.contacts.map(c=>'<div class="contact"><span class="ci">'+c.initial+'</span><div class="cn"><div class="cnm">'+c.name+'</div><div class="crl">'+c.role+'</div>'+(c.email?'<div class="cmail"><a href="mailto:'+c.email+'">'+c.email+'</a></div>':'')+'</div>'
+    // One labelled action per row, whatever the row actually has: Call if there is a number,
+    // otherwise Email. A row with no button read as broken rather than as "no number on file".
+    +(c.phone?'<a href="tel:'+c.phone+'">Call</a>':(c.email?'<a href="mailto:'+c.email+'">Email</a>':(c.url?'<a href="'+c.url+'" target="_blank" rel="noopener">Open</a>':'')))+'</div>').join('');
   document.getElementById('contactsSection').innerHTML='<div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/></svg>Need Help?</div><div class="card" style="padding:6px 14px">'+rows+'</div>';
 }
 function renderRules(){
@@ -1418,7 +1428,7 @@ function renderFullGuide(){
   var fg=document.getElementById('fullGuideLink'); if(!fg) return;
   fg.href=TOURNAMENT.tournament.fullGuideUrl||'../guides/';
   document.getElementById('fg1').textContent='Full '+(TEAM_LABEL_FOR_GUIDE||TOURNAMENT.tournament.name)+' Guide';
-  document.getElementById('fg2').textContent='Everything in one detailed document — hotel, travel scenarios, full rules, itinerary.';
+  document.getElementById('fg2').textContent='Hotels, travel, tournament rules, and the complete itinerary.';
 }
 
 // ---- "BEFORE YOU GO" TICKS (per tournament, per phase group) ----
@@ -1524,7 +1534,10 @@ function renderFood(){
 function renderHotels(){
   var el=document.getElementById('hotelsSection'); if(!el) return;
   var _all=Array.isArray(TOURNAMENT.hotels)?TOURNAMENT.hotels:[];
-  if(!_all.length){ el.innerHTML='<div class="card"><p class="small muted" style="margin:0">The host has not published its hotel block yet. Nothing is recommended until it does.</p></div>'; return; }
+  if(!_all.length){ el.innerHTML='<div class="card empty-card">'
+    +'<span class="eic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9h1M9 13h1M9 17h1"/></svg></span>'
+    +'<div><p class="et">Hotel block not published yet</p>'
+    +'<p class="eb">The host has not announced its hotels. Nothing is recommended until it does.</p></div></div>'; return; }
   var picks=_all.filter(function(h){return h.tier==='pick';});
   var alts =_all.filter(function(h){return h.tier==='alt';});
   function card(h){
